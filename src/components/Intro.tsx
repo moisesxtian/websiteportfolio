@@ -1,7 +1,7 @@
 import React from 'react';
 import HeroAvatar from '../assets/HeroCard.png';
 import { ReactTyped } from "react-typed";
-import { FaGithub, FaLinkedin, FaBehanceSquare, FaDiscord, FaFacebook,FaJava,FaHashtag,FaPython,FaHtml5,FaCss3Alt,FaNodeJs,FaReact,FaGitkraken,FaPhp,FaLongArrowAltDown,} from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaBehanceSquare, FaDiscord, FaFacebook,FaJava,FaHashtag,FaPython,FaHtml5,FaCss3Alt,FaNodeJs,FaReact,FaGitkraken,FaPhp,} from "react-icons/fa";
 import { FaFlutter } from "react-icons/fa6";
 import { RiTailwindCssFill } from "react-icons/ri";
 import { SiJupyter,SiScikitlearn,SiKotlin } from "react-icons/si";
@@ -14,21 +14,19 @@ const Intro = () => {
   return (
     <div className="container mx-auto min-h-screen w-screen font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16">
       {/* Grid Container */}
-      <button className='absolute bottom-16 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-white border border-main-color rounded-full animate-pulse flex items-center justify-center'>
-        <FaLongArrowAltDown size={20} color='F06F4F'/>
-      </button>
-      <div className="flex flex-wrap w-full m-auto MyG">
+
+      <div className="flex flex-wrap w-full m-auto justify-between">
         {/* Right Side: Image Holder */}
 
             <img
               src={HeroAvatar}
-              alt="Christian Moises"
-              className="mt-10 md:mt-0 w-full h-auto md:w-1/2 overflow-hidden object-contain w-full h-auto order-2 "
+              alt="Christian Moises" 
+              className="mt-10 md:mt-0 h-auto w-full md:w-2/5  overflow-hidden object-contain h-auto order-2 pb-0 md:pb-10 "
             />
 
         {/* Left Side: Intro Box */}
         <div className="md: flex flex-col justify-center md:items-start text-center md:text-left space-y-4 w-full md:w-1/2 order-2 md:order-1 ">
-          <h2 className="text-3xl">My name is,</h2>
+          <h2 className="text-sm font-medium text-secondary-color">I AM</h2>
           <h1 className="text-7xl font-extrabold">Christian Moises</h1>
           <h3 className="text-sm">
             an aspiring <span className="font-bold text-main-color">  <ReactTyped strings={["Software Developer","Web Developer","Data Scientist"]} typeSpeed={40} backSpeed={40} loop/></span> from the Philippines.
@@ -53,7 +51,7 @@ const Intro = () => {
             ))}
           </div>
           {/* Social Media */}
-          <IconContext.Provider value={{ color: "#915eff", className: "contactIcon" }}>
+          <IconContext.Provider value={{ color: "#F97316", className: "contactIcon" }}>
           <div className="flex justify-center md:justify-start gap-4 border px-6 py-2 rounded-full">
             <FaGithub size={30} color="#494545" />
             <FaLinkedin size={30} color="#494545" />
@@ -70,7 +68,7 @@ const Intro = () => {
           {/* LANGUAGES AND TECHNOLOGIES  */}
           <div className='flex flex-wrap items-center justify-center'>
             <div className='flex w-fit pr-5 items-center justify'>
-            <IoTerminal size={40} color='#F06F4F'/>
+            <IoTerminal size={40} color='#F97316'/>
             </div>
             
               <div>
@@ -78,7 +76,7 @@ const Intro = () => {
               <p className='text-sm'>Technologies i use and used to work with.</p>
               </div>
             </div>
-            <IconContext.Provider value={{color:"#F06F4F"}}>
+            <IconContext.Provider value={{color:"#F97316"}}>
             <div>
               <div className='flex w-full md:w-[620px] overflow-hidden group MyGradient'>
                   <div className="flex max-w-none animate-loop-scroll group-hover:paused ">

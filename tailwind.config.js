@@ -20,7 +20,7 @@ export default {
         'poppins':["Poppins", 'serif']
       },
       colors:{
-        'main-color':'#F06F4F',
+        'main-color':'#F97316',
         'secondary-color':'#252525',
       }
     },

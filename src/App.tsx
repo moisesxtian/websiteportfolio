@@ -2,6 +2,7 @@ import React from "react"
 import Navbar from "./components/Navbar"
 import Intro from "./components/Intro";
 import Projects from "./components/Projects";
+import Certificates from "./components/Certificates"
 import './App.css'
 
 function App(){
@@ -10,6 +11,7 @@ function App(){
       <Navbar />
       <Intro />
       <Projects/>
+      <Certificates/>
     </div>
     
   );

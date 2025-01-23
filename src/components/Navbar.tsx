@@ -8,9 +8,9 @@ const Navbar = () => {
     }
     
   return (
-    <div className="fixed top-0 left-1/2 transform -translate-x-1/2  container mx-auto flex justify-between items-center bg-white">
-        <h1 className="select-none  cursor-pointer transition ease-in-out font-poppins font-bold text-3xl text-secondary-color p-4">HYX</h1>
-         <ul className="hidden sm:flex space-x-5 font-medium  text-sm">
+    <div className="fixed top-0 pt-10 left-1/2 transform -translate-x-1/2 container mx-auto flex justify-between items-center bg-white z-50">
+        <h1 className="select-none  cursor-pointer transition ease-in-out font-poppins font-bold text-3xl text-secondary-color  ">HYX</h1>
+         <ul className="hidden sm:flex space-x-5 font-medium font-semibold text-sm text-gray-700">
          <li className='p-4 cursor-pointer select-none px-4 hover:text-main-color transition duration-200 ease-in-out'>Home</li>
             <li className='p-4 cursor-pointer select-none px-4 hover:text-main-color transition duration-200 ease-in-out'>Projects</li>
             <li className='p-4 cursor-pointer select-none px-4 hover:text-main-color transition duration-200 ease-in-out'>Certificates</li>
