@@ -79,10 +79,9 @@ const projects = [
 const Projects = () => {
   return (
     <div className="relative">
-
-  <div className=" p-10 container mx-auto min-h-screen w-screen font-poppins text-secondary-color grid grid-cols-1 gap-5">
+  <div className="p-10 container mx-auto min-h-screen w-screen font-poppins text-secondary-color grid grid-cols-1 gap-5" id='Projects'>
     {/* Personal Projects Container */}
-    <div className="relative w-fit h-fit text-start  rounded-xl p-3 shadow-">
+    <div className="relative w-fit h-fit text-start  rounded-xl p-3">
       <div className="absolute h-fit top-[-15px] right-[-15px] visible md:hidden">
         <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />
       </div>

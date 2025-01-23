@@ -12,7 +12,7 @@ import { IconContext } from 'react-icons';
 
 const Intro = () => {
   return (
-    <div className="container mx-auto min-h-screen w-screen font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16">
+    <div className="container mx-auto min-h-screen w-screen font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16"id='Intro'>
       {/* Grid Container */}
 
       <div className="flex flex-wrap w-full m-auto justify-between">

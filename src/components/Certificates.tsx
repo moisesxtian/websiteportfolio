@@ -76,7 +76,7 @@ const Certificates = () => {
   };
 
   return (
-    <div className="relative bg-gray-50 min-h-screen p-10">
+    <div className="relative bg-gray-50 min-h-screen p-10" id='Certificates'>
       <div className="flex container mx-auto flex flex-col">
         {/* Header */}
         <div className="flex flex-col p-2 md:flex-row h-fit w-full items-center justify-between px-4">
