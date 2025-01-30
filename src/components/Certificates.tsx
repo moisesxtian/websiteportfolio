@@ -14,7 +14,7 @@ const certificates = [
     id: 1,
     name: 'Supervised Learning with Scikit Learn',
     imageUrl:
-      'public/assets/Certificates/1.png',
+      '../assets/Certificates/1.png',
     description: '',
     organization: 'DataCamp',
     certificateLink: '#',
@@ -23,7 +23,7 @@ const certificates = [
     id: 2,
     name: 'Intermediate Python',
     imageUrl:
-      'public/assets/Certificates/2.png',
+      '../assets/Certificates/2.png',
     description: '',
     organization: 'DataCamp',
     certificateLink: '#',
@@ -32,7 +32,7 @@ const certificates = [
     id: 3,
     name: 'Data Science in Python',
     imageUrl:
-      'public/assets/Certificates/3.png',
+      '../assets/Certificates/3.png',
     description: '',
     organization: 'DataCamp',
     certificateLink: '#',
@@ -41,7 +41,7 @@ const certificates = [
     id: 4,
     name: 'Java Foundation',
     imageUrl:
-      'public/assets/Certificates/4.png',
+      '../assets/Certificates/4.png',
     description: '',
     organization: 'Oracle',
     certificateLink: '#',
@@ -50,16 +50,16 @@ const certificates = [
     id: 4,
     name: 'AI For Everyone',
     imageUrl:
-      'public/assets/Certificates/5.png',
+      '../assets/Certificates/5.png',
     description: '',
     organization: 'DeelLearning.AI',
-    certificateLink: '#public/assets/Certificates/5.png',
+    certificateLink: '#public/../assets/Certificates/5.png',
   },
   {
     id: 4,
     name: 'UI/UX',
     imageUrl:
-      'public/assets/Certificates/6.png',
+      '../assets/Certificates/6.png',
     description: '',
     organization: 'GreatLearning',
     certificateLink: '#',
