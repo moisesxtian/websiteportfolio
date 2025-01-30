@@ -4,52 +4,59 @@ import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 
 const Navbar = () => {
   const [nav, setNav] = useState(true);
-  const [activeLink, setActiveLink] = useState<string>('Intro'); // Explicit type for activeLink
-  const [lastScrollY, setLastScrollY] = useState(0); // Track the last scroll position
-  const [navbarVisible, setNavbarVisible] = useState(true); // Navbar visibility state
+  const [activeLink, setActiveLink] = useState<string>('Intro'); // Active section
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [navbarVisible, setNavbarVisible] = useState(true);
 
   const handleNav = () => {
     setNav(!nav);
   };
 
-  const handleLinkClick = (section: string) => {
-    setActiveLink(section); // Update active link on click
-  };
-
   const handleScroll = () => {
-    if (typeof window !== 'undefined') {
-      const currentScrollY = window.scrollY;
-
-      // If scrolling down and current scroll position is greater than the last scroll
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        // Hide navbar
-        setNavbarVisible(false);
-      }
-      // If scrolling up and current scroll position is less than the last scroll
-      else if (currentScrollY < lastScrollY) {
-        // Show navbar
-        setNavbarVisible(true);
-      }
-
-      // Update the last scroll position
-      setLastScrollY(currentScrollY);
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > lastScrollY && currentScrollY > 50) {
+      setNavbarVisible(false);
+    } else if (currentScrollY < lastScrollY) {
+      setNavbarVisible(true);
     }
+    setLastScrollY(currentScrollY);
   };
 
   useEffect(() => {
-    // Add scroll event listener
     window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
-    // Cleanup the event listener on component unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
+  // ** Auto-Detect Active Section **
+  useEffect(() => {
+    const sections = ['Intro', 'Projects', 'Certificates', 'Experience', 'Contact'];
+    const observerOptions = {
+      root: null, // Viewport
+      rootMargin: '0px',
+      threshold: 0.6, // Section is "active" when at least 60% is visible
     };
-  }, [lastScrollY]); // Dependency on lastScrollY to track scroll changes
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveLink(entry.target.id); // Update active section
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
-      className={`fixed left-1/2 transform -translate-x-1/2 container mx-auto flex justify-between items-center bg-white z-50 transition-all duration-300 ${
-        navbarVisible ? 'top-0' : '-top-20' // Hide navbar when scrolling down
+      className={`fixed backdrop-blur-sm bg-opacity-80 bg-white w-full left-1/2 transform -translate-x-1/2 container mx-auto flex justify-between items-center z-50 transition-all duration-300 ${
+        navbarVisible ? 'top-0' : '-top-20'
       }`}
     >
       <h1 className="select-none cursor-pointer transition ease-in-out font-poppins font-bold text-3xl text-secondary-color">
@@ -57,120 +64,43 @@ const Navbar = () => {
       </h1>
 
       <ul className="hidden sm:flex space-x-5 font-medium font-semibold text-sm text-gray-700">
-        <Link to="Intro" spy={true} smooth={true} offset={50} duration={500}>
-          <li
-            className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-              activeLink === 'Intro' ? 'text-main-color' : 'hover:text-main-color'
-            }`}
-            onClick={() => handleLinkClick('Intro')}
-          >
-            Home
-          </li>
-        </Link>
-        <Link to="Projects" spy={true} smooth={true} offset={50} duration={500}>
-          <li
-            className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-              activeLink === 'Projects' ? 'text-main-color' : 'hover:text-main-color'
-            }`}
-            onClick={() => handleLinkClick('Projects')}
-          >
-            Projects
-          </li>
-        </Link>
-        <Link to="Certificates" spy={true} smooth={true} offset={50} duration={500}>
-          <li
-            className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-              activeLink === 'Certificates' ? 'text-main-color' : 'hover:text-main-color'
-            }`}
-            onClick={() => handleLinkClick('Certificates')}
-          >
-            Certificates
-          </li>
-        </Link>
-        <Link to="About" spy={true} smooth={true} offset={50} duration={500}>
-          <li
-            className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-              activeLink === 'About' ? 'text-main-color' : 'hover:text-main-color'
-            }`}
-            onClick={() => handleLinkClick('About')}
-          >
-            About
-          </li>
-        </Link>
-        <Link to="Contact" spy={true} smooth={true} offset={50} duration={500}>
-          <li
-            className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-              activeLink === 'Contact' ? 'text-main-color' : 'hover:text-main-color'
-            }`}
-            onClick={() => handleLinkClick('Contact')}
-          >
-            Contact
-          </li>
-        </Link>
+        {['Intro', 'Projects', 'Certificates', 'Experience', 'Contact'].map((section) => (
+          <Link key={section} to={section} spy={true} smooth={true} offset={50} duration={500}>
+            <li
+              className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
+                activeLink === section ? 'text-main-color' : 'hover:text-main-color'
+              }`}
+            >
+              {section}
+            </li>
+          </Link>
+        ))}
       </ul>
 
+      {/* Mobile Menu */}
       <div onClick={handleNav} className="flex sm:hidden p-4">
         {!nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
       </div>
 
       <div
-        className={
+        className={`${
           nav
-            ? 'z-0 w-48 fixed right-[-100%] top-16 opacity-0 border-s border bg-white border-gray-300 rounded-xl text-sm sm:hidden text-sm ease-in-out duration-500'
-            : 'bg-white w-48 fixed right-5 top-16 opacity-100 border-s border border-gray-300 rounded-xl text-sm sm:hidden text-sm ease-in-out duration-500'
-        }
+            ? 'z-0 w-48 fixed right-[-100%] top-16 opacity-0'
+            : 'bg-white w-48 fixed right-5 top-16 opacity-100 border border-gray-300 rounded-xl text-sm ease-in-out duration-500'
+        } sm:hidden`}
       >
         <ul>
-          <Link to="Intro" spy={true} smooth={true} offset={50} duration={500}>
-            <li
-              className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                activeLink === 'Intro' ? 'text-main-color' : 'hover:text-main-color'
-              }`}
-              onClick={() => handleLinkClick('Intro')}
-            >
-              Home
-            </li>
-          </Link>
-          <Link to="Projects" spy={true} smooth={true} offset={50} duration={500}>
-            <li
-              className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                activeLink === 'Projects' ? 'text-main-color' : 'hover:text-main-color'
-              }`}
-              onClick={() => handleLinkClick('Projects')}
-            >
-              Projects
-            </li>
-          </Link>
-          <Link to="Certificates" spy={true} smooth={true} offset={50} duration={500}>
-            <li
-              className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                activeLink === 'Certificates' ? 'text-main-color' : 'hover:text-main-color'
-              }`}
-              onClick={() => handleLinkClick('Certificates')}
-            >
-              Certificates
-            </li>
-          </Link>
-          <Link to="About" spy={true} smooth={true} offset={50} duration={500}>
-            <li
-              className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                activeLink === 'About' ? 'text-main-color' : 'hover:text-main-color'
-              }`}
-              onClick={() => handleLinkClick('About')}
-            >
-              About
-            </li>
-          </Link>
-          <Link to="Contact" spy={true} smooth={true} offset={50} duration={500}>
-            <li
-              className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                activeLink === 'Contact' ? 'text-main-color' : 'hover:text-main-color'
-              }`}
-              onClick={() => handleLinkClick('Contact')}
-            >
-              Contact
-            </li>
-          </Link>
+          {['Intro', 'Projects', 'Certificates', 'Experience', 'Contact'].map((section) => (
+            <Link key={section} to={section} spy={true} smooth={true} offset={50} duration={500}>
+              <li
+                className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
+                  activeLink === section ? 'text-main-color' : 'hover:text-main-color'
+                }`}
+              >
+                {section}
+              </li>
+            </Link>
+          ))}
         </ul>
       </div>
     </div>

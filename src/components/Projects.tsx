@@ -2,93 +2,127 @@ import React from 'react';
 import { FaGithub, FaEye } from 'react-icons/fa'; // React Icons
 import { ReactTyped } from 'react-typed';
 import { BsFillArrowDownRightCircleFill,BsFillArrowDownLeftCircleFill} from "react-icons/bs";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const projects = [
   {
     id: 1,
     title: 'MIRA: ASL RECOGNITION MOBILE APPLICATION',
     href: '#', // Link to the project
     description:
-      'An American Sasdign language applicatioto-Text features. utilizing Dynamic Time Warping /Time Series/Clustering and Recurrent Neural Network',
-    skills: ['Kotlin','Python','MediaPipe','TensorFlow','Sci-kit Learn', ], // Skills used
-    githubLink: '#',
-    liveDemoLink: '#',
+      'An american sign language application utilizing with static and gesture recognition, speech to-text and text-to speech integration',
+    skills: ['Kotlin','Python','MediaPipe','TensorFlow','Sci-kit Learn','Android Studio' ], // Skills used
+    githubLink: 'https://github.com/moisesxtian/ASL-Recognition-app',
+    liveDemoLink: 'https://drive.google.com/file/d/1jOWUbYa4FnnYM6ctXErhlphfiPWMaafw/view?fbclid=IwY2xjawIAXr9leHRuA2FlbQIxMAABHfUAq4zVjwElscbfOqkq7F-XFKi8J3fF1oDovANOJMWCmCOlTa2KmgIOig_aem_33AdnvpKOFDGWrMBGt1bFg',
     imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', // Project image
+      'src/assets/projects/MIRA ASL APP MOCKUP.png', // Project image
     hoverImageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?crop=entropy&cs=tinysrgb&fit=max&ixid=MXwyMDgwMnwwfDF8c2VhY2h8MjB8fGltYWdlfGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080',
+      'src/assets/projects/m-h.png',
   },
   {
-    id: 1,
-    title: 'MIRA: ASL RECOGNITION MOBILE APPLICATION',
-    href: '#', // Link to the project
+    id: 2,
+    title: 'Sign Language Recognition: Model Training',
+    href: '', // Link to the project
     description:
-      'An American Sign language application that can translate Dynamic and static gestures. with built in Text-to-Speech and Speech-to-Text features. utilizing Dynamic Time Warping /Time Series/Clustering and Recurrent Neural Network',
-    skills: ['Kotlin','Python','MediaPipe','TensorFlow','Sci-kit Learn', ], // Skills used
-    githubLink: '#',
-    liveDemoLink: '#',
+      'Model training for the static gestures of alphabets and additional words (ERASE, SPACE, COMMA, DOT). This model has an accuracy of 97%',
+    skills: ['Python','pip','Mediapipe','OpenCV','TensorFlow','Pandas','Numpy','sklearn',], // Skills used
+    githubLink: 'https://github.com/moisesxtian/MLNotebook',
+    liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
     imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', // Project image
+      'src/assets/projects/asl prediction.png', // Project image
     hoverImageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?crop=entropy&cs=tinysrgb&fit=max&ixid=MXwyMDgwMnwwfDF8c2VhY2h8MjB8fGltYWdlfGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080',
-  },
-    {
-    id: 1,
-    title: 'MIRA: ASL RECOGNITION MOBILE APPLICATION',
-    href: '#', // Link to the project
-    description:
-      'An American Sign language application that can translate Dynamic and static gestures. with built in Text-to-Speech and Speech-to-Text features. utilizing Dynamic Time Warping /Time Series/Clustering and Recurrent Neural Network',
-    skills: ['Kotlin','Python','MediaPipe','TensorFlow','Sci-kit Learn', ], // Skills used
-    githubLink: '#',
-    liveDemoLink: '#',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', // Project image
-    hoverImageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?crop=entropy&cs=tinysrgb&fit=max&ixid=MXwyMDgwMnwwfDF8c2VhY2h8MjB8fGltYWdlfGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080',
-  },
-  
-  {
-    id: 1,
-    title: 'Tails of Manila Website',
-    href: '#', // Link to the project
-    description:
-      'An American Sign language application that can translate Dynamic and static gestures. with built in Text-to-Speech and Speech-to-Text features. utilizing Dynamic Time Warping /Time Series/Clustering and Recurrent Neural Network',
-    skills: ['Kotlin','Python','MediaPipe','TensorFlow','Sci-kit Learn', ], // Skills used
-    githubLink: '#',
-    liveDemoLink: '#',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', // Project image
-    hoverImageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?crop=entropy&cs=tinysrgb&fit=max&ixid=MXwyMDgwMnwwfDF8c2VhY2h8MjB8fGltYWdlfGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080',
+      'src/assets/projects/asl prediction.png', // Project image
   },
   {
-    id: 1,
-    title: 'Nciky heart',
+    id: 3,
+    title: 'Tails Of Manila: Website',
     href: '#', // Link to the project
     description:
-      'Nicky heart aslkdjaslkdaw',
-    skills: ['Kotlin','Python','MediaPipe','TensorFlow','Sci-kit Learn', ], // Skills used
-    githubLink: '#',
-    liveDemoLink: '#',
+      'A Simple website for Tails of manila, a Pet supplies and groooming store. this website is responsive, with components like shop location and a functional Contact Form ',
+    skills: ['CSS','HTML','Javascript','Figma','UI/UX','Web3Forms'], // Skills used
+    githubLink: 'https://github.com/moisesxtian/tails-of-manila-website',
+    liveDemoLink: 'http://www.tailsofmanila.vercel.app',
     imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', // Project image
+      'src/assets/projects/Tails of Manila Mock Up.png', // Project image
     hoverImageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?crop=entropy&cs=tinysrgb&fit=max&ixid=MXwyMDgwMnwwfDF8c2VhY2h8MjB8fGltYWdlfGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080',
+      'src/assets/projects/tom-h.png',
   },
-];
+  {
+    id: 4,
+    title: 'Portfolio Website - v1',
+    href: 'https://hyxcreation.vercel.app', // Link to the project
+    description:
+      'A Simple website for Tails of manila, a pet supplies and groooming store. this website is responsive, with components like shop location and a functional contact form ',
+    skills: ['HTML/CSS','JavaScript','Figma','Photoshop'], // Skills used
+    githubLink: 'https://github.com/moisesxtian/websiteportfolio',
+    liveDemoLink: 'https://hyxcreation.vercel.app',
+    imageUrl:
+      'src/assets/projects/portfolio-website-v1.png', // Project image
+    hoverImageUrl:
+      'src/assets/projects/pw-h.png',
+  },
+  {
+    id: 5,
+    title: 'Car Prices Prediction: Model Training',
+    href: '', // Link to the project
+    description:
+      'A simple predictive model using Linear Regression and XGBoost with dataset from Kaggle',
+    skills: ['Numpy','Pandas','Python','Linear Regression','XG Boost'], // Skills used
+    githubLink: 'https://github.com/moisesxtian/MLNotebook',
+    liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
+    imageUrl:
+      'src/assets/projects/CarPrice Prediction.png', // Project image
+    hoverImageUrl:
+      'src/assets/projects/CarPrice Prediction.png', // Project image
+  },
+  {
+    id: 6,
+    title: 'Mobtech: Mobile Application UI/UX Prototype',
+    href: '', // Link to the project
+    description:
+      'A Detailed prototype of a Mobile application,for mobile technicians. ',
+    skills: ['Figma','Canva','Iconify','Vector','Adobe Creative','Wireframing','Prototyping'], // Skills used
+    githubLink: 'https://github.com/moisesxtian/MLNotebook',
+    liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
+    imageUrl:
+      'src/assets/projects/MobTech Prototype.png', // Project image
+    hoverImageUrl:
+      'src/assets/projects/mtp-h.png', // Project image
+  },
+  {
+    id: 7,
+    title: 'Calculator mini app',
+    href: '', // Link to the project
+    description:
+      'A Simple calculator app I made way back on 2021 with functions such as Plus, Divide, Minus, Multiply',
+    skills: ['C#'], // Skills used
+    githubLink: 'https://github.com/moisesxtian/MLNotebook',
+    liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
+    imageUrl:
+      'src/assets/projects/calcoolator.png', // Project image
+    hoverImageUrl:
+     'src/assets/projects/calcoolator.png', // Project image
+  },
 
+];
+AOS.init({
+  offset:200
+});
 const Projects = () => {
+
   return (
     <div className="relative">
-  <div className="p-10 container mx-auto min-h-screen w-screen font-poppins text-secondary-color grid grid-cols-1 gap-5" id='Projects'>
+  <div className="p-20 md:p-10 container mx-auto min-h-screen w-screen font-poppins text-secondary-color grid grid-cols-1 gap-5" id='Projects'>
     {/* Personal Projects Container */}
-    <div className="relative w-fit h-fit text-start  rounded-xl p-3">
-      <div className="absolute h-fit top-[-15px] right-[-15px] visible md:hidden">
+    <div className="relative w-fit h-fit text-start  rounded-xl p-3 border bg-gray-50"data-aos="fade-right">
+      <div className="absolute h-fit top-[-15px] right-[-15px] visible md:hidden bort">
         <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />
       </div>
       <div className="absolute h-fit top-[-15px] right-[-15px] hidden md:block">
         <BsFillArrowDownRightCircleFill size={50} color="#F97316" />
       </div>
-      <h2 className="w-fit text-4xl font-extrabold tracking-tight font-poppins text-gray-900 sm:text-5xl">
+      <h2 className="w-fit text-4xl font-extrabold tracking-tight font-poppins text-gray-900 sm:text-5xl  ">
         <ReactTyped
           strings={["Personal Projects"]}
           typeSpeed={20}
@@ -97,17 +131,19 @@ const Projects = () => {
           cursorChar="*"
         />
       </h2>
-      <p className="w-fit mt-4 text-sm text-gray-600">
+      <p className="w-fit mt-4 text-sm text-gray-600" data-aos="fade-right" data-aos-delay="300">
         A showcase of my personal projects highlighting my skills and creativity.
       </p>
     </div>
 
     {/* Projects Grid */}
-<div className="w-full grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-  {projects.map((project) => (
+    <div className="w-full grid gap-5 sm:grid-cols-2 lg:grid-cols-4 p-10 md:p-4 rounded-xl border">
+  {projects.map((project, index) => (
     <div
       key={project.id}
       className="group relative rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      data-aos="fade-up"
+      data-aos-delay={`${index * 50}`} // Staggered delay: 0ms, 100ms, 200ms...
     >
       {/* Image with hover effect */}
       <div className="relative w-full h-56">
@@ -129,9 +165,9 @@ const Projects = () => {
         </h3>
         <p className="mt-3 text-sm text-gray-600">{project.description}</p>
         <div className="mt-4 flex flex-wrap gap-2">
-          {project.skills.map((skill, index) => (
+          {project.skills.map((skill, skillIndex) => (
             <span
-              key={index}
+              key={skillIndex}
               className="inline-block bg-orange-100 text-orange-500 text-xs font-medium px-2 py-1 rounded-full"
             >
               {skill}
@@ -164,6 +200,7 @@ const Projects = () => {
     </div>
   ))}
 </div>
+
   </div>
 
 
