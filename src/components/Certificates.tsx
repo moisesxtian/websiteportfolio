@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { FaArrowLeft, FaArrowRight, FaDownload,FaHashtag} from 'react-icons/fa';
-import { BsFillArrowDownRightCircleFill,BsFillArrowDownLeftCircleFill} from "react-icons/bs";
+import { BsFillArrowDownLeftCircleFill} from "react-icons/bs";
 import { ReactTyped } from 'react-typed';
 import AOS from 'aos';
 import 'aos/dist/aos.css';

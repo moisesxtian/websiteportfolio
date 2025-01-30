@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaGithub, FaEye } from 'react-icons/fa'; // React Icons
 import { ReactTyped } from 'react-typed';
 import { BsFillArrowDownRightCircleFill,BsFillArrowDownLeftCircleFill} from "react-icons/bs";
