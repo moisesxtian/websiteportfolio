@@ -29,9 +29,9 @@ const projects = [
     githubLink: 'https://github.com/moisesxtian/MLNotebook',
     liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
     imageUrl:
-      '../assets/projects/asl prediction.png', // Project image
+      '../assets/Projects/asl prediction.png', // Project image
     hoverImageUrl:
-      '../assets/projects/asl prediction.png', // Project image
+      '../assets/Projects/asl prediction.png', // Project image
   },
   {
     id: 3,
