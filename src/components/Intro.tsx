@@ -1,5 +1,5 @@
 
-import HeroAvatar from '../assets/HeroCard.png';
+import HeroAvatar from '/public/assets/HeroCard.png';
 import { ReactTyped } from "react-typed";
 import { FaGithub, FaLinkedin, FaBehanceSquare, FaDiscord, FaFacebook,FaJava,FaHashtag,FaPython,FaHtml5,FaCss3Alt,FaNodeJs,FaReact,FaGitkraken,FaPhp,} from "react-icons/fa";
 import { FaFlutter } from "react-icons/fa6";

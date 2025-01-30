@@ -15,9 +15,9 @@ const projects = [
     githubLink: 'https://github.com/moisesxtian/ASL-Recognition-app',
     liveDemoLink: 'https://drive.google.com/file/d/1jOWUbYa4FnnYM6ctXErhlphfiPWMaafw/view?fbclid=IwY2xjawIAXr9leHRuA2FlbQIxMAABHfUAq4zVjwElscbfOqkq7F-XFKi8J3fF1oDovANOJMWCmCOlTa2KmgIOig_aem_33AdnvpKOFDGWrMBGt1bFg',
     imageUrl:
-      'src/assets/projects/MIRA ASL APP MOCKUP.png', // Project image
+      'public/assets/projects/MIRA ASL APP MOCKUP.png', // Project image
     hoverImageUrl:
-      'src/assets/projects/m-h.png',
+      'public/assets/projects/m-h.png',
   },
   {
     id: 2,
@@ -29,9 +29,9 @@ const projects = [
     githubLink: 'https://github.com/moisesxtian/MLNotebook',
     liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
     imageUrl:
-      'src/assets/projects/asl prediction.png', // Project image
+      'public/assets/projects/asl prediction.png', // Project image
     hoverImageUrl:
-      'src/assets/projects/asl prediction.png', // Project image
+      'public/assets/projects/asl prediction.png', // Project image
   },
   {
     id: 3,
@@ -43,9 +43,9 @@ const projects = [
     githubLink: 'https://github.com/moisesxtian/tails-of-manila-website',
     liveDemoLink: 'http://www.tailsofmanila.vercel.app',
     imageUrl:
-      'src/assets/projects/Tails of Manila Mock Up.png', // Project image
+      'public/assets/projects/Tails of Manila Mock Up.png', // Project image
     hoverImageUrl:
-      'src/assets/projects/tom-h.png',
+      'public/assets/projects/tom-h.png',
   },
   {
     id: 4,
@@ -57,9 +57,9 @@ const projects = [
     githubLink: 'https://github.com/moisesxtian/websiteportfolio',
     liveDemoLink: 'https://hyxcreation.vercel.app',
     imageUrl:
-      'src/assets/projects/portfolio-website-v1.png', // Project image
+      'public/assets/projects/portfolio-website-v1.png', // Project image
     hoverImageUrl:
-      'src/assets/projects/pw-h.png',
+      'public/assets/projects/pw-h.png',
   },
   {
     id: 5,
@@ -71,9 +71,9 @@ const projects = [
     githubLink: 'https://github.com/moisesxtian/MLNotebook',
     liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
     imageUrl:
-      'src/assets/projects/CarPrice Prediction.png', // Project image
+      'public/assets/projects/CarPrice Prediction.png', // Project image
     hoverImageUrl:
-      'src/assets/projects/CarPrice Prediction.png', // Project image
+      'public/assets/projects/CarPrice Prediction.png', // Project image
   },
   {
     id: 6,
@@ -85,9 +85,9 @@ const projects = [
     githubLink: 'https://github.com/moisesxtian/MLNotebook',
     liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
     imageUrl:
-      'src/assets/projects/MobTech Prototype.png', // Project image
+      'public/assets/projects/MobTech Prototype.png', // Project image
     hoverImageUrl:
-      'src/assets/projects/mtp-h.png', // Project image
+      'public/assets/projects/mtp-h.png', // Project image
   },
   {
     id: 7,
@@ -99,9 +99,9 @@ const projects = [
     githubLink: 'https://github.com/moisesxtian/MLNotebook',
     liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
     imageUrl:
-      'src/assets/projects/calcoolator.png', // Project image
+      'public/assets/projects/calcoolator.png', // Project image
     hoverImageUrl:
-     'src/assets/projects/calcoolator.png', // Project image
+     'public/assets/projects/calcoolator.png', // Project image
   },
 
 ];

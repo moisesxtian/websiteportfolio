@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { FaArrowLeft, FaArrowRight, FaDownload,FaHashtag} from 'react-icons/fa';
-import { BsFillArrowDownLeftCircleFill} from "react-icons/bs";
+import { BsFillArrowDownRightCircleFill,BsFillArrowDownLeftCircleFill} from "react-icons/bs";
 import { ReactTyped } from 'react-typed';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -14,7 +14,7 @@ const certificates = [
     id: 1,
     name: 'Supervised Learning with Scikit Learn',
     imageUrl:
-      'src/assets/certificates/1.png',
+      'public/assets/certificates/1.png',
     description: '',
     organization: 'DataCamp',
     certificateLink: '#',
@@ -23,7 +23,7 @@ const certificates = [
     id: 2,
     name: 'Intermediate Python',
     imageUrl:
-      'src/assets/certificates/2.png',
+      'public/assets/certificates/2.png',
     description: '',
     organization: 'DataCamp',
     certificateLink: '#',
@@ -32,7 +32,7 @@ const certificates = [
     id: 3,
     name: 'Data Science in Python',
     imageUrl:
-      'src/assets/certificates/3.png',
+      'public/assets/certificates/3.png',
     description: '',
     organization: 'DataCamp',
     certificateLink: '#',
@@ -41,7 +41,7 @@ const certificates = [
     id: 4,
     name: 'Java Foundation',
     imageUrl:
-      'src/assets/certificates/4.png',
+      'public/assets/certificates/4.png',
     description: '',
     organization: 'Oracle',
     certificateLink: '#',
@@ -50,16 +50,16 @@ const certificates = [
     id: 4,
     name: 'AI For Everyone',
     imageUrl:
-      'src/assets/certificates/5.png',
+      'public/assets/certificates/5.png',
     description: '',
     organization: 'DeelLearning.AI',
-    certificateLink: '#src/assets/certificates/5.png',
+    certificateLink: '#public/assets/certificates/5.png',
   },
   {
     id: 4,
     name: 'UI/UX',
     imageUrl:
-      'src/assets/certificates/6.png',
+      'public/assets/certificates/6.png',
     description: '',
     organization: 'GreatLearning',
     certificateLink: '#',
