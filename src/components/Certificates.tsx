@@ -2,6 +2,12 @@ import React, { useRef } from 'react';
 import { FaArrowLeft, FaArrowRight, FaDownload,FaHashtag} from 'react-icons/fa';
 import { BsFillArrowDownRightCircleFill,BsFillArrowDownLeftCircleFill} from "react-icons/bs";
 import { ReactTyped } from 'react-typed';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+AOS.init({
+  startEvent: 'load',
+  easing:'ease-in-out'
+});
 
 const certificates = [
   {
@@ -76,12 +82,12 @@ const Certificates = () => {
   };
 
   return (
-    <div className="relative bg-gray-50 min-h-screen p-10" id='Certificates'>
+    <div className="relative min-h-4 p-10" id='Certificates'>
       <div className="flex container mx-auto flex flex-col">
         {/* Header */}
-        <div className="flex flex-col p-2 md:flex-row h-fit w-full items-center justify-between px-4">
+        <div className="flex flex-col p-2 md:flex-row h-fit w-full items-center justify-between px-4 py-6">
   {/* Left Section */}
-  <div className="flex items-center bg-white border border-gray-300 p-3 rounded-lg">
+  <div className="flex items-center bg-white border border-gray-300 p-3 rounded-lg bg-gray-50" data-aos="fade-right">
     <FaHashtag size={30} color="#F97316" />
     <div className="ml-3">
       <h3 className="text-sm font-bold text-gray-700">Certificates</h3>
@@ -90,7 +96,7 @@ const Certificates = () => {
   </div>
 
   {/* Right Section */}
-  <div className="relative w-fit h-fit rounded-xl p-3 border">
+  <div className="relative w-fit h-fit rounded-xl p-3 border bg-gray-50" data-aos="fade-left">
     {/* Arrow pointing bottom-left */}
     <div className="absolute top-[-15px] left-[-15px] hidden md:block">
       <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />
@@ -123,49 +129,52 @@ const Certificates = () => {
 
           {/* Scrollable Container */}
           <div
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-scroll scroll-smooth scrollbar-hide p-4"
+  ref={scrollRef}
+  className="flex gap-6 overflow-x-scroll scroll-smooth overflow-hidden p-4"
+>
+  {certificates.map((certificate, index) => ( // Added 'index' here
+    <div
+      key={certificate.id}
+      className="group relative bg-white rounded-lg shadow-md w-72 flex-shrink-0 transition-shadow hover:shadow-lg"
+      data-aos="fade-up"
+      data-aos-delay={index * 50} // Apply staggered delay: 0ms, 100ms, 200ms...
+    >
+      {/* Image */}
+      <div className="relative w-full h-48">
+        <img
+          src={certificate.imageUrl}
+          alt={certificate.name}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="p-6">
+        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-500">
+          {certificate.name}
+        </h3>
+        <p className="mt-2 text-sm text-gray-600">{certificate.description}</p>
+        <p className="mt-1 text-sm text-gray-500">
+          <span className="font-medium text-gray-700">Issued by:</span> {certificate.organization}
+        </p>
+
+        {/* Download/View Link */}
+        <div className="mt-4">
+          <a
+            href={certificate.certificateLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center bg-orange-500 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-orange-400 transition-all"
           >
-            {certificates.map((certificate) => (
-              <div
-                key={certificate.id}
-                className="group relative bg-white rounded-lg shadow-md w-72 flex-shrink-0 transition-shadow hover:shadow-lg"
-              >
-                {/* Image */}
-                <div className="relative w-full h-48">
-                  <img
-                    src={certificate.imageUrl}
-                    alt={certificate.name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Content */}
-                <div className="p-6 ">
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-500">
-                    {certificate.name}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600">{certificate.description}</p>
-                  <p className="mt-1 text-sm text-gray-500">
-                    <span className="font-medium text-gray-700">Issued by:</span> {certificate.organization}
-                  </p>
-
-                  {/* Download/View Link */}
-                  <div className="mt-4">
-                    <a
-                      href={certificate.certificateLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center bg-orange-500 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-orange-400 transition-all"
-                    >
-                      <FaDownload className="mr-2" />
-                      View Certificate
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <FaDownload className="mr-2" />
+            View Certificate
+          </a>
+        </div>
+      </div>
+    </div>
+  ))}
           </div>
+
 
           {/* Right Scroll Button */}
           <button
