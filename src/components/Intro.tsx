@@ -8,11 +8,16 @@ import { SiJupyter,SiScikitlearn,SiKotlin } from "react-icons/si";
 import { DiMysql } from "react-icons/di";
 import { IoTerminal } from "react-icons/io5";
 import { IconContext } from 'react-icons';
-
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+AOS.init({
+  easing:'ease-in-out'
+});
 
 const Intro = () => {
   return (
-    <div className="container mx-auto min-h-screen w-screen font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16"id='Intro'>
+    
+    <div className="container mx-auto min-h-screen w-screen font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16 p-20 md:p-0"id='Intro'>
       {/* Grid Container */}
 
       <div className="flex flex-wrap w-full m-auto justify-between">
@@ -22,18 +27,24 @@ const Intro = () => {
               src={HeroAvatar}
               alt="Christian Moises" 
               className="mt-10 md:mt-0 h-auto w-full md:w-2/5  overflow-hidden object-contain h-auto order-2 pb-0 md:pb-10 "
+              data-aos="fade-left"
+              data-aos-easing="ease-in-out" 
+              data-aos-duration="2000"
             />
 
         {/* Left Side: Intro Box */}
-        <div className="md: flex flex-col justify-center md:items-start text-center md:text-left space-y-4 w-full md:w-1/2 order-2 md:order-1 ">
-          <h2 className="text-sm font-medium text-secondary-color">I AM</h2>
-          <h1 className="text-7xl font-extrabold">Christian Moises</h1>
-          <h3 className="text-sm">
+        <div className="md: flex flex-col justify-center md:items-start text-center md:text-left space-y-4 w-full md:w-1/2 order-2 md:order-1"
+                      data-aos="fade-right"
+                      data-aos-easing="ease-in-out" 
+                      data-aos-duration="500">
+          <h2 className="text-sm font-medium text-secondary-color" data-aos="flip-down">I AM</h2>
+          <h1 className="text-7xl font-extrabold" data-aos="fade-right">Christian Moises</h1>
+          <h3 className="text-sm" data-aos="fade-right"data-aos-delay="200">
             an aspiring <span className="font-bold text-main-color">  <ReactTyped strings={["Software Developer","Web Developer","Data Scientist"]} typeSpeed={40} backSpeed={40} loop/></span> from the Philippines.
           </h3>
           
           {/* Roles */}
-          <div className="flex flex-wrap justify-center md:justify-start gap-4 max-w-xl">
+          <div className="flex flex-wrap justify-center md:justify-start gap-4 max-w-xl"data-aos="fade-right"data-aos-delay="300">
             {[
               "Web Developer",
               "App Development",
@@ -52,7 +63,7 @@ const Intro = () => {
           </div>
           {/* Social Media */}
           <IconContext.Provider value={{ color: "#F97316", className: "contactIcon" }}>
-          <div className="flex justify-center md:justify-start gap-4 border px-6 py-2 rounded-full">
+          <div className="flex justify-center md:justify-start gap-4 border px-6 py-2 rounded-full" data-aos="fade-right"data-aos-delay="400">
             <FaGithub size={30} color="#494545" />
             <FaLinkedin size={30} color="#494545" />
             <FaBehanceSquare size={30} color="#494545" />
@@ -61,12 +72,12 @@ const Intro = () => {
           </div>
           </IconContext.Provider>
 
-            <div className='flex justify-center md:justify-start align-middle'>
+            <div className='flex justify-center md:justify-start align-middle'data-aos="fade-right"data-aos-delay="500">
             <button className=' w-40 h-9 rounded-xl bg-main-color duration-300 text-white text-xs hover:bg-[#FFA893]'>View CV</button>
             </div>
           
           {/* LANGUAGES AND TECHNOLOGIES  */}
-          <div className='flex flex-wrap items-center justify-center'>
+          <div className='flex flex-wrap items-center justify-center animate-a' data-aos="fade-right"data-aos-delay="600">
             <div className='flex w-fit pr-5 items-center justify'>
             <IoTerminal size={40} color='#F97316'/>
             </div>
@@ -78,7 +89,7 @@ const Intro = () => {
             </div>
             <IconContext.Provider value={{color:"#F97316"}}>
             <div>
-              <div className='flex w-full md:w-[620px] overflow-hidden group MyGradient'>
+              <div className='flex w-full md:w-[620px] overflow-hidden group MyGradient' data-aos="fade-right"data-aos-delay="700">
                   <div className="flex max-w-none animate-loop-scroll group-hover:paused ">
                       {/* TECHNOLOGIES CONTAINER  */}
                       <div className='flex p-1'>
