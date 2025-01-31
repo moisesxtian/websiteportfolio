@@ -17,10 +17,10 @@ AOS.init({
 const Intro = () => {
   return (
     
-    <div className="container mx-auto min-h-screen w-screen font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16 p-20 md:p-0"id='Intro'>
+    <div className="container mx-auto   font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16 md:p-0"id='Intro'>
       {/* Grid Container */}
 
-      <div className="flex flex-wrap w-full m-auto justify-between">
+      <div className="flex flex-wrap w-screen m-auto justify-between align-middle">
         {/* Right Side: Image Holder */}
 
             <img
@@ -33,12 +33,12 @@ const Intro = () => {
             />
 
         {/* Left Side: Intro Box */}
-        <div className="md: flex flex-col justify-center md:items-start text-center md:text-left space-y-4 w-full md:w-1/2 order-2 md:order-1"
+        <div className="md:flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-4 w-full w-full md:w-1/2 order-2 md:order-1"
                       data-aos="fade-right"
                       data-aos-easing="ease-in-out" 
                       data-aos-duration="500">
           <h2 className="text-sm font-medium text-secondary-color" data-aos="flip-down">I AM</h2>
-          <h1 className="text-7xl font-extrabold" data-aos="fade-right">Christian Moises</h1>
+          <h1 className="text-center md:text-start text-2xl md:text-7xl font-extrabold" data-aos="fade-right">Christian Moises</h1>
           <h3 className="text-sm" data-aos="fade-right"data-aos-delay="200">
             an aspiring <span className="font-bold text-main-color">  <ReactTyped strings={["Software Developer","Web Developer","Data Scientist"]} typeSpeed={40} backSpeed={40} loop/></span> from the Philippines.
           </h3>
