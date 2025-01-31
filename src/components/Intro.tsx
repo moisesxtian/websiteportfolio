@@ -87,7 +87,11 @@ const Intro = () => {
             </IconContext.Provider>
 
             <div className='flex justify-center md:justify-start align-middle'data-aos="fade-right"data-aos-delay="500">
-            <button className=' w-40 h-9 rounded-xl bg-main-color duration-300 text-white text-xs hover:bg-[#FFA893]'>View CV</button>
+            <a href="../Moises_Resume.pdf" download="Christian-Moises-CV.pdf">
+              <button className="w-40 h-9 rounded-xl bg-main-color duration-300 text-white text-xs hover:bg-[#FFA893]">
+                View CV
+              </button>
+            </a>
             </div>
           
           {/* LANGUAGES AND TECHNOLOGIES  */}
