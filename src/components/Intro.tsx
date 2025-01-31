@@ -62,15 +62,29 @@ const Intro = () => {
             ))}
           </div>
           {/* Social Media */}
-          <IconContext.Provider value={{ color: "#F97316", className: "contactIcon" }}>
-          <div className="flex justify-center md:justify-start gap-4 border px-6 py-2 rounded-full" data-aos="fade-right"data-aos-delay="400">
-            <FaGithub size={30} color="#494545" />
-            <FaLinkedin size={30} color="#494545" />
-            <FaBehanceSquare size={30} color="#494545" />
-            <FaDiscord size={30} color="#494545" />
-            <FaFacebook size={30} color="#494545" />
-          </div>
-          </IconContext.Provider>
+          <IconContext.Provider value={{ size:"30",className: "contactIcon transition duration-300" }}>
+              <div
+                className="flex justify-center md:justify-start gap-4 border px-6 py-2 rounded-full"
+                data-aos="fade-right"
+                data-aos-delay="400"
+              >
+                <a href="https://github.com/moisesxtian" target="_blank" rel="noopener noreferrer">
+                  <FaGithub className="text-[#494545] hover:text-[#F97316]" />
+                </a>
+                <a href="https://www.linkedin.com/in/christian-moises/" target="_blank" rel="noopener noreferrer">
+                  <FaLinkedin className="text-[#494545] hover:text-[#F97316]" />
+                </a>
+                <a href="https://www.behance.net/hyxchan" target="_blank" rel="noopener noreferrer">
+                  <FaBehanceSquare className="text-[#494545] hover:text-[#F97316]" />
+                </a>
+                <a href="https://discord.com/users/hyx.chan" target="_blank" rel="noopener noreferrer">
+                  <FaDiscord className="text-[#494545] hover:text-[#F97316]" />
+                </a>
+                <a href="https://www.facebook.com/moisesxtian" target="_blank" rel="noopener noreferrer">
+                  <FaFacebook className="text-[#494545] hover:text-[#F97316]" />
+                </a>
+              </div>
+            </IconContext.Provider>
 
             <div className='flex justify-center md:justify-start align-middle'data-aos="fade-right"data-aos-delay="500">
             <button className=' w-40 h-9 rounded-xl bg-main-color duration-300 text-white text-xs hover:bg-[#FFA893]'>View CV</button>
