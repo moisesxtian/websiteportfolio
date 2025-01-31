@@ -2,7 +2,7 @@
 
 const CardsLayout = () => {
   return (
-<div className="container mx-auto p-5 font-poppins">
+<div className="container mx-auto p-5 font-poppins" id="Contact">
   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
     {/* Left section with 2 vertical cards */}
     <div className="flex flex-col gap-5">
