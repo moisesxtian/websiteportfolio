@@ -13,7 +13,7 @@ const projects = [
       'An american sign language application utilizing with static and gesture recognition, speech to-text and text-to speech integration',
     skills: ['Kotlin','Python','MediaPipe','TensorFlow','Sci-kit Learn','Android Studio' ], // Skills used
     githubLink: 'https://github.com/moisesxtian/ASL-Recognition-app',
-    liveDemoLink: 'https://drive.google.com/file/d/1jOWUbYa4FnnYM6ctXErhlphfiPWMaafw/view?fbclid=IwY2xjawIAXr9leHRuA2FlbQIxMAABHfUAq4zVjwElscbfOqkq7F-XFKi8J3fF1oDovANOJMWCmCOlTa2KmgIOig_aem_33AdnvpKOFDGWrMBGt1bFg',
+    liveDemoLink: 'https://drive.google.com/drive/folders/1PwizLoIWeM4PoqLsopeR6ucKD9pHHBVz?usp=sharing',
     imageUrl:
       '../assets/Projects/mira-asl-app-mockup.png', // Project image
     hoverImageUrl:
@@ -49,15 +49,15 @@ const projects = [
   },
   {
     id: 4,
-    title: 'Portfolio Website - v1',
+    title: 'Penguin Rush - Platformer Game',
     href: 'https://hyxcreation.vercel.app', // Link to the project
     description:
-      'A Simple website for Tails of manila, a pet supplies and groooming store. this website is responsive, with components like shop location and a functional contact form ',
-    skills: ['HTML/CSS','JavaScript','Figma','Photoshop'], // Skills used
+      'Developed Penguin Rush, a 2D platformer in Unity and C#, featuring smooth mechanics, intuitive controls, obstacles, collectibles, and power-ups.',
+    skills: ['C#', 'Unity','Photoshop'], // Skills used
     githubLink: 'https://github.com/moisesxtian/websiteportfolio',
-    liveDemoLink: 'https://hyxcreation.vercel.app',
+    liveDemoLink: 'https://drive.google.com/drive/folders/1jUzX2mEZIs-Z3y5UXam2eG72B36NVesL?usp=sharing',
     imageUrl:
-      '../assets/Projects/portfolio-website-v1.png', // Project image
+      '../assets/Projects/penguin-rush.png', // Project image
     hoverImageUrl:
       '../assets/Projects/pw-h.png',
   },
@@ -82,8 +82,8 @@ const projects = [
     description:
       'A Detailed prototype of a Mobile application,for mobile technicians. ',
     skills: ['Figma','Canva','Iconify','Vector','Adobe Creative','Wireframing','Prototyping'], // Skills used
-    githubLink: 'https://github.com/moisesxtian/MLNotebook',
-    liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
+    githubLink: 'https://www.figma.com/design/aUz4m8i074AQ40ZU5WWqWF/MOISES_PORTFOLIO?node-id=0-1&t=pZ3L4mkVbroB2BE1-1',
+    liveDemoLink: 'https://www.figma.com/design/aUz4m8i074AQ40ZU5WWqWF/MOISES_PORTFOLIO?node-id=0-1&t=pZ3L4mkVbroB2BE1-1',
     imageUrl:
       '../assets/Projects/mobtech-prototype.png', // Project image
     hoverImageUrl:
@@ -96,12 +96,26 @@ const projects = [
     description:
       'A Simple calculator app I made way back on 2021 with functions such as Plus, Divide, Minus, Multiply',
     skills: ['C#'], // Skills used
-    githubLink: 'https://github.com/moisesxtian/MLNotebook',
-    liveDemoLink: 'https://github.com/moisesxtian/MLNotebook',
+    githubLink: 'https://github.com/moisesxtian/Calculator',
+    liveDemoLink: 'https://github.com/moisesxtian/Calculator',
     imageUrl:
       '../assets/Projects/calcoolator.png', // Project image
     hoverImageUrl:
      '../assets/Projects/calcoolator.png', // Project image
+  },
+  {
+    id: 8,
+    title: 'Portfolio Website - v1',
+    href: 'https://hyxcreation.vercel.app', // Link to the project
+    description:
+      'A Simple website for Tails of manila, a pet supplies and groooming store. this website is responsive, with components like shop location and a functional contact form ',
+    skills: ['HTML/CSS','JavaScript','Figma','Photoshop'], // Skills used
+    githubLink: 'https://github.com/moisesxtian/moisesxtian.github.io',
+    liveDemoLink: 'https://moisesxtian.github.io',
+    imageUrl:
+      '../assets/Projects/portfolio-website-v1.png', // Project image
+    hoverImageUrl:
+      '../assets/Projects/pr-mm.png',
   },
 
 ];
