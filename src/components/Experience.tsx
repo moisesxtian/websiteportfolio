@@ -95,7 +95,7 @@ export default function Experience() {
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 w-full">
-        {experiences.map((exp, idx) => (
+        {experiences.map((exp) => (
           <ExperienceItem
             key={exp.company}
             company={exp.company}
