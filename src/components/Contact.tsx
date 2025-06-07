@@ -6,7 +6,7 @@ const CardsLayout = () => {
   const [result, setResult] = useState<string | null>(null);
 
   // Get API key from env
-  const WEB3FORMS_API_KEY = import.meta.env.VITE_WEB3_FORMS_API_KEY as string;
+  const WEB3FORMS_API_KEY ='cf56714b-d5fa-4bbd-99d1-b4f6c89239dc';
 
   // hCaptcha sitekey (replace with your own if needed)
   const HCAPTCHA_SITEKEY = '890a1e98-0a90-48b0-bd48-ef6656c212be';
@@ -29,6 +29,10 @@ const CardsLayout = () => {
 
     formData.append("access_key", WEB3FORMS_API_KEY);
 
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
@@ -40,6 +44,7 @@ const CardsLayout = () => {
         formRef.current?.reset();
         (window as any).hcaptcha?.reset();
       } else {
+        console.error("Error:", data);
         setResult("Something went wrong. Please try again.");
       }
     } catch {
@@ -88,7 +93,6 @@ const CardsLayout = () => {
             onSubmit={handleSubmit}
             autoComplete="off"
           >
-            <input type="hidden" name="access_key" value={WEB3FORMS_API_KEY} />
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-secondary-color">
                 Name
