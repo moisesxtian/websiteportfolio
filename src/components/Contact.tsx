@@ -9,7 +9,7 @@ const CardsLayout = () => {
   const WEB3FORMS_API_KEY = import.meta.env.VITE_WEB3_FORMS_API_KEY as string;
 
   // hCaptcha sitekey (replace with your own if needed)
-  const HCAPTCHA_SITEKEY = "10000000-ffff-ffff-ffff-000000000001";
+  const HCAPTCHA_SITEKEY = import.meta.env.VITE_HCAPTCHA_SITEKEY;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
