@@ -1,13 +1,25 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import axios from "axios";
 
 // Access environment variables
-const WEB3FORMS_API_KEY = import.meta.env.VITE_WEB3_FORMS_API_KEY as string;
-const HCAPTCHA_SITEKEY = import.meta.env.HCAPTCHA_SITE_KEY as string;
+const HCAPTCHA_SITEKEY = import.meta.env.VITE_HCAPTCHA_SITEKEY;
+const WEB3FORMS_API_KEY = import.meta.env.VITE_WEB3FORMS_KEY;
 
 const CardsLayout = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Load hCaptcha script once
+    if (typeof window !== "undefined" && !(window as any).hcaptchaScriptLoaded) {
+      const script = document.createElement("script");
+      script.src = "https://js.hcaptcha.com/1/api.js";
+      script.async = true;
+      document.body.appendChild(script);
+      (window as any).hcaptchaScriptLoaded = true;
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,34 +39,24 @@ const CardsLayout = () => {
     formData.append("access_key", WEB3FORMS_API_KEY);
 
     try {
-      const axios = (await import("axios")).default;
       const res = await axios.post("https://api.web3forms.com/submit", formData);
       const data = res.data;
 
       if (data.success) {
-        setResult("Message sent successfully!");
+        setResult("✅ Message sent successfully!");
         formRef.current?.reset();
         (window as any).hcaptcha?.reset();
       } else {
         console.error("Web3Forms Error:", data);
-        setResult(data.message || "Something went wrong. Please try again.");
+        setResult(data.message || "❌ Something went wrong. Please try again.");
       }
     } catch (err) {
       console.error("Network error:", err);
-      setResult("Something went wrong. Please try again.");
+      setResult("❌ Network error. Please try again.");
     }
 
     setSubmitting(false);
   };
-
-  // Load hCaptcha script once
-  if (typeof window !== "undefined" && !(window as any).hcaptchaScriptLoaded) {
-    const script = document.createElement("script");
-    script.src = "https://js.hcaptcha.com/1/api.js";
-    script.async = true;
-    document.body.appendChild(script);
-    (window as any).hcaptchaScriptLoaded = true;
-  }
 
   return (
     <div className="container mx-auto p-5 font-poppins" id="Contact">
@@ -126,6 +128,7 @@ const CardsLayout = () => {
                 required
               ></textarea>
             </div>
+
             {/* hCaptcha */}
             <div className="mt-2">
               <div
@@ -134,6 +137,7 @@ const CardsLayout = () => {
                 data-theme="light"
               ></div>
             </div>
+
             <button
               type="submit"
               className="mt-4 w-full py-3 px-5 bg-main-color text-white font-bold rounded-lg shadow-md hover:bg-main-color-dark focus:outline-none focus:ring-2 focus:ring-main-color"
@@ -141,8 +145,11 @@ const CardsLayout = () => {
             >
               {submitting ? "Sending..." : "Send Message"}
             </button>
+
             {result && (
-              <div className="mt-2 text-center text-sm text-main-color">{result}</div>
+              <div className="mt-2 text-center text-sm text-main-color">
+                {result}
+              </div>
             )}
           </form>
         </div>
