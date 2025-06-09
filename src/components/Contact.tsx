@@ -34,11 +34,12 @@ const CardsLayout = () => {
     }
 
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
+      // Use axios for POST request
+      const axios = (await import("axios")).default;
+      const res = await axios.post("https://api.web3forms.com/submit", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      const data = await res.json();
+      const data = res.data;
       if (data.success) {
         setResult("Message sent successfully!");
         formRef.current?.reset();
