@@ -1,84 +1,79 @@
 import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 
-// Access environment variables
-const HCAPTCHA_SITEKEY = import.meta.env.VITE_HCAPTCHA_SITEKEY;
-const WEB3FORMS_API_KEY = import.meta.env.VITE_WEB3FORMS_KEY;
+const WEB3FORMS_API_KEY = "cf56714b-d5fa-4bbd-99d1-b4f6c89239dc";
 
 const CardsLayout = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [result, setResult] = useState<string | null>(null);
 
-  // Load hCaptcha script only once
-  useEffect(() => {
-    if (typeof window !== "undefined" && !(window as any).hcaptchaScriptLoaded) {
-      const script = document.createElement("script");
-      script.src = "https://js.hcaptcha.com/1/api.js";
-      script.async = true;
-      document.body.appendChild(script);
-      (window as any).hcaptchaScriptLoaded = true;
-    }
-  }, []);
+  // Track when timer starts after first successful submission
+  const [startTime, setStartTime] = useState<number | null>(null);
+
+  // Flag to track if user submitted once already
+  const [hasSubmittedOnce, setHasSubmittedOnce] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setResult(null);
 
-    // Ensure the API key is available
-    if (!WEB3FORMS_API_KEY) {
-      setResult({ type: 'error', message: "Form submission is not configured. Missing API Key." });
+    if (!formRef.current) {
+      setResult("Form is not available.");
       setSubmitting(false);
       return;
     }
 
-    const formData = new FormData(formRef.current!);
-    const hcaptchaToken = (window as any).hcaptcha?.getResponse();
+    const formData = new FormData(formRef.current);
 
-    if (!hcaptchaToken) {
-      setResult({ type: 'error', message: "Please complete the hCaptcha." });
+    // Honeypot check: if filled, likely spam
+    if (formData.get("website")) {
+      setResult("Spam detected.");
       setSubmitting(false);
       return;
     }
 
-    // Append necessary data
-    formData.append("h-captcha-response", hcaptchaToken);
+    // Only check timer if user submitted once before
+    if (hasSubmittedOnce) {
+      const now = Date.now();
+      if (startTime && now - startTime < 20000) { // 10 seconds wait
+        setResult("Please wait before submitting again.");
+        setSubmitting(false);
+        return;
+      }
+    }
+
     formData.append("access_key", WEB3FORMS_API_KEY);
 
-    // Convert FormData to a plain object for reliable JSON submission
-    const object = Object.fromEntries(formData.entries());
-    const json = JSON.stringify(object);
-
     try {
-      const res = await axios.post("https://api.web3forms.com/submit", json, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        }
+      const res = await axios.post("https://api.web3forms.com/submit", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
+
       const data = res.data;
-
       if (data.success) {
-        setResult({ type: 'success', message: "Message sent successfully!" });
-        formRef.current?.reset();
-        (window as any).hcaptcha?.reset();
-      } else {
-        console.error("Web3Forms Error:", data);
-        setResult({ type: 'error', message: data.message || "Something went wrong. Please try again." });
-      }
-    } catch (err) {
-      console.error("Network error:", err);
-      if (axios.isAxiosError(err) && err.response) {
-        // Log the detailed error from the server
-        console.error("Server Response:", err.response.data);
-        setResult({ type: 'error', message: err.response.data.message || "A server error occurred." });
-      } else {
-        setResult({ type: 'error', message: "Something went wrong. Please try again." });
-      }
-    }
+        setResult("Message sent successfully!");
+        formRef.current.reset();
 
-    setSubmitting(false);
+        // If first time submitting, start timer and mark flag
+        if (!hasSubmittedOnce) {
+          setHasSubmittedOnce(true);
+          setStartTime(Date.now());
+        } else {
+          // Reset timer on subsequent submissions too if you want a rolling wait
+          setStartTime(Date.now());
+        }
+      } else {
+        console.error("Submission error:", data);
+        setResult("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+      setResult("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -103,7 +98,7 @@ const CardsLayout = () => {
           </div>
         </div>
 
-        {/* Right section with contact form */}
+        {/* Right section with the contact form */}
         <div className="bg-gray-50 border p-5 rounded-lg shadow-sm col-span-1 md:col-span-2">
           <h2 className="text-xl font-bold text-secondary-color">Contact Me</h2>
           <form
@@ -151,14 +146,15 @@ const CardsLayout = () => {
                 required
               ></textarea>
             </div>
-            {/* hCaptcha */}
-            <div className="mt-2">
-              <div
-                className="h-captcha"
-                data-sitekey={HCAPTCHA_SITEKEY}
-                data-theme="light"
-              ></div>
-            </div>
+
+            <input
+              type="text"
+              name="website"
+              style={{ display: "none" }}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+
             <button
               type="submit"
               className="mt-4 w-full py-3 px-5 bg-main-color text-white font-bold rounded-lg shadow-md hover:bg-main-color-dark focus:outline-none focus:ring-2 focus:ring-main-color"
@@ -167,13 +163,7 @@ const CardsLayout = () => {
               {submitting ? "Sending..." : "Send Message"}
             </button>
             {result && (
-              <div
-                className={`mt-2 text-center text-sm ${
-                  result.type === 'success' ? 'text-green-500' : 'text-red-500'
-                }`}
-              >
-                {result.message}
-              </div>
+              <div className="mt-2 text-center text-sm text-main-color">{result}</div>
             )}
           </form>
         </div>

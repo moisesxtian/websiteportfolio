@@ -11,19 +11,19 @@ const Footer: React.FC = () => {
             Passionate developer & designer. Building creative, accessible, and performant web experiences.
           </p>
           <div className="flex gap-4 mt-2">
-            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <a href="https://github.com/moisesxtian" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <FaGithub className="hover:text-orange-400 transition" size={22} />
             </a>
-            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/christian-moises/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <FaLinkedin className="hover:text-orange-400 transition" size={22} />
             </a>
-            <a href="https://behance.net/yourusername" target="_blank" rel="noopener noreferrer" aria-label="Behance">
+            <a href="https://www.behance.net/hyxchan" target="_blank" rel="noopener noreferrer" aria-label="Behance">
               <FaBehanceSquare className="hover:text-orange-400 transition" size={22} />
             </a>
-            <a href="https://discord.com/users/yourdiscordid" target="_blank" rel="noopener noreferrer" aria-label="Discord">
+            <a href="https://discord.com/users/hyx.chan" target="_blank" rel="noopener noreferrer" aria-label="Discord">
               <FaDiscord className="hover:text-orange-400 transition" size={22} />
             </a>
-            <a href="https://facebook.com/yourusername" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <a href="https://www.facebook.com/moisesxtian" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
               <FaFacebook className="hover:text-orange-400 transition" size={22} />
             </a>
           </div>
