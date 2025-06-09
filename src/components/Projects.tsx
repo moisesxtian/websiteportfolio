@@ -1,7 +1,7 @@
 import { FaGithub, FaEye } from 'react-icons/fa'; // React Icons
 import { ReactTyped } from 'react-typed';
 import { BsFillArrowDownRightCircleFill,BsFillArrowDownLeftCircleFill} from "react-icons/bs";
-import { useState } from 'react'; // React
+import { useRef, useState } from 'react'; // React
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -155,11 +155,33 @@ AOS.init({
 });
 const Projects = () => {
   const [showAll, setShowAll] = useState(false);
+  const projectsRef = useRef<HTMLDivElement>(null);
+  const extraProjectsRef = useRef<HTMLDivElement>(null);
+
   const visibleProjects = showAll ? projects : projects.slice(0, 4);
+
+  const handleToggle = () => {
+    if (showAll && projectsRef.current) {
+      setShowAll(false);
+      // Scroll to Projects section after state update
+      setTimeout(() => {
+        projectsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100); // Delay to allow UI to update
+    } else {
+      setShowAll(true);
+      setTimeout(() => {
+        extraProjectsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300); // Delay to allow UI to update
+    }
+  };
 
   return (
     <div className="relative">
-      <div className="p-5 md:p-10 container mx-auto min-h-screen w-screen font-poppins text-secondary-color grid grid-cols-1 gap-5" id='Projects'>
+      <div
+        className="p-5 md:p-10 container mx-auto min-h-screen w-screen font-poppins text-secondary-color grid grid-cols-1 gap-5"
+        id="Projects"
+        ref={projectsRef}
+      >
         
         {/* Title Section */}
         <div className="relative w-fit h-fit text-start rounded-xl p-3 border bg-gray-50" data-aos="fade-right">
@@ -185,7 +207,7 @@ const Projects = () => {
 
         {/* Project Cards */}
         <div className="w-full grid gap-5 sm:grid-cols-2 lg:grid-cols-4 p-10 md:p-4 rounded-xl border">
-          {visibleProjects.map((project, index) => (
+          {projects.slice(0, 4).map((project, index) => (
             <div
               key={project.id}
               className="group relative flex flex-col rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full bg-white"
@@ -247,12 +269,76 @@ const Projects = () => {
               </div>
             </div>
           ))}
+          {showAll &&
+            projects.slice(4).map((project, index) => (
+              <div
+                key={project.id}
+                ref={index === 0 ? extraProjectsRef : undefined}
+                className="group relative flex flex-col rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full bg-white"
+                data-aos="fade-up"
+                data-aos-delay={`${(index + 4) * 50}`}
+                style={{ minHeight: 480 }}
+              >
+                {/* Image Hover */}
+                <div className="relative w-full h-56 flex-shrink-0">
+                  <img
+                    src={project.imageUrl}
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
+                  />
+                  <img
+                    src={project.hoverImageUrl}
+                    alt={`${project.title} hover`}
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  />
+                </div>
+
+                <div className="flex flex-col flex-1 justify-between p-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-500">
+                      {project.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-gray-600">{project.description}</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {project.skills.map((skill, skillIndex) => (
+                        <span
+                          key={skillIndex}
+                          className="inline-block bg-orange-100 text-orange-500 text-xs font-medium px-2 py-1 rounded-full"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="mt-6 flex items-center gap-4">
+                    <a
+                      href={project.githubLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition-all"
+                    >
+                      <FaGithub className="mr-2" />
+                      View Repo
+                    </a>
+                    <a
+                      href={project.liveDemoLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center bg-orange-500 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-orange-400 transition-all"
+                    >
+                      <FaEye className="mr-2" />
+                      See Live
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
 
         {/* See More Button */}
-        <div className="text-center" data-aos="fade-up">
+        <div className="text-center">
           <button
-            onClick={() => setShowAll(prev => !prev)}
+            onClick={handleToggle}
             className="px-6 py-2 text-white bg-orange-500 hover:bg-orange-400 rounded-lg shadow transition-all"
           >
             {showAll ? 'Show Less' : 'See More'}

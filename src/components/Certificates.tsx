@@ -132,34 +132,43 @@ const Certificates = () => {
   ref={scrollRef}
   className="flex gap-6 overflow-x-scroll scroll-smooth overflow-hidden p-4"
 >
-  {certificates.map((certificate, index) => ( // Added 'index' here
+  {certificates.map((certificate, index) => (
     <div
-      key={certificate.id}
-      className="group relative bg-white rounded-lg shadow-md w-72 flex-shrink-0 transition-shadow hover:shadow-lg"
+      key={certificate.id + '-' + index}
+      className="bg-white rounded-lg shadow-md w-72 flex-shrink-0 flex flex-col transition-shadow hover:shadow-lg"
+      style={{ minHeight: 420 }}
       data-aos="fade-up"
-      data-aos-delay={index * 50} // Apply staggered delay: 0ms, 100ms, 200ms...
+      data-aos-delay={index * 50}
     >
       {/* Image */}
       <div className="relative w-full h-48">
         <img
           src={certificate.imageUrl}
           alt={certificate.name}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
         />
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-500">
+      <div className="flex flex-col flex-1 p-6">
+        {/* Title */}
+        <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
           {certificate.name}
         </h3>
-        <p className="mt-2 text-sm text-gray-600">{certificate.description}</p>
-        <p className="mt-1 text-sm text-gray-500">
-          <span className="font-medium text-gray-700">Issued by:</span> {certificate.organization}
-        </p>
-
-        {/* Download/View Link */}
-        <div className="mt-4">
+        {/* Spacer for description if needed */}
+        <div className="min-h-[32px] mb-2 flex items-center justify-center">
+          <p className="text-sm text-gray-600 text-center">
+            {certificate.description || <span>&nbsp;</span>}
+          </p>
+        </div>
+        {/* Issuer always in same spot */}
+        <div className="mt-auto mb-4">
+          <p className="text-sm text-gray-500 text-center">
+            <span className="font-medium text-gray-700">Issued by:</span> {certificate.organization}
+          </p>
+        </div>
+        {/* Button pinned to bottom */}
+        <div className="flex justify-center">
           <a
             href={certificate.certificateLink}
             target="_blank"
