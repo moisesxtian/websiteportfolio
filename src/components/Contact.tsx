@@ -1,15 +1,13 @@
 import { useRef, useState } from "react";
 
+// Access environment variables
+const WEB3FORMS_API_KEY = import.meta.env.VITE_WEB3_FORMS_API_KEY as string;
+const HCAPTCHA_SITEKEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY as string;
+
 const CardsLayout = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<string | null>(null);
-
-  // Get API key from env
-  const WEB3FORMS_API_KEY ='cf56714b-d5fa-4bbd-99d1-b4f6c89239dc';
-
-  // hCaptcha sitekey (replace with your own if needed)
-  const HCAPTCHA_SITEKEY = '890a1e98-0a90-48b0-bd48-ef6656c212be';
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,43 +16,38 @@ const CardsLayout = () => {
 
     const formData = new FormData(formRef.current!);
 
-    // hCaptcha token
     const hcaptchaToken = (window as any).hcaptcha?.getResponse();
     if (!hcaptchaToken) {
       setResult("Please complete the hCaptcha.");
       setSubmitting(false);
       return;
     }
-    formData.append("h-captcha-response", hcaptchaToken);
 
+    formData.append("h-captcha-response", hcaptchaToken);
     formData.append("access_key", WEB3FORMS_API_KEY);
 
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
     try {
-      // Use axios for POST request
       const axios = (await import("axios")).default;
-      const res = await axios.post("https://api.web3forms.com/submit", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await axios.post("https://api.web3forms.com/submit", formData);
       const data = res.data;
+
       if (data.success) {
         setResult("Message sent successfully!");
         formRef.current?.reset();
         (window as any).hcaptcha?.reset();
       } else {
-        console.error("Error:", data);
-        setResult("Something went wrong. Please try again.");
+        console.error("Web3Forms Error:", data);
+        setResult(data.message || "Something went wrong. Please try again.");
       }
-    } catch {
+    } catch (err) {
+      console.error("Network error:", err);
       setResult("Something went wrong. Please try again.");
     }
+
     setSubmitting(false);
   };
 
-  // hCaptcha script loader
+  // Load hCaptcha script once
   if (typeof window !== "undefined" && !(window as any).hcaptchaScriptLoaded) {
     const script = document.createElement("script");
     script.src = "https://js.hcaptcha.com/1/api.js";
@@ -66,7 +59,7 @@ const CardsLayout = () => {
   return (
     <div className="container mx-auto p-5 font-poppins" id="Contact">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Left section with 2 vertical cards */}
+        {/* Left section */}
         <div className="flex flex-col gap-5">
           <div className="bg-gray-50 border p-5 rounded-lg shadow-sm">
             <h2 className="text-6xl font-bold text-secondary-color">
@@ -85,7 +78,7 @@ const CardsLayout = () => {
           </div>
         </div>
 
-        {/* Right section with the contact form card */}
+        {/* Right section with contact form */}
         <div className="bg-gray-50 border p-5 rounded-lg shadow-sm col-span-1 md:col-span-2">
           <h2 className="text-xl font-bold text-secondary-color">Contact Me</h2>
           <form
@@ -133,7 +126,7 @@ const CardsLayout = () => {
                 required
               ></textarea>
             </div>
-            {/* hCaptcha widget */}
+            {/* hCaptcha */}
             <div className="mt-2">
               <div
                 className="h-captcha"
