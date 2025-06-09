@@ -158,7 +158,6 @@ const Projects = () => {
   const projectsRef = useRef<HTMLDivElement>(null);
   const extraProjectsRef = useRef<HTMLDivElement>(null);
 
-  const visibleProjects = showAll ? projects : projects.slice(0, 4);
 
   const handleToggle = () => {
     if (showAll && projectsRef.current) {
