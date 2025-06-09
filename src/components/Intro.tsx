@@ -14,10 +14,10 @@ AOS.init({
   easing:'ease-in-out'
 });
 
-const Intro = () => {
+const Home = () => {
   return (
     
-    <div className="container mx-auto   font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16 md:p-0"id='Intro'>
+    <div className="container mx-auto   font-poppins text-secondary-color flex items-center justify-center pt-16 md:pt-24 pb-16 md:p-0"id='Home'>
       {/* Grid Container */}
 
       <div className="flex flex-wrap w-screen m-auto justify-between align-middle">
@@ -275,4 +275,4 @@ const Intro = () => {
   );
 };
 
-export default Intro;
+export default Home;

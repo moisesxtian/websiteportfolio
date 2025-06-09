@@ -184,7 +184,11 @@ const Projects = () => {
       >
         
         {/* Title Section */}
-        <div className="relative w-fit h-fit text-start rounded-xl p-3 border bg-gray-50" data-aos="fade-right">
+        <div
+          id="projects-heading"
+          className="relative w-fit h-fit text-start rounded-xl p-3 border bg-gray-50"
+          data-aos="fade-right"
+        >
           <div className="absolute h-fit top-[-15px] right-[-15px] visible md:hidden bort">
             <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />
           </div>

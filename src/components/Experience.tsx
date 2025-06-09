@@ -1,10 +1,11 @@
-import { BsFillArrowDownLeftCircleFill, BsFillArrowDownRightCircleFill} from "react-icons/bs";
+import { BsFillArrowDownLeftCircleFill, BsFillArrowDownRightCircleFill } from "react-icons/bs";
 import { ReactTyped } from 'react-typed';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+
 AOS.init({
   startEvent: 'load',
-  easing:'ease-in-out',
+  easing: 'ease-in-out',
 });
 
 type ExperienceItemProps = {
@@ -21,7 +22,9 @@ function ExperienceItem({ company, period, role, duties, aos }: ExperienceItemPr
       className="p-6 rounded-lg shadow-sm bg-gray-50 border hover:scale-105 transition flex flex-col gap-2"
       data-aos={aos || "fade-up"}
     >
-      <h2 className="text-xl font-bold mb-1">{company}</h2>
+      <h2 className="text-xl font-bold mb-1 border-b border-orange-300 pb-1 w-fit">
+        {company}
+      </h2>
       <p className="text-sm text-gray-600">{period}</p>
       <p className="text-sm text-gray-600 mb-2">{role}</p>
       <h3 className="font-semibold mb-2">Duties & Responsibilities</h3>

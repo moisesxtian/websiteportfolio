@@ -4,7 +4,7 @@ import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 
 const Navbar = () => {
   const [nav, setNav] = useState(true);
-  const [activeLink, setActiveLink] = useState<string>('Intro'); // Active section
+  const [activeLink, setActiveLink] = useState<string>('Home'); // Active section
   const [lastScrollY, setLastScrollY] = useState(0);
   const [navbarVisible, setNavbarVisible] = useState(true);
 
@@ -29,7 +29,7 @@ const Navbar = () => {
 
   // ** Auto-Detect Active Section **
   useEffect(() => {
-    const sections = ['Intro', 'Projects', 'Certificates', 'Experience', 'Contact'];
+    const sections = ['Home', 'Projects', 'Certificates', 'Experience', 'Contact'];
     const observerOptions = {
       root: null, // Viewport
       rootMargin: '0px',
@@ -64,14 +64,27 @@ const Navbar = () => {
       </h1>
 
       <ul className="hidden sm:flex space-x-5 font-medium font-semibold text-sm text-gray-700">
-        {['Intro', 'Projects', 'Certificates', 'Experience', 'Contact'].map((section) => (
-          <Link key={section} to={section} spy={true} smooth={true} offset={50} duration={500}>
+        {[
+          { label: 'Home', target: 'Home' },
+          { label: 'Projects', target: 'projects-heading' }, // <-- use heading id
+          { label: 'Certificates', target: 'Certificates' },
+          { label: 'Experience', target: 'Experience' },
+          { label: 'Contact', target: 'Contact' },
+        ].map(({ label, target }) => (
+          <Link
+            key={label}
+            to={target}
+            spy={true}
+            smooth={true}
+            offset={-40} // Adjust this value to match your navbar height
+            duration={500}
+          >
             <li
               className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                activeLink === section ? 'text-main-color' : 'hover:text-main-color'
+                activeLink === label ? 'text-main-color' : 'hover:text-main-color'
               }`}
             >
-              {section}
+              {label}
             </li>
           </Link>
         ))}
@@ -90,7 +103,7 @@ const Navbar = () => {
         } sm:hidden`}
       >
         <ul>
-          {['Intro', 'Projects', 'Certificates', 'Experience', 'Contact'].map((section) => (
+          {['Home', 'Projects', 'Certificates', 'Experience', 'Contact'].map((section) => (
             <Link key={section} to={section} spy={true} smooth={true} offset={50} duration={500}>
               <li
                 className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
