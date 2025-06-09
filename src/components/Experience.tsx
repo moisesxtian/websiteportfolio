@@ -19,20 +19,31 @@ type ExperienceItemProps = {
 function ExperienceItem({ company, period, role, duties, aos }: ExperienceItemProps) {
   return (
     <div
-      className="p-6 rounded-lg shadow-sm bg-gray-50 border hover:scale-105 transition flex flex-col gap-2"
+      className="p-6 rounded-lg shadow-sm bg-gray-50 border hover:scale-105 transition flex flex-col gap-4"
       data-aos={aos || "fade-up"}
     >
-      <h2 className="text-xl font-bold mb-1 border-b border-orange-300 pb-1 w-fit">
-        {company}
-      </h2>
-      <p className="text-sm text-gray-600">{period}</p>
-      <p className="text-sm text-gray-600 mb-2">{role}</p>
-      <h3 className="font-semibold mb-2">Duties & Responsibilities</h3>
-      <ul className="list-disc pl-5 text-sm flex flex-col gap-2">
-        {duties.map((duty, idx) => (
-          <li key={idx} className="leading-relaxed">{duty}</li>
-        ))}
-      </ul>
+      {/* Top row: 2 columns */}
+      <div className="grid grid-cols-2 items-start gap-2">
+        {/* Company on left */}
+        <h2 className="text-xl font-bold border-b border-orange-300 pb-1 text-left">
+          {company}
+        </h2>
+        {/* Period and Role on right */}
+        <div className="text-right">
+          <p className="text-sm text-gray-600">{period}</p>
+          <p className="text-sm text-gray-600 italic">{role}</p>
+        </div>
+      </div>
+
+      {/* Duties section */}
+      <div>
+        <h3 className="font-semibold mb-2">Duties & Responsibilities</h3>
+        <ul className="list-disc pl-5 text-sm flex flex-col gap-2">
+          {duties.map((duty, idx) => (
+            <li key={idx} className="leading-relaxed">{duty}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -74,7 +85,7 @@ export default function Experience() {
 
   return (
     <div
-      className="container mx-auto my-auto flex flex-col justify-center items-center md:items-start p-10 font-poppins text-gray-800"
+      className="container mx-auto flex flex-col justify-center items-center md:items-start p-6 md:p-10 font-poppins text-gray-800"
       id="Experience"
     >
       <div className="relative w-fit h-fit text-start rounded-xl p-5 md:pr-16 border bg-gray-50" data-aos="fade-right">
@@ -97,18 +108,28 @@ export default function Experience() {
           Some relevant experience throughout my career.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 w-full">
-        {experiences.map((exp) => (
+
+      {/* Experience Cards */}
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12 pt-10 w-full">
+    {experiences.map((exp, index) => {
+      const isLast = index === experiences.length - 1;
+      const isOddCount = experiences.length % 2 === 1;
+      const centerOnDesktop = isLast && isOddCount ? "md:col-span-2 md:mx-auto" : "";
+
+      return (
+        <div key={exp.company} className={centerOnDesktop}>
           <ExperienceItem
-            key={exp.company}
             company={exp.company}
             period={exp.period}
             role={exp.role}
             duties={exp.duties}
             aos="fade-up"
           />
-        ))}
-      </div>
-    </div>
+        </div>
+      );
+    })}
+  </div>
+    </div> 
   );
 }

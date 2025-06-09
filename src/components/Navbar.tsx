@@ -55,7 +55,7 @@ const Navbar = () => {
 
   return (
     <div
-      className={`fixed backdrop-blur-sm bg-opacity-80 bg-white w-screen left-1/2 transform -translate-x-1/2 container mx-auto flex justify-between items-center z-50 transition-all duration-300 ${
+      className={`fixed backdrop-blur-sm bg-opacity-80 bg-white w-full left-1/2 transform -translate-x-1/2 container mx-auto flex justify-between items-center z-50 transition-all duration-300 ${
         navbarVisible ? 'top-0' : '-top-20'
       }`}
     >
