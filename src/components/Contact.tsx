@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState} from "react";
 import axios from "axios";
 
 const WEB3FORMS_API_KEY = "cf56714b-d5fa-4bbd-99d1-b4f6c89239dc";
