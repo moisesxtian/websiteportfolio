@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 // Access environment variables
 const WEB3FORMS_API_KEY = import.meta.env.VITE_WEB3_FORMS_API_KEY as string;
-const HCAPTCHA_SITEKEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY as string;
+const HCAPTCHA_SITEKEY = import.meta.env.HCAPTCHA_SITE_KEY as string;
 
 const CardsLayout = () => {
   const formRef = useRef<HTMLFormElement>(null);
