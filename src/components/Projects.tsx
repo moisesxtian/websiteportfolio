@@ -13,8 +13,8 @@ const projects = [
     description:
       'This project is an exercise tracker web application called Reptr, implemented using the MERN stack . It features secure login and registration using JSON Web Tokens for authorization. Registered users can track their workouts with the ability to add, edit, and delete workout entries.',
     skills: ['MongoDB','ExpressJS','React','NodeJS','JWT','Mongoose','Tailwind'], // Skills used
-    githubLink: 'https://github.com/moisesxtian/cs-chatbot/tree/main',
-    liveDemoLink: 'https://github.com/moisesxtian/cs-chatbot/tree/main',
+    githubLink: 'https://github.com/moisesxtian/ExerciseTracker',
+    liveDemoLink: 'https://github.com/moisesxtian/ExerciseTracker',
     imageUrl:
       '../assets/Projects/reptr-1.png', // Project image
     hoverImageUrl:
@@ -41,8 +41,8 @@ const projects = [
     description:
       'This project is a conduction sticker detection system that uses YOLOv8 for accurate object detection and FastAPI to serve the model via an API. It processes vehicle images to detect conduction stickers and includes a separate model for car make and model classification.',
     skills: ['Python','YOLOv8','FastAPI','Roboflow','PaddleOCR','numpy','Pillow','CNN'], // Skills used
-    githubLink: 'https://github.com/moisesxtian/Web-scraper',
-    liveDemoLink: 'https://github.com/moisesxtian/Web-scraper',
+    githubLink: 'https://github.com/moisesxtian/conduction-extraction',
+    liveDemoLink: 'https://github.com/moisesxtian/conduction-extraction',
     imageUrl:
       '../assets/Projects/conduction-1.png', // Project image
     hoverImageUrl:
