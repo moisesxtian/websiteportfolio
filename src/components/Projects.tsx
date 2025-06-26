@@ -14,7 +14,7 @@ const projects = [
       'This project is an exercise tracker web application called Reptr, implemented using the MERN stack . It features secure login and registration using JSON Web Tokens for authorization. Registered users can track their workouts with the ability to add, edit, and delete workout entries.',
     skills: ['MongoDB','ExpressJS','React','NodeJS','JWT','Mongoose','Tailwind'], // Skills used
     githubLink: 'https://github.com/moisesxtian/ExerciseTracker',
-    liveDemoLink: 'https://github.com/moisesxtian/ExerciseTracker',
+    liveDemoLink: 'https://reptr.vercel.app',
     imageUrl:
       '../assets/Projects/reptr-1.png', // Project image
     hoverImageUrl:
