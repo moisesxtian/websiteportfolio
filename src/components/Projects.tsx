@@ -20,7 +20,7 @@ const projects = [
     imageUrl:
       '../assets/Projects/vitae.png', // Project image
     hoverImageUrl:      
-      '../assets/Projects/vitae.png', // Project image
+      '../assets/Projects/vitae-hovered.png', // Project image
   },
             {
     id: 12,
