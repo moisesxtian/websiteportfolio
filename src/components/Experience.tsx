@@ -5,7 +5,7 @@ import 'aos/dist/aos.css';
 
 AOS.init({
   startEvent: 'load',
-  easing: 'ease-in-out',
+  easing: 'ease-in',
 });
 
 type ExperienceItemProps = {

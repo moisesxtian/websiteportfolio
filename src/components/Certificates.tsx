@@ -6,7 +6,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 AOS.init({
   startEvent: 'load',
-  easing:'ease-in-out'
+  easing:'ease-in'
 });
 
 const certificates = [
@@ -138,7 +138,7 @@ const Certificates = () => {
       className="bg-white rounded-lg shadow-md w-72 flex-shrink-0 flex flex-col transition-shadow hover:shadow-lg"
       style={{ minHeight: 420 }}
       data-aos="fade-up"
-      data-aos-delay={index * 50}
+      data-aos-delay={index * 20}
     >
       {/* Image */}
       <div className="relative w-full h-48">

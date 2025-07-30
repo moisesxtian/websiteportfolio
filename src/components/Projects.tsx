@@ -6,9 +6,39 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const projects = [
+              {
+    id: 13,
+    title: 'Vitae - AI Resume Builder',
+    href: 'https://github.com/moisesxtian/Vitae', // Link to the project
+    description:
+      'Vitae AI Resume Builder is a smart, one-page resume generator that uses AI to help users create polished resumes quickly. It features a dynamic multi-step form, real-time suggestionsperfect for job seekers who want fast, professional results.',
+    skills: ["React", "Tailwind CSS", "FastAPI", "Pydantic", "Jinja2", "ChatGPT API", "Vercel","Render"], // Skills used
+
+
+    githubLink: 'https://github.com/moisesxtian/Vitae',
+    liveDemoLink: 'https://vitae.hyxcreation.tech',
+    imageUrl:
+      '../assets/Projects/vitae.png', // Project image
+    hoverImageUrl:      
+      '../assets/Projects/vitae.png', // Project image
+  },
+            {
+    id: 12,
+    title: 'Tails Of Manila: Smart Agent',
+    href: 'https://github.com/moisesxtian/N8N--Workflows', // Link to the project
+    description:
+      'This project is a Smart Agent for Tails of Manila, a pet supplies and grooming store. It automates various tasks such as sending email notifications, managing customer inquiries, and handling order processing using N8N workflows.',
+    skills: ['N8N',"Facebook API", "Telegram API","Google Sheets API","Google Calendar API","LLM","WebHooks"], // Skills used
+    githubLink: 'https://github.com/moisesxtian/N8N--Workflows',
+    liveDemoLink: 'https://github.com/moisesxtian/N8N--Workflows',
+    imageUrl:
+      '../assets/Projects/n8n.png', // Project image
+    hoverImageUrl:      
+      '../assets/Projects/n8n-hover.png', // Project image
+  },
           {
     id: 11,
-    title: 'Reptr- Exercise Tracker',
+    title: 'Reptr - Exercise Tracker',
     href: 'https://github.com/moisesxtian/ExerciseTracker', // Link to the project
     description:
       'This project is an exercise tracker web application called Reptr, implemented using the MERN stack . It features secure login and registration using JSON Web Tokens for authorization. Registered users can track their workouts with the ability to add, edit, and delete workout entries.',
@@ -151,7 +181,8 @@ const projects = [
 
 ];
 AOS.init({
-  offset:200
+  offset: 300,
+  once:true
 });
 const Projects = () => {
   const [showAll, setShowAll] = useState(false);
@@ -187,6 +218,7 @@ const Projects = () => {
           id="projects-heading"
           className="relative w-fit h-fit text-start rounded-xl p-3 border bg-gray-50"
           data-aos="fade-right"
+          data-aos-offset="400"
         >
           <div className="absolute h-fit top-[-15px] right-[-15px] visible md:hidden bort">
             <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />

@@ -11,7 +11,7 @@ import { IconContext } from 'react-icons';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 AOS.init({
-  easing:'ease-in-out'
+  easing:'ease-in'
 });
 
 const Home = () => {
@@ -66,7 +66,7 @@ const Home = () => {
               <div
                 className="flex justify-center md:justify-start gap-4 border px-6 py-2 rounded-full"
                 data-aos="fade-right"
-                data-aos-delay="400"
+                data-aos-delay="200"
               >
                 <a href="https://github.com/moisesxtian" target="_blank" rel="noopener noreferrer">
                   <FaGithub className="text-[#494545] hover:text-[#F97316]" />
