@@ -1,165 +1,142 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FaGithub, FaEye } from 'react-icons/fa';
-import { ReactTyped } from 'react-typed';
-import { BsFillArrowDownRightCircleFill, BsFillArrowDownLeftCircleFill } from 'react-icons/bs';
-import { useRef, useState } from 'react';
-import { Play, X } from 'lucide-react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import {
+  ChevronLeft,
+  ChevronRight,
+  LayoutGrid,
+  Maximize2,
+  Play,
+  X,
+} from 'lucide-react';
 import { useProjects } from '../Hooks/useProjects';
 import type { Project } from '../types/content';
 
-AOS.init({
-  offset: 300,
-  once: true,
-});
+type ViewMode = 'showcase' | 'grid';
 
 const Projects = () => {
   const { projects } = useProjects();
-  const [showAll, setShowAll] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('showcase');
+  const [activeIndex, setActiveIndex] = useState(0);
   const [videoProject, setVideoProject] = useState<Project | null>(null);
-  const projectsRef = useRef<HTMLElement>(null);
-  const extraProjectsRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isJumping = useRef(false);
 
-  const handleToggle = () => {
-    if (showAll && projectsRef.current) {
-      setShowAll(false);
-      setTimeout(() => {
-        projectsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    } else {
-      setShowAll(true);
-      setTimeout(() => {
-        extraProjectsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 300);
-    }
-  };
+  const scrollToIndex = useCallback((index: number) => {
+    const track = trackRef.current;
+    if (!track || projects.length === 0) return;
 
-  const renderCard = (project: Project, index: number, ref?: React.Ref<HTMLDivElement>) => (
-    <div
-      key={project.id}
-      ref={ref}
-      className="group relative flex flex-col rounded-lg shadow-md overflow-hidden h-full bg-white transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_22px_40px_-24px_rgba(249,115,22,0.45)]"
-      data-aos="fade-up"
-      data-aos-delay={`${index * 50}`}
-      style={{ minHeight: 420 }}
-    >
-      <div className="relative w-full h-56 flex-shrink-0">
-        <img
-          src={project.image_url}
-          alt={project.title}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
-        />
-        <img
-          src={project.hover_image_url || project.image_url}
-          alt={`${project.title} hover`}
-          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        />
-        {project.video_url ? (
-          <button
-            type="button"
-            onClick={() => setVideoProject(project)}
-            className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-1 rounded-full bg-black/70 text-white text-xs px-3 py-1.5 hover:bg-black"
-          >
-            <Play size={12} />
-            Watch
-          </button>
-        ) : null}
-      </div>
+    const next = ((index % projects.length) + projects.length) % projects.length;
+    const width = track.clientWidth;
+    if (!width) return;
 
-      <div className="flex flex-col flex-1 justify-between p-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-500">
-            {project.title}
-          </h3>
-          <p className="mt-3 text-sm text-gray-600">{project.description}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {project.skills.map((skill, skillIndex) => (
-              <span
-                key={skillIndex}
-                className="inline-block bg-orange-100 text-orange-500 text-xs font-medium px-2 py-1 rounded-full"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="mt-6 flex items-center gap-4">
-          <a
-            href={project.github_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition-all"
-          >
-            <FaGithub className="mr-2" />
-            View Repo
-          </a>
-          <a
-            href={project.live_demo_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center bg-orange-500 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-orange-400 transition-all"
-          >
-            <FaEye className="mr-2" />
-            See Live
-          </a>
-        </div>
-      </div>
-    </div>
-  );
+    isJumping.current = true;
+    setActiveIndex(next);
+    track.scrollTo({ left: next * width, behavior: 'smooth' });
+
+    window.setTimeout(() => {
+      isJumping.current = false;
+    }, 450);
+  }, [projects.length]);
+
+  const goNext = () => scrollToIndex(activeIndex + 1);
+  const goPrev = () => scrollToIndex(activeIndex - 1);
+
+  useEffect(() => {
+    if (viewMode !== 'showcase') return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        scrollToIndex(activeIndex + 1);
+      }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        scrollToIndex(activeIndex - 1);
+      }
+    };
+
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [activeIndex, viewMode, scrollToIndex]);
+
+  // Keep scroll position correct after resize
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || viewMode !== 'showcase') return;
+
+    const onResize = () => {
+      track.scrollTo({ left: activeIndex * track.clientWidth, behavior: 'auto' });
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [activeIndex, viewMode]);
 
   return (
     <div className="relative">
       <section
-        className="section-page section-cut font-poppins text-secondary-color"
         id="Projects"
-        ref={projectsRef}
+        className="section-page section-cut font-poppins text-secondary-color"
       >
-        <div className="section-page-inner gap-6 md:gap-8">
-          <div
-            id="projects-heading"
-            className="relative w-fit h-fit text-start rounded-xl p-3 border bg-gray-50"
-            data-aos="fade-right"
-          >
-            <div className="absolute h-fit top-[-15px] right-[-15px] visible md:hidden bort">
-              <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />
+        <div className="section-page-inner gap-5 md:gap-6 !justify-start">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 w-full">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-main-color mb-2">
+                Portfolio
+              </p>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
+                Personal Projects
+              </h2>
+              <p className="mt-2 text-sm text-gray-600 max-w-lg">
+                Explore builds one at a time in full view, or switch to a compact card grid.
+              </p>
             </div>
-            <div className="absolute h-fit top-[-15px] right-[-15px] hidden md:block">
-              <BsFillArrowDownRightCircleFill size={50} color="#F97316" />
-            </div>
-            <h2 className="w-fit text-4xl font-extrabold tracking-tight font-poppins text-gray-900 sm:text-5xl">
-              <ReactTyped
-                strings={['Personal Projects']}
-                typeSpeed={20}
-                backSpeed={100}
-                backDelay={2000}
-                cursorChar="*"
-              />
-            </h2>
-            <p className="w-fit mt-4 text-sm text-gray-600">
-              A showcase of my personal projects highlighting my skills and creativity.
-            </p>
-          </div>
 
-          <div className="w-full grid gap-5 sm:grid-cols-2 lg:grid-cols-4 p-4 rounded-xl border bg-white/50">
-            {projects.slice(0, 4).map((project, index) => renderCard(project, index))}
-            {showAll &&
-              projects
-                .slice(4)
-                .map((project, index) =>
-                  renderCard(project, index + 4, index === 0 ? extraProjectsRef : undefined)
-                )}
-          </div>
-
-          {projects.length > 4 ? (
-            <div className="text-center">
+            <div className="inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm self-start sm:self-auto">
               <button
-                onClick={handleToggle}
-                className="px-6 py-2 text-white bg-orange-500 hover:bg-orange-400 rounded-lg shadow transition-all"
+                type="button"
+                onClick={() => setViewMode('showcase')}
+                className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition ${
+                  viewMode === 'showcase'
+                    ? 'bg-main-color text-white'
+                    : 'text-gray-600 hover:text-main-color'
+                }`}
               >
-                {showAll ? 'Show Less' : 'See More'}
+                <Maximize2 size={14} />
+                Full view
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('grid')}
+                className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition ${
+                  viewMode === 'grid'
+                    ? 'bg-main-color text-white'
+                    : 'text-gray-600 hover:text-main-color'
+                }`}
+              >
+                <LayoutGrid size={14} />
+                Card view
               </button>
             </div>
-          ) : null}
+          </div>
+
+          {viewMode === 'showcase' ? (
+            <ShowcaseView
+              projects={projects}
+              activeIndex={activeIndex}
+              trackRef={trackRef}
+              isJumping={isJumping}
+              onSelect={scrollToIndex}
+              onPrev={goPrev}
+              onNext={goNext}
+              onWatchVideo={setVideoProject}
+              onScrollIndex={(index) => {
+                if (!isJumping.current) setActiveIndex(index);
+              }}
+            />
+          ) : (
+            <GridView projects={projects} onWatchVideo={setVideoProject} />
+          )}
         </div>
       </section>
 
@@ -180,5 +157,231 @@ const Projects = () => {
     </div>
   );
 };
+
+function ShowcaseView({
+  projects,
+  activeIndex,
+  trackRef,
+  onSelect,
+  onPrev,
+  onNext,
+  onWatchVideo,
+  onScrollIndex,
+}: {
+  projects: Project[];
+  activeIndex: number;
+  trackRef: React.RefObject<HTMLDivElement>;
+  isJumping: React.MutableRefObject<boolean>;
+  onSelect: (index: number) => void;
+  onPrev: () => void;
+  onNext: () => void;
+  onWatchVideo: (project: Project) => void;
+  onScrollIndex: (index: number) => void;
+}) {
+  if (projects.length === 0) {
+    return <p className="text-sm text-gray-500 py-10">No projects yet.</p>;
+  }
+
+  return (
+    <div className="w-full flex flex-col gap-4">
+      <div className="relative rounded-2xl border border-gray-200 bg-secondary-color text-white shadow-lg">
+        <div
+          ref={trackRef}
+          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide"
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            const width = el.clientWidth;
+            if (!width) return;
+            const index = Math.round(el.scrollLeft / width);
+            if (index >= 0 && index < projects.length) {
+              onScrollIndex(index);
+            }
+          }}
+        >
+          {projects.map((project) => (
+            <article
+              key={project.id}
+              className="relative w-full min-w-full max-w-full flex-shrink-0 snap-center grid grid-cols-1 lg:grid-cols-2 min-h-[420px] md:min-h-[520px]"
+            >
+              <div className="relative h-56 sm:h-72 lg:h-auto overflow-hidden">
+                <img
+                  src={project.image_url}
+                  alt={project.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-secondary-color via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-secondary-color/80" />
+              </div>
+
+              <div className="relative flex flex-col justify-center gap-4 p-6 sm:p-8 lg:p-10">
+                <p className="text-[11px] uppercase tracking-[0.16em] text-orange-300 font-semibold">
+                  Featured project
+                </p>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight">
+                  {project.title}
+                </h3>
+                <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-xl">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {project.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-[11px] text-orange-200"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <a
+                    href={project.github_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-white text-secondary-color px-4 py-2.5 text-sm font-semibold hover:bg-orange-50 transition"
+                  >
+                    <FaGithub />
+                    View Repo
+                  </a>
+                  <a
+                    href={project.live_demo_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-main-color text-white px-4 py-2.5 text-sm font-semibold hover:bg-orange-400 transition"
+                  >
+                    <FaEye />
+                    See Live
+                  </a>
+                  {project.video_url ? (
+                    <button
+                      type="button"
+                      onClick={() => onWatchVideo(project)}
+                      className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-semibold hover:bg-white/10 transition"
+                    >
+                      <Play size={14} />
+                      Watch
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={onPrev}
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/60 p-2.5 text-white backdrop-blur hover:bg-main-color transition"
+          aria-label="Previous project"
+        >
+          <ChevronLeft size={20} />
+        </button>
+        <button
+          type="button"
+          onClick={onNext}
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/60 p-2.5 text-white backdrop-blur hover:bg-main-color transition"
+          aria-label="Next project"
+        >
+          <ChevronRight size={20} />
+        </button>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <p className="text-xs text-gray-500 tabular-nums whitespace-nowrap">
+          {String(activeIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+        </p>
+        <div className="flex-1 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 min-w-max py-1">
+            {projects.map((project, index) => (
+              <button
+                key={project.id}
+                type="button"
+                onClick={() => onSelect(index)}
+                className={`relative h-14 w-24 overflow-hidden rounded-lg border transition ${
+                  index === activeIndex
+                    ? 'border-main-color ring-2 ring-main-color/30'
+                    : 'border-gray-200 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <img
+                  src={project.image_url}
+                  alt={project.title}
+                  className="h-full w-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GridView({
+  projects,
+  onWatchVideo,
+}: {
+  projects: Project[];
+  onWatchVideo: (project: Project) => void;
+}) {
+  return (
+    <div className="w-full grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {projects.map((project) => (
+        <article
+          key={project.id}
+          className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-main-color/30 hover:shadow-md"
+        >
+          <div className="relative h-36 overflow-hidden">
+            <img
+              src={project.image_url}
+              alt={project.title}
+              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-0"
+            />
+            <img
+              src={project.hover_image_url || project.image_url}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+            {project.video_url ? (
+              <button
+                type="button"
+                onClick={() => onWatchVideo(project)}
+                className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] text-white"
+              >
+                <Play size={10} />
+                Watch
+              </button>
+            ) : null}
+          </div>
+          <div className="flex flex-1 flex-col p-4 gap-2">
+            <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-main-color">
+              {project.title}
+            </h3>
+            <p className="text-xs text-gray-500 line-clamp-2">{project.description}</p>
+            <div className="mt-auto flex gap-2 pt-2">
+              <a
+                href={project.github_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex flex-1 items-center justify-center gap-1 rounded-md bg-gray-900 px-2 py-1.5 text-[11px] text-white"
+              >
+                <FaGithub />
+                Repo
+              </a>
+              <a
+                href={project.live_demo_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex flex-1 items-center justify-center gap-1 rounded-md bg-main-color px-2 py-1.5 text-[11px] text-white"
+              >
+                <FaEye />
+                Live
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
 
 export default Projects;

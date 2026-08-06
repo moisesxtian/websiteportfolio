@@ -32,10 +32,10 @@ const Footer: React.FC = () => {
         {/* Center: Quick Links */}
         <div className="grid grid-cols-2 gap-5 text-center text-left md:text-center">
           <span className="uppercase text-xs text-gray-400 tracking-widest mb-1 col-span-2">Quick Links</span>
-          <a href="#Intro" className="hover:text-orange-400 transition text-sm">Home</a>
+          <a href="#Home" className="hover:text-orange-400 transition text-sm">Home</a>
+          <a href="#Experience" className="hover:text-orange-400 transition text-sm">Experience</a>
           <a href="#Projects" className="hover:text-orange-400 transition text-sm">Projects</a>
           <a href="#Certificates" className="hover:text-orange-400 transition text-sm">Certificates</a>
-          <a href="#Experience" className="hover:text-orange-400 transition text-sm">Experience</a>
           <a href="#Contact" className="hover:text-orange-400 transition text-sm col-span-2 text-center">Contact</a>
         </div>
 

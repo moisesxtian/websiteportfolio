@@ -2,9 +2,17 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 
+const navItems = [
+  { label: 'Home', target: 'Home', id: 'Home' },
+  { label: 'Experience', target: 'Experience', id: 'Experience' },
+  { label: 'Projects', target: 'Projects', id: 'Projects' },
+  { label: 'Certificates', target: 'Certificates', id: 'Certificates' },
+  { label: 'Contact', target: 'Contact', id: 'Contact' },
+];
+
 const Navbar = () => {
   const [nav, setNav] = useState(true);
-  const [activeLink, setActiveLink] = useState<string>('Home'); // Active section
+  const [activeLink, setActiveLink] = useState<string>('Home');
   const [lastScrollY, setLastScrollY] = useState(0);
   const [navbarVisible, setNavbarVisible] = useState(true);
 
@@ -27,24 +35,19 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // ** Auto-Detect Active Section **
   useEffect(() => {
-    const sections = ['Home', 'Projects', 'Certificates', 'Experience', 'Contact'];
-    const observerOptions = {
-      root: null, // Viewport
-      rootMargin: '0px',
-      threshold: 0.6, // Section is "active" when at least 60% is visible
-    };
+    const sections = navItems.map((item) => item.id);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveLink(entry.target.id);
+          }
+        });
+      },
+      { root: null, rootMargin: '0px', threshold: 0.45 }
+    );
 
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveLink(entry.target.id); // Update active section
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
     sections.forEach((id) => {
       const section = document.getElementById(id);
       if (section) observer.observe(section);
@@ -64,24 +67,11 @@ const Navbar = () => {
       </h1>
 
       <ul className="hidden sm:flex space-x-5 font-medium font-semibold text-sm text-gray-700">
-        {[
-          { label: 'Home', target: 'Home' },
-          { label: 'Projects', target: 'projects-heading' }, // <-- use heading id
-          { label: 'Certificates', target: 'Certificates' },
-          { label: 'Experience', target: 'Experience' },
-          { label: 'Contact', target: 'Contact' },
-        ].map(({ label, target }) => (
-          <Link
-            key={label}
-            to={target}
-            spy={true}
-            smooth={true}
-            offset={-40} // Adjust this value to match your navbar height
-            duration={500}
-          >
+        {navItems.map(({ label, target, id }) => (
+          <Link key={label} to={target} spy smooth offset={-40} duration={500}>
             <li
               className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                activeLink === label ? 'text-main-color' : 'hover:text-main-color'
+                activeLink === id ? 'text-main-color' : 'hover:text-main-color'
               }`}
             >
               {label}
@@ -90,7 +80,6 @@ const Navbar = () => {
         ))}
       </ul>
 
-      {/* Mobile Menu */}
       <div onClick={handleNav} className="flex sm:hidden p-4">
         {!nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
       </div>
@@ -103,14 +92,22 @@ const Navbar = () => {
         } sm:hidden`}
       >
         <ul>
-          {['Home', 'Projects', 'Certificates', 'Experience', 'Contact'].map((section) => (
-            <Link key={section} to={section} spy={true} smooth={true} offset={50} duration={500}>
+          {navItems.map(({ label, target, id }) => (
+            <Link
+              key={label}
+              to={target}
+              spy
+              smooth
+              offset={-40}
+              duration={500}
+              onClick={() => setNav(true)}
+            >
               <li
                 className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                  activeLink === section ? 'text-main-color' : 'hover:text-main-color'
+                  activeLink === id ? 'text-main-color' : 'hover:text-main-color'
                 }`}
               >
-                {section}
+                {label}
               </li>
             </Link>
           ))}

@@ -98,10 +98,10 @@ const Home = () => {
               Christian Moises
             </h1>
             <h3 className="hero-reveal text-sm sm:text-base" style={{ animationDelay: '140ms' }}>
-              a {' '}
+              an {' '}
               <span className="font-bold text-main-color">
                 <ReactTyped
-                  strings={['Software Developer', 'Web Developer', 'Data Scientist']}
+                  strings={['AI Developer', 'Automations Engineer']}
                   typeSpeed={40}
                   backSpeed={40}
                   loop
@@ -115,10 +115,10 @@ const Home = () => {
               style={{ animationDelay: '200ms' }}
             >
               {[
-                'Web Developer',
-                'App Development',
-                'Data Science',
-                'Machine Learning',
+                'Full Stack Development',
+                'Automation Engineering',
+                'AI Development',
+                'Web Scraping',
                 'Graphic Designer',
               ].map((role) => (
                 <div
@@ -232,7 +232,7 @@ const Home = () => {
         </div>
 
         <Link
-          to="Projects"
+          to="Experience"
           smooth
           offset={-40}
           duration={500}
