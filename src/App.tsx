@@ -1,22 +1,28 @@
-import Navbar from "./components/Navbar";
-import Intro from "./components/Intro";
-import Projects from "./components/Projects";
-import Certificates from "./components/Certificates";
-import Experience from "./components/Experience";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './Context/AuthContext';
+import HomePage from './Pages/HomePage';
+import AdminLogin from './Pages/Admin/AdminLogin';
+import AdminDashboard from './Pages/Admin/AdminDashboard';
+import ProtectedRoute from './components/Admin/ProtectedRoute';
 
 function App() {
   return (
-    <div className="overflow-x-hidden">
-      <Navbar />
-      <Intro />
-      <Projects />
-      <Certificates />
-      <Experience />
-      <Contact />
-      <Footer />
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

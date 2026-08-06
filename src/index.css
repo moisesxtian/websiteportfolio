@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .admin-input {
+    @apply w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-main-color focus:ring-1 focus:ring-main-color;
+  }
+}
