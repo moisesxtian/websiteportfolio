@@ -46,7 +46,7 @@ function setCircleOrigin(event?: MouseEvent<HTMLElement>) {
   let x = window.innerWidth - 48;
   let y = 32;
 
-  if (event?.currentTarget) {
+  if (event?.currentTarget instanceof HTMLElement) {
     const rect = event.currentTarget.getBoundingClientRect();
     x = rect.left + rect.width / 2;
     y = rect.top + rect.height / 2;
@@ -62,6 +62,14 @@ function setCircleOrigin(event?: MouseEvent<HTMLElement>) {
   root.style.setProperty('--theme-toggle-r', `${endRadius}px`);
 }
 
+function canUseViewTransition(): boolean {
+  if (typeof document.startViewTransition !== 'function') return false;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+  // View Transitions can be flaky on some mobile browsers — skip animation, still toggle.
+  if (window.matchMedia('(pointer: coarse)').matches) return false;
+  return true;
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => getInitialTheme());
 
@@ -71,27 +79,31 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [theme]);
 
   const setTheme = (next: Theme) => {
+    applyThemeClass(next);
+    localStorage.setItem(STORAGE_KEY, next);
     setThemeState(next);
   };
 
   const toggleTheme = (event?: MouseEvent<HTMLElement>) => {
     const next: Theme = theme === 'dark' ? 'light' : 'dark';
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     setCircleOrigin(event);
 
     const apply = () => {
+      applyThemeClass(next);
+      localStorage.setItem(STORAGE_KEY, next);
       flushSync(() => {
         setThemeState(next);
       });
     };
 
-    if (
-      !prefersReduced &&
-      typeof document.startViewTransition === 'function'
-    ) {
-      document.startViewTransition(apply);
-      return;
+    if (canUseViewTransition()) {
+      try {
+        document.startViewTransition!(apply);
+        return;
+      } catch {
+        // Fall through to instant toggle
+      }
     }
 
     apply();

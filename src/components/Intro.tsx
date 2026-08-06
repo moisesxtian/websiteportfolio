@@ -207,7 +207,7 @@ const Home = () => {
           {/* Portrait + soundtrack */}
           <div className="hero-float-stage relative w-full lg:w-[42%] flex flex-col items-center justify-center">
             <div
-              className="relative w-[min(72vw,280px)] sm:w-[min(60vw,340px)] lg:w-full"
+              className="relative w-[min(92vw,380px)] sm:w-[min(70vw,400px)] lg:w-full"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >

@@ -124,6 +124,11 @@
   .hero-float-shadow {
     animation: hero-float-shadow 5.5s ease-in-out infinite;
   }
+
+  .nav-glass {
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    backdrop-filter: blur(28px) saturate(200%);
+  }
 }
 
 @layer utilities {

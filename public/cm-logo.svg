@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 360" width="540" height="360" role="img" aria-label="CM logo">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="36">
+    <!-- C -->
+    <path d="M 201.4 118.7 A 80 80 0 1 0 201.4 241.3" stroke="#16181D"/>
+    <!-- M verticals -->
+    <path d="M 290 100 L 290 260" stroke="#16181D"/>
+    <path d="M 470 100 L 470 260" stroke="#16181D"/>
+    <!-- M center V (accent) -->
+    <path d="M 290 100 L 380 228 L 470 100" stroke="#FF4D2E"/>
+  </g>
+</svg>
