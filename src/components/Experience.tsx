@@ -85,10 +85,10 @@ function ExperienceCard({
       {/* Timeline node */}
       <div className="absolute left-0 top-8 md:left-1/2 md:-translate-x-1/2 z-20">
         <div
-          className={`relative flex h-4 w-4 items-center justify-center rounded-full ring-4 ring-white transition-colors duration-200 ${
+          className={`relative flex h-4 w-4 items-center justify-center rounded-full ring-4 ring-white transition-colors duration-200 dark:ring-page-bg ${
             isLatest
               ? 'bg-main-color shadow-[0_0_0_6px_rgba(249,115,22,0.18)]'
-              : 'bg-gray-300 group-hover:bg-main-color group-hover:shadow-[0_0_0_6px_rgba(249,115,22,0.12)]'
+              : 'bg-gray-300 group-hover:bg-main-color group-hover:shadow-[0_0_0_6px_rgba(249,115,22,0.12)] dark:bg-gray-600'
           }`}
         >
           {isLatest ? (
@@ -107,28 +107,28 @@ function ExperienceCard({
           type="button"
           onClick={onToggle}
           aria-expanded={isActive}
-          className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 rounded-2xl"
+          className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 rounded-2xl dark:focus-visible:ring-offset-page-bg"
         >
           <div
-            className={`relative overflow-hidden rounded-2xl border bg-white/95 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-200 ease-out ${
+            className={`relative overflow-hidden rounded-2xl border bg-white/95 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-200 ease-out dark:bg-neutral-900/95 ${
               isActive
                 ? 'border-main-color/35 shadow-[0_22px_55px_-28px_rgba(249,115,22,0.55)] -translate-y-0.5'
-                : 'border-gray-200/90 shadow-sm hover:border-main-color/25 hover:shadow-md'
+                : 'border-gray-200/90 shadow-sm hover:border-main-color/25 hover:shadow-md dark:border-gray-700/90'
             }`}
           >
             <div
               className={`absolute inset-y-0 left-0 w-1 transition-colors duration-200 ${
                 isActive || isLatest
                   ? 'bg-main-color'
-                  : 'bg-gray-200 group-hover:bg-main-color/50'
+                  : 'bg-gray-200 group-hover:bg-main-color/50 dark:bg-gray-700'
               }`}
             />
 
             <div
               className={`pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full blur-2xl transition-opacity duration-200 ${
                 isActive
-                  ? 'opacity-100 bg-orange-200/50'
-                  : 'opacity-0 group-hover:opacity-70 bg-orange-100/60'
+                  ? 'opacity-100 bg-orange-200/50 dark:bg-orange-500/20'
+                  : 'opacity-0 group-hover:opacity-70 bg-orange-100/60 dark:bg-orange-500/15'
               }`}
             />
 
@@ -137,15 +137,15 @@ function ExperienceCard({
                 <div className="min-w-0 space-y-2 sm:space-y-2.5">
                   <div className="flex flex-wrap items-center gap-2">
                     {isLatest ? (
-                      <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-main-color">
+                      <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-main-color dark:bg-orange-950/60">
                         Current chapter
                       </span>
                     ) : (
-                      <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
+                      <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:bg-neutral-800 dark:text-gray-400">
                         {progressLabel}
                       </span>
                     )}
-                    <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs text-gray-500">
+                    <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs text-gray-500 dark:text-gray-400">
                       <Calendar size={12} className="text-main-color" />
                       {experience.period}
                     </span>
@@ -155,7 +155,7 @@ function ExperienceCard({
                     {experience.role}
                   </h3>
 
-                  <p className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600">
+                  <p className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-400">
                     <Building2 size={14} className="text-main-color flex-shrink-0" />
                     {experience.company}
                   </p>
@@ -165,7 +165,7 @@ function ExperienceCard({
                   className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border transition-all duration-200 ${
                     isActive
                       ? 'border-main-color bg-main-color text-white rotate-180'
-                      : 'border-gray-200 bg-gray-50 text-gray-500 group-hover:border-main-color/40 group-hover:text-main-color'
+                      : 'border-gray-200 bg-gray-50 text-gray-500 group-hover:border-main-color/40 group-hover:text-main-color dark:border-gray-700 dark:bg-neutral-800 dark:text-gray-400'
                   }`}
                 >
                   <ChevronDown size={16} />
@@ -178,7 +178,7 @@ function ExperienceCard({
                 }`}
               >
                 <div className="overflow-hidden">
-                  <div className="border-t border-dashed border-gray-200 pt-4">
+                  <div className="border-t border-dashed border-gray-200 pt-4 dark:border-gray-700">
                     <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
                       Highlights & responsibilities
                     </p>
@@ -186,9 +186,9 @@ function ExperienceCard({
                       {experience.duties.map((duty, dutyIndex) => (
                         <li
                           key={dutyIndex}
-                          className="flex gap-3 text-sm leading-relaxed text-gray-600"
+                          className="flex gap-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400"
                         >
-                          <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-50 text-main-color ring-1 ring-orange-100">
+                          <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-50 text-main-color ring-1 ring-orange-100 dark:bg-orange-950/50 dark:ring-orange-900/50">
                             <CheckCircle2 size={13} strokeWidth={2.5} />
                           </span>
                           <span className="pt-0.5">{duty}</span>
@@ -221,8 +221,8 @@ export default function Experience() {
       className="section-page section-cut relative overflow-hidden font-poppins text-secondary-color"
     >
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-orange-100/45 blur-3xl" />
-        <div className="absolute bottom-10 left-0 h-64 w-64 rounded-full bg-stone-200/50 blur-3xl" />
+        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-orange-100/45 blur-3xl dark:bg-orange-500/10" />
+        <div className="absolute bottom-10 left-0 h-64 w-64 rounded-full bg-stone-200/50 blur-3xl dark:bg-neutral-700/30" />
         <div
           className="absolute inset-0 opacity-[0.28]"
           style={{
@@ -237,26 +237,26 @@ export default function Experience() {
         {/* Always-visible section header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 w-full">
           <div className="relative w-fit">
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-main-color">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-main-color dark:border-orange-800 dark:bg-orange-950/50">
               <Briefcase size={12} />
               Career path
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
               Work Experience
             </h2>
-            <p className="mt-3 max-w-md text-xs sm:text-sm text-gray-600 leading-relaxed">
+            <p className="mt-3 max-w-md text-xs sm:text-sm text-gray-600 leading-relaxed dark:text-gray-400">
               Roles that shaped how I build — from freelance craft to AI/ML engineering.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="rounded-xl bg-white px-4 py-3 min-w-[110px]">
+            <div className="rounded-xl bg-white px-4 py-3 min-w-[110px] dark:bg-neutral-900">
               <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Roles</p>
               <p className="text-2xl font-bold text-secondary-color tabular-nums">
                 {experiences.length}
               </p>
             </div>
-            <div className="rounded-xl bg-white px-4 py-3 min-w-[110px]">
+            <div className="rounded-xl bg-white px-4 py-3 min-w-[110px] dark:bg-neutral-900">
               <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">
                 YOE
               </p>
@@ -266,10 +266,10 @@ export default function Experience() {
         </div>
 
         <div className="relative w-full">
-          <div className="absolute left-[7px] md:left-1/2 top-4 bottom-16 w-px -translate-x-1/2 bg-gradient-to-b from-main-color via-orange-200 to-transparent" />
+          <div className="absolute left-[7px] md:left-1/2 top-4 bottom-16 w-px -translate-x-1/2 bg-gradient-to-b from-main-color via-orange-200 to-transparent dark:via-orange-800" />
 
           {experiences.length === 0 ? (
-            <p className="text-center text-sm text-gray-500 py-16">
+            <p className="text-center text-sm text-gray-500 py-16 dark:text-gray-400">
               No experience entries yet. Add some from the admin panel.
             </p>
           ) : (

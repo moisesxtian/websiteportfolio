@@ -86,7 +86,7 @@ const Home = () => {
     const Icon = getSkillIcon(skill.icon_key);
     return (
       <div key={`${keyPrefix}-${skill.id}`} className="flex p-1">
-        <div className="skill-chip flex gap-2 rounded-lg p-1.5 border border-gray-300 text-xs items-center whitespace-nowrap bg-white/80">
+        <div className="skill-chip flex gap-2 rounded-lg p-1.5 border border-gray-300 text-xs items-center whitespace-nowrap bg-white/80 dark:border-gray-600 dark:bg-neutral-900/80">
           <Icon size={15} />
           <span>{skill.name}</span>
         </div>
@@ -135,7 +135,7 @@ const Home = () => {
               ].map((role) => (
                 <div
                   key={role}
-                  className="role-pill flex items-center space-x-2 rounded-full border border-gray-300 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-light bg-white/70"
+                  className="role-pill flex items-center space-x-2 rounded-full border border-gray-300 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-light bg-white/70 dark:border-gray-600 dark:bg-neutral-900/70"
                 >
                   <span className="block w-2 h-2 bg-main-color rounded-full" />
                   <span>{role}</span>
@@ -144,7 +144,7 @@ const Home = () => {
             </div>
 
             <IconContext.Provider value={{ size: '24', className: 'transition duration-300' }}>
-              <div className="hero-reveal flex justify-center lg:justify-start gap-3 sm:gap-4 border border-gray-200 px-4 sm:px-5 py-2 rounded-full bg-white/60">
+              <div className="hero-reveal flex justify-center lg:justify-start gap-3 sm:gap-4 border border-gray-200 px-4 sm:px-5 py-2 rounded-full bg-white/60 dark:border-gray-700 dark:bg-neutral-900/60">
                 {[
                   { href: 'https://github.com/moisesxtian', Icon: FaGithub },
                   { href: 'https://www.linkedin.com/in/christian-moises/', Icon: FaLinkedin },
@@ -157,7 +157,7 @@ const Home = () => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-icon text-[#494545]"
+                    className="social-icon text-[#494545] dark:text-gray-300"
                   >
                     <Icon />
                   </a>
@@ -183,7 +183,7 @@ const Home = () => {
                 <p className="text-main-color font-bold text-sm sm:text-base">
                   Technologies & Languages
                 </p>
-                <p className="text-xs sm:text-sm text-gray-600">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   Technologies I use and have worked with.
                 </p>
               </div>
@@ -249,7 +249,7 @@ const Home = () => {
           smooth
           offset={-56}
           duration={500}
-          className="scroll-hint absolute bottom-1 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-1 text-xs text-gray-400 cursor-pointer hover:text-main-color transition-colors"
+          className="scroll-hint absolute bottom-1 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-1 text-xs text-gray-400 dark:text-gray-500 cursor-pointer hover:text-main-color transition-colors"
         >
           <span>Scroll</span>
           <ChevronDown size={16} className="scroll-hint-icon" />

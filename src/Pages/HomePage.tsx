@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 
 export default function HomePage() {
   return (
-    <div className="overflow-x-hidden snap-y snap-proximity">
+    <div className="overflow-x-hidden snap-y snap-proximity bg-page-bg text-secondary-color">
       <Navbar />
       <div className="snap-start">
         <Intro />

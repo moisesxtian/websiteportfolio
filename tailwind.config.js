@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       animation: {
@@ -30,7 +31,10 @@ export default {
       },
       colors: {
         "main-color": "#F97316",
-        "secondary-color": "#252525",
+        "secondary-color": "var(--secondary-color)",
+        surface: "var(--surface)",
+        "surface-muted": "var(--surface-muted)",
+        "page-bg": "var(--page-bg)",
       },
     },
   },

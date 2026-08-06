@@ -3,12 +3,28 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --page-bg: #ffffff;
+    --page-fg: #252525;
+    --secondary-color: #252525;
+    --surface: #ffffff;
+    --surface-muted: #f9fafb;
+  }
+
+  .dark {
+    --page-bg: #0a0a0a;
+    --page-fg: #f3f4f6;
+    --secondary-color: #f3f4f6;
+    --surface: #171717;
+    --surface-muted: #1f1f1f;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply overflow-x-hidden;
+    @apply overflow-x-hidden bg-page-bg text-secondary-color antialiased;
   }
 
   img {
@@ -17,9 +33,47 @@
   }
 }
 
+/* Circular swipe when toggling light / dark mode (outside layers for VT specificity) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+::view-transition-new(root) {
+  animation: theme-circle-wipe 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  z-index: 1;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+@keyframes theme-circle-wipe {
+  from {
+    clip-path: circle(0px at var(--theme-toggle-x, 90%) var(--theme-toggle-y, 5%));
+  }
+  to {
+    clip-path: circle(
+      var(--theme-toggle-r, 150vmax) at var(--theme-toggle-x, 90%) var(--theme-toggle-y, 5%)
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
 @layer components {
   .admin-input {
-    @apply w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-main-color focus:ring-1 focus:ring-main-color;
+    @apply w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-main-color focus:ring-1 focus:ring-main-color dark:border-gray-600 dark:bg-surface dark:text-gray-100;
   }
 
   .section-page {
@@ -43,6 +97,15 @@
       90deg,
       transparent 0%,
       rgba(249, 115, 22, 0.25) 50%,
+      transparent 100%
+    );
+  }
+
+  .dark .section-cut::after {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(249, 115, 22, 0.4) 50%,
       transparent 100%
     );
   }
@@ -192,6 +255,10 @@
     transform: translateY(-2px) scale(1.04);
     border-color: rgba(249, 115, 22, 0.5);
     background-color: #fff7ed;
+  }
+
+  .dark .skill-chip:hover {
+    background-color: rgba(249, 115, 22, 0.12);
   }
 
   .terminal-pulse {

@@ -40,17 +40,17 @@ export default function AdminDashboard() {
   const [tab, setTab] = useState<Tab>('projects');
 
   return (
-    <div className="min-h-screen bg-gray-50 font-poppins text-secondary-color">
-      <header className="bg-white border-b sticky top-0 z-40">
+    <div className="min-h-screen bg-gray-50 font-poppins text-secondary-color dark:bg-neutral-950">
+      <header className="bg-white border-b sticky top-0 z-40 dark:border-gray-800 dark:bg-neutral-900">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-lg font-bold">Portfolio Admin</h1>
-            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+            <p className="text-xs text-gray-500 truncate dark:text-gray-400">{user?.email}</p>
           </div>
           <div className="flex items-center gap-2">
             <Link
               to="/"
-              className="px-3 py-2 text-sm border rounded-lg hover:bg-gray-50"
+              className="px-3 py-2 text-sm border rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-neutral-800"
               target="_blank"
             >
               View site
@@ -58,7 +58,7 @@ export default function AdminDashboard() {
             <button
               type="button"
               onClick={() => signOut()}
-              className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-gray-900 text-white rounded-lg hover:bg-gray-700"
+              className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-gray-900 text-white rounded-lg hover:bg-gray-700 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
             >
               <LogOut size={16} />
               Logout
@@ -77,7 +77,7 @@ export default function AdminDashboard() {
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm border transition ${
                 tab === id
                   ? 'bg-main-color text-white border-main-color'
-                  : 'bg-white text-gray-700 hover:border-main-color'
+                  : 'bg-white text-gray-700 hover:border-main-color dark:border-gray-700 dark:bg-neutral-900 dark:text-gray-300'
               }`}
             >
               <Icon size={16} />
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
           ))}
         </nav>
 
-        <div className="bg-white border rounded-xl p-5 shadow-sm">
+        <div className="bg-white border rounded-xl p-5 shadow-sm dark:border-gray-800 dark:bg-neutral-900">
           {tab === 'projects' ? <ProjectsPanel /> : null}
           {tab === 'certificates' ? <CertificatesPanel /> : null}
           {tab === 'experience' ? <ExperiencePanel /> : null}

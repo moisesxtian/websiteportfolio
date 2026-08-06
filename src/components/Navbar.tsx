@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from '../Context/ThemeContext';
 
 const navItems = [
   { label: 'Home', target: 'Home', id: 'Home' },
@@ -11,6 +13,7 @@ const navItems = [
 ];
 
 const Navbar = () => {
+  const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState<string>('Home');
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -59,20 +62,20 @@ const Navbar = () => {
         navbarVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div className="border-b border-gray-200/70 bg-white/85 backdrop-blur-md">
+      <div className="border-b border-gray-200/70 bg-white/85 backdrop-blur-md dark:border-gray-800/80 dark:bg-neutral-950/85">
         <div className="container mx-auto max-w-7xl flex items-center justify-between px-4 sm:px-6 md:px-10 h-14 sm:h-16">
           <h1 className="select-none font-poppins font-bold text-2xl sm:text-3xl text-secondary-color">
             Hyx.
           </h1>
 
-          <ul className="hidden md:flex items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700">
+          <ul className="hidden md:flex items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
             {navItems.map(({ label, target, id }) => (
               <Link key={label} to={target} spy smooth offset={-56} duration={500}>
                 <li
                   className={`cursor-pointer select-none px-3 py-2 rounded-lg transition duration-200 ${
                     activeLink === id
-                      ? 'text-main-color bg-orange-50'
-                      : 'hover:text-main-color hover:bg-gray-50'
+                      ? 'text-main-color bg-orange-50 dark:bg-orange-950/50'
+                      : 'hover:text-main-color hover:bg-gray-50 dark:hover:bg-neutral-800'
                   }`}
                 >
                   {label}
@@ -81,20 +84,31 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <button
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
-          >
-            {menuOpen ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={(e) => toggleTheme(e)}
+              className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-neutral-800 transition-colors"
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800 text-secondary-color"
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+            >
+              {menuOpen ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
+            </button>
+          </div>
         </div>
       </div>
 
       {menuOpen ? (
-        <div className="md:hidden border-b border-gray-200 bg-white shadow-lg">
+        <div className="md:hidden border-b border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-neutral-950">
           <ul className="container mx-auto max-w-7xl px-4 py-2">
             {navItems.map(({ label, target, id }) => (
               <Link
@@ -108,7 +122,9 @@ const Navbar = () => {
               >
                 <li
                   className={`cursor-pointer select-none px-3 py-3 rounded-lg text-sm font-semibold transition ${
-                    activeLink === id ? 'text-main-color bg-orange-50' : 'text-gray-700'
+                    activeLink === id
+                      ? 'text-main-color bg-orange-50 dark:bg-orange-950/50'
+                      : 'text-gray-700 dark:text-gray-300'
                   }`}
                 >
                   {label}

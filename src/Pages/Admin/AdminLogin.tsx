@@ -29,21 +29,21 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-gray-100 flex items-center justify-center p-4 font-poppins">
-      <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-gray-100 flex items-center justify-center p-4 font-poppins dark:from-neutral-950 dark:via-neutral-900 dark:to-black">
+      <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-sm p-8 dark:border-gray-700 dark:bg-neutral-900">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-lg bg-orange-100 text-main-color">
+          <div className="p-2 rounded-lg bg-orange-100 text-main-color dark:bg-orange-950/60">
             <Lock size={20} />
           </div>
           <div>
             <h1 className="text-xl font-bold text-secondary-color">Admin Login</h1>
-            <p className="text-sm text-gray-500">Manage portfolio content</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Manage portfolio content</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <label className="block space-y-1">
-            <span className="text-sm font-medium text-gray-700">Email</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</span>
             <input
               type="email"
               className="admin-input"
@@ -55,7 +55,7 @@ export default function AdminLogin() {
           </label>
 
           <label className="block space-y-1">
-            <span className="text-sm font-medium text-gray-700">Password</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</span>
             <input
               type="password"
               className="admin-input"

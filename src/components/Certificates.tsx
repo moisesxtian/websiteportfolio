@@ -16,10 +16,10 @@ const Certificates = () => {
               <Award size={12} />
               Credentials
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
               Certificates
             </h2>
-            <p className="mt-1 text-xs sm:text-sm text-gray-500">
+            <p className="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
               A compact look at courses I&apos;ve completed along the way.
             </p>
           </div>
@@ -30,9 +30,9 @@ const Certificates = () => {
           {certificates.map((certificate) => (
             <article
               key={certificate.id}
-              className="group snap-start flex w-[200px] sm:w-[220px] flex-shrink-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:border-main-color/30 hover:shadow-md"
+              className="group snap-start flex w-[200px] sm:w-[220px] flex-shrink-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:border-main-color/30 hover:shadow-md dark:border-gray-700 dark:bg-neutral-900"
             >
-              <div className="relative h-28 overflow-hidden bg-gray-100">
+              <div className="relative h-28 overflow-hidden bg-gray-100 dark:bg-neutral-800">
                 <img
                   src={certificate.image_url}
                   alt={certificate.name}
@@ -43,14 +43,14 @@ const Certificates = () => {
                 <p className="text-[10px] font-semibold uppercase tracking-wide text-main-color">
                   {certificate.organization || 'Issuer'}
                 </p>
-                <h3 className="text-xs font-semibold text-gray-900 leading-snug line-clamp-2">
+                <h3 className="text-xs font-semibold text-gray-900 leading-snug line-clamp-2 dark:text-gray-100">
                   {certificate.name}
                 </h3>
                 <a
                   href={certificate.certificate_link || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-auto inline-flex items-center gap-1 pt-1 text-[11px] font-medium text-gray-500 hover:text-main-color"
+                  className="mt-auto inline-flex items-center gap-1 pt-1 text-[11px] font-medium text-gray-500 hover:text-main-color dark:text-gray-400"
                 >
                   View
                   <ExternalLink size={11} />

@@ -84,22 +84,22 @@ const Projects = () => {
               <p className="text-xs font-semibold uppercase tracking-wider text-main-color mb-2">
                 Portfolio
               </p>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
                 Personal Projects
               </h2>
-              <p className="mt-2 text-sm text-gray-600 max-w-lg">
+              <p className="mt-2 text-sm text-gray-600 max-w-lg dark:text-gray-400">
                 Explore builds one at a time in full view, or switch to a compact card grid.
               </p>
             </div>
 
-            <div className="inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm self-start sm:self-auto">
+            <div className="inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm self-start sm:self-auto dark:border-gray-700 dark:bg-neutral-900">
               <button
                 type="button"
                 onClick={() => setViewMode('showcase')}
                 className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition ${
                   viewMode === 'showcase'
                     ? 'bg-main-color text-white'
-                    : 'text-gray-600 hover:text-main-color'
+                    : 'text-gray-600 hover:text-main-color dark:text-gray-400'
                 }`}
               >
                 <Maximize2 size={14} />
@@ -111,7 +111,7 @@ const Projects = () => {
                 className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition ${
                   viewMode === 'grid'
                     ? 'bg-main-color text-white'
-                    : 'text-gray-600 hover:text-main-color'
+                    : 'text-gray-600 hover:text-main-color dark:text-gray-400'
                 }`}
               >
                 <LayoutGrid size={14} />
@@ -179,12 +179,12 @@ function ShowcaseView({
   onScrollIndex: (index: number) => void;
 }) {
   if (projects.length === 0) {
-    return <p className="text-sm text-gray-500 py-10">No projects yet.</p>;
+    return <p className="text-sm text-gray-500 py-10 dark:text-gray-400">No projects yet.</p>;
   }
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <div className="relative rounded-2xl border border-gray-200 bg-secondary-color text-white shadow-lg">
+      <div className="relative rounded-2xl border border-gray-200 bg-[#1a1a1a] text-white shadow-lg dark:border-gray-700">
         <div
           ref={trackRef}
           className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide"
@@ -214,7 +214,7 @@ function ShowcaseView({
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover/image:opacity-100"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-secondary-color via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-secondary-color/80" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[#1a1a1a]/80" />
               </div>
 
               <div className="relative flex flex-col justify-center gap-3 sm:gap-4 p-4 sm:p-6 md:p-8 lg:p-10">
@@ -242,7 +242,7 @@ function ShowcaseView({
                     href={project.github_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-white text-secondary-color px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold hover:bg-orange-50 transition"
+                    className="inline-flex items-center gap-2 rounded-lg bg-white text-[#252525] px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold hover:bg-orange-50 transition"
                   >
                     <FaGithub />
                     View Repo
@@ -291,7 +291,7 @@ function ShowcaseView({
       </div>
 
       <div className="flex items-center gap-3">
-        <p className="text-xs text-gray-500 tabular-nums whitespace-nowrap">
+        <p className="text-xs text-gray-500 tabular-nums whitespace-nowrap dark:text-gray-400">
           {String(activeIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
         </p>
         <div className="flex-1 overflow-x-auto scrollbar-hide">
@@ -304,7 +304,7 @@ function ShowcaseView({
                 className={`relative h-12 w-20 sm:h-14 sm:w-24 overflow-hidden rounded-lg border transition ${
                   index === activeIndex
                     ? 'border-main-color ring-2 ring-main-color/30'
-                    : 'border-gray-200 opacity-70 hover:opacity-100'
+                    : 'border-gray-200 opacity-70 hover:opacity-100 dark:border-gray-700'
                 }`}
               >
                 <img
@@ -333,7 +333,7 @@ function GridView({
       {projects.map((project) => (
         <article
           key={project.id}
-          className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-main-color/30 hover:shadow-md"
+          className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-main-color/30 hover:shadow-md dark:border-gray-700 dark:bg-neutral-900"
         >
           <div className="relative h-36 overflow-hidden">
             <img
@@ -358,16 +358,16 @@ function GridView({
             ) : null}
           </div>
           <div className="flex flex-1 flex-col p-4 gap-2">
-            <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-main-color">
+            <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-main-color dark:text-gray-100">
               {project.title}
             </h3>
-            <p className="text-xs text-gray-500 line-clamp-2">{project.description}</p>
+            <p className="text-xs text-gray-500 line-clamp-2 dark:text-gray-400">{project.description}</p>
             <div className="mt-auto flex gap-2 pt-2">
               <a
                 href={project.github_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex flex-1 items-center justify-center gap-1 rounded-md bg-gray-900 px-2 py-1.5 text-[11px] text-white"
+                className="inline-flex flex-1 items-center justify-center gap-1 rounded-md bg-gray-900 px-2 py-1.5 text-[11px] text-white dark:bg-neutral-800"
               >
                 <FaGithub />
                 Repo
