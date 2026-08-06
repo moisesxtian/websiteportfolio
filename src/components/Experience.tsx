@@ -215,7 +215,7 @@ export default function Experience() {
           </div>
         </div>
 
-        <div className="relative mx-auto max-w-5xl w-full">
+        <div className="relative w-full">
           <div className="absolute left-[7px] md:left-1/2 top-4 bottom-16 w-px -translate-x-1/2 bg-gradient-to-b from-main-color via-orange-200 to-transparent" />
 
           {experiences.length === 0 ? (

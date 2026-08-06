@@ -20,7 +20,8 @@ import NowPlaying from './NowPlaying';
 const Home = () => {
   const { skills } = useSkills();
   const { resumeUrl } = useResume();
-  const cardRef = useRef<HTMLDivElement>(null);
+  const floatRef = useRef<HTMLDivElement>(null);
+  const tiltRef = useRef<HTMLDivElement>(null);
   const tiltTarget = useRef({ rx: 0, ry: 0 });
   const tiltCurrent = useRef({ rx: 0, ry: 0 });
 
@@ -39,11 +40,16 @@ const Home = () => {
       tiltCurrent.current.rx += (tiltTarget.current.rx - tiltCurrent.current.rx) * ease;
       tiltCurrent.current.ry += (tiltTarget.current.ry - tiltCurrent.current.ry) * ease;
 
-      const el = cardRef.current;
-      if (el) {
+      const floatEl = floatRef.current;
+      if (floatEl) {
+        floatEl.style.transform = `translate3d(0, ${floatY}px, 0)`;
+      }
+
+      const tiltEl = tiltRef.current;
+      if (tiltEl) {
         const rx = tiltCurrent.current.rx;
         const ry = tiltCurrent.current.ry;
-        el.style.transform = `translate3d(0, ${floatY}px, 0) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        tiltEl.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
       }
 
       frame = requestAnimationFrame(animate);
@@ -55,7 +61,7 @@ const Home = () => {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (window.matchMedia('(pointer: coarse)').matches) return;
-    const el = cardRef.current;
+    const el = tiltRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
@@ -190,36 +196,41 @@ const Home = () => {
           </div>
 
           {/* Portrait + soundtrack */}
-          <div className="hero-float-stage relative w-full lg:w-[42%] flex flex-col items-center justify-center gap-3 sm:gap-4">
+          <div className="hero-float-stage relative w-full lg:w-[42%] flex flex-col items-center justify-center">
             <div
               className="relative w-[min(72vw,280px)] sm:w-[min(60vw,340px)] lg:w-full"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
-              <div className="hero-float-shadow absolute -bottom-2 left-1/2 h-6 w-2/3 rounded-[100%] bg-black/20 blur-xl" />
+              <div className="hero-float-shadow absolute -bottom-2 left-1/2 h-6 w-2/3 -translate-x-1/2 rounded-[100%] bg-black/20 blur-xl" />
               <div
-                ref={cardRef}
+                ref={floatRef}
                 className="relative will-change-transform"
-                style={{
-                  transformStyle: 'preserve-3d',
-                  backfaceVisibility: 'hidden',
-                }}
               >
-                <img
-                  src={HeroAvatar}
-                  alt="Christian Moises"
-                  className="w-full h-auto object-contain select-none pointer-events-none drop-shadow-[0_28px_35px_rgba(37,37,37,0.22)]"
-                  draggable={false}
+                <div
+                  ref={tiltRef}
+                  className="relative will-change-transform"
                   style={{
+                    transformStyle: 'preserve-3d',
                     backfaceVisibility: 'hidden',
-                    transform: 'translateZ(0)',
                   }}
-                />
-              </div>
-            </div>
+                >
+                  <img
+                    src={HeroAvatar}
+                    alt="Christian Moises"
+                    className="w-full h-auto object-contain select-none pointer-events-none drop-shadow-[0_28px_35px_rgba(37,37,37,0.22)]"
+                    draggable={false}
+                    style={{
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                    }}
+                  />
+                </div>
 
-            <div className="w-full max-w-[320px] sm:max-w-[340px] px-1">
-              <NowPlaying />
+                <div className="pointer-events-auto absolute bottom-2 sm:bottom-3 left-1/2 z-20 w-[92%] max-w-[300px] -translate-x-1/2 px-1">
+                  <NowPlaying />
+                </div>
+              </div>
             </div>
           </div>
         </div>

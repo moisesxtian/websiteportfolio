@@ -13,7 +13,7 @@ export default function NowPlaying() {
 
   if (loading) {
     return (
-      <div className="w-full rounded-full border border-gray-200/80 bg-white/60 px-3 py-2 backdrop-blur">
+      <div className="w-full rounded-full border border-white/40 bg-white/80 px-3 py-2 shadow-md backdrop-blur-md">
         <div className="flex items-center gap-2.5 animate-pulse">
           <div className="h-9 w-9 rounded-full bg-gray-200" />
           <div className="flex-1 space-y-1.5">
@@ -36,7 +36,7 @@ export default function NowPlaying() {
       href={track.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex w-full items-center gap-2.5 rounded-full border border-gray-200/90 bg-white/75 px-2.5 py-2 shadow-sm backdrop-blur transition hover:border-main-color/35 hover:bg-orange-50/70"
+      className="group flex w-full items-center gap-2.5 rounded-full border border-white/50 bg-white/85 px-2.5 py-2 shadow-md backdrop-blur-md transition hover:border-main-color/40 hover:bg-orange-50/90"
       aria-label={`${track.nowPlaying ? 'Now playing' : 'Last played'}: ${track.name} by ${track.artist}, ${whenLabel}`}
     >
       <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden rounded-full bg-gray-100 ring-1 ring-black/5">

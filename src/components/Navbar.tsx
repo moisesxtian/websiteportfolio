@@ -62,7 +62,7 @@ const Navbar = () => {
       <div className="border-b border-gray-200/70 bg-white/85 backdrop-blur-md">
         <div className="container mx-auto max-w-7xl flex items-center justify-between px-4 sm:px-6 md:px-10 h-14 sm:h-16">
           <h1 className="select-none font-poppins font-bold text-2xl sm:text-3xl text-secondary-color">
-            HYX
+            CM
           </h1>
 
           <ul className="hidden md:flex items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700">
