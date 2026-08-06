@@ -77,7 +77,8 @@ const CardsLayout = () => {
   };
 
   return (
-    <div className="container mx-auto p-5 font-poppins" id="Contact">
+    <section className="section-page section-cut font-poppins" id="Contact">
+      <div className="section-page-inner">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Left section */}
         <div className="flex flex-col gap-5">
@@ -168,7 +169,8 @@ const CardsLayout = () => {
           </form>
         </div>
       </div>
-    </div>
+      </div>
+    </section>
   );
 };
 

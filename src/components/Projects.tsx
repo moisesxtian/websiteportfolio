@@ -17,7 +17,7 @@ const Projects = () => {
   const { projects } = useProjects();
   const [showAll, setShowAll] = useState(false);
   const [videoProject, setVideoProject] = useState<Project | null>(null);
-  const projectsRef = useRef<HTMLDivElement>(null);
+  const projectsRef = useRef<HTMLElement>(null);
   const extraProjectsRef = useRef<HTMLDivElement>(null);
 
   const handleToggle = () => {
@@ -38,10 +38,10 @@ const Projects = () => {
     <div
       key={project.id}
       ref={ref}
-      className="group relative flex flex-col rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full bg-white"
+      className="group relative flex flex-col rounded-lg shadow-md overflow-hidden h-full bg-white transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_22px_40px_-24px_rgba(249,115,22,0.45)]"
       data-aos="fade-up"
       data-aos-delay={`${index * 50}`}
-      style={{ minHeight: 480 }}
+      style={{ minHeight: 420 }}
     >
       <div className="relative w-full h-56 flex-shrink-0">
         <img
@@ -109,58 +109,59 @@ const Projects = () => {
 
   return (
     <div className="relative">
-      <div
-        className="p-5 md:p-10 container mx-auto min-h-screen w-screen font-poppins text-secondary-color grid grid-cols-1 gap-5"
+      <section
+        className="section-page section-cut font-poppins text-secondary-color"
         id="Projects"
         ref={projectsRef}
       >
-        <div
-          id="projects-heading"
-          className="relative w-fit h-fit text-start rounded-xl p-3 border bg-gray-50"
-          data-aos="fade-right"
-          data-aos-offset="400"
-        >
-          <div className="absolute h-fit top-[-15px] right-[-15px] visible md:hidden bort">
-            <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />
+        <div className="section-page-inner gap-6 md:gap-8">
+          <div
+            id="projects-heading"
+            className="relative w-fit h-fit text-start rounded-xl p-3 border bg-gray-50"
+            data-aos="fade-right"
+          >
+            <div className="absolute h-fit top-[-15px] right-[-15px] visible md:hidden bort">
+              <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />
+            </div>
+            <div className="absolute h-fit top-[-15px] right-[-15px] hidden md:block">
+              <BsFillArrowDownRightCircleFill size={50} color="#F97316" />
+            </div>
+            <h2 className="w-fit text-4xl font-extrabold tracking-tight font-poppins text-gray-900 sm:text-5xl">
+              <ReactTyped
+                strings={['Personal Projects']}
+                typeSpeed={20}
+                backSpeed={100}
+                backDelay={2000}
+                cursorChar="*"
+              />
+            </h2>
+            <p className="w-fit mt-4 text-sm text-gray-600">
+              A showcase of my personal projects highlighting my skills and creativity.
+            </p>
           </div>
-          <div className="absolute h-fit top-[-15px] right-[-15px] hidden md:block">
-            <BsFillArrowDownRightCircleFill size={50} color="#F97316" />
-          </div>
-          <h2 className="w-fit text-4xl font-extrabold tracking-tight font-poppins text-gray-900 sm:text-5xl">
-            <ReactTyped
-              strings={['Personal Projects']}
-              typeSpeed={20}
-              backSpeed={100}
-              backDelay={2000}
-              cursorChar="*"
-            />
-          </h2>
-          <p className="w-fit mt-4 text-sm text-gray-600" data-aos="fade-right" data-aos-delay="300">
-            A showcase of my personal projects highlighting my skills and creativity.
-          </p>
-        </div>
 
-        <div className="w-full grid gap-5 sm:grid-cols-2 lg:grid-cols-4 p-10 md:p-4 rounded-xl border">
-          {projects.slice(0, 4).map((project, index) => renderCard(project, index))}
-          {showAll &&
-            projects
-              .slice(4)
-              .map((project, index) =>
-                renderCard(project, index + 4, index === 0 ? extraProjectsRef : undefined)
-              )}
-        </div>
-
-        {projects.length > 4 ? (
-          <div className="text-center">
-            <button
-              onClick={handleToggle}
-              className="px-6 py-2 text-white bg-orange-500 hover:bg-orange-400 rounded-lg shadow transition-all"
-            >
-              {showAll ? 'Show Less' : 'See More'}
-            </button>
+          <div className="w-full grid gap-5 sm:grid-cols-2 lg:grid-cols-4 p-4 rounded-xl border bg-white/50">
+            {projects.slice(0, 4).map((project, index) => renderCard(project, index))}
+            {showAll &&
+              projects
+                .slice(4)
+                .map((project, index) =>
+                  renderCard(project, index + 4, index === 0 ? extraProjectsRef : undefined)
+                )}
           </div>
-        ) : null}
-      </div>
+
+          {projects.length > 4 ? (
+            <div className="text-center">
+              <button
+                onClick={handleToggle}
+                className="px-6 py-2 text-white bg-orange-500 hover:bg-orange-400 rounded-lg shadow transition-all"
+              >
+                {showAll ? 'Show Less' : 'See More'}
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </section>
 
       {videoProject?.video_url ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">

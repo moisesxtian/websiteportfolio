@@ -1,6 +1,5 @@
-import { useRef } from 'react';
-import { FaArrowLeft, FaArrowRight, FaDownload, FaHashtag } from 'react-icons/fa';
-import { BsFillArrowDownLeftCircleFill } from 'react-icons/bs';
+import { useMemo, useState } from 'react';
+import { Award, Building2, ExternalLink, LayoutGrid } from 'lucide-react';
 import { ReactTyped } from 'react-typed';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -8,131 +7,154 @@ import { useCertificates } from '../Hooks/useCertificates';
 
 AOS.init({
   startEvent: 'load',
-  easing: 'ease-in',
+  easing: 'ease-out-cubic',
+  once: true,
+  duration: 450,
 });
 
 const Certificates = () => {
   const { certificates } = useCertificates();
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeOrg, setActiveOrg] = useState<string>('All');
 
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
-    }
-  };
+  const organizations = useMemo(() => {
+    const unique = Array.from(
+      new Set(certificates.map((c) => c.organization).filter(Boolean))
+    );
+    return ['All', ...unique];
+  }, [certificates]);
 
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-    }
-  };
+  const filtered =
+    activeOrg === 'All'
+      ? certificates
+      : certificates.filter((c) => c.organization === activeOrg);
 
   return (
-    <div className="relative min-h-4 p-10" id="Certificates">
-      <div className="flex container mx-auto flex flex-col">
-        <div className="flex flex-col p-2 md:flex-row h-fit w-full items-center justify-between px-4 py-6">
-          <div
-            className="flex items-center bg-white border border-gray-300 p-3 rounded-lg bg-gray-50"
-            data-aos="fade-right"
-          >
-            <FaHashtag size={30} color="#F97316" />
-            <div className="ml-3">
-              <h3 className="text-sm font-bold text-gray-700">Certificates</h3>
-              <p className="text-xs text-gray-500">Total: {certificates.length}</p>
+    <section
+      id="Certificates"
+      className="section-page section-cut font-poppins text-secondary-color bg-gradient-to-b from-white via-orange-50/30 to-white"
+    >
+      <div className="section-page-inner gap-8 md:gap-10">
+        {/* Header row */}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div className="max-w-xl" data-aos="fade-up">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-orange-200/80 bg-white/80 px-3 py-1 text-xs font-medium text-main-color shadow-sm">
+              <Award size={13} />
+              Credentials
             </div>
-          </div>
-
-          <div
-            className="relative w-fit h-fit rounded-xl p-3 border bg-gray-50"
-            data-aos="fade-left"
-          >
-            <div className="absolute top-[-15px] left-[-15px] hidden md:block">
-              <BsFillArrowDownLeftCircleFill size={50} color="#F97316" />
-            </div>
-            <h2 className="text-center md:text-right text-4xl font-extrabold tracking-tight font-poppins text-gray-900 sm:text-5xl">
-              <ReactTyped
-                strings={['Certificates']}
-                typeSpeed={20}
-                backSpeed={20}
-                backDelay={5000}
-                loop
-                cursorChar="*"
-              />
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
+              <ReactTyped strings={['Certificates']} typeSpeed={25} showCursor={false} />
             </h2>
-            <p className="mt-4 text-sm text-gray-600 text-right">
-              Collection of certificates and courses I've taken throughout my career.
+            <p className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed">
+              Structured proof of the courses and credentials behind my craft — filter by issuer or
+              browse the full set.
             </p>
           </div>
-        </div>
-
-        <div className="relative border rounded-lg">
-          <button
-            onClick={scrollLeft}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-900 text-white p-3 rounded-full shadow-md hover:bg-gray-700 transition-all"
-          >
-            <FaArrowLeft size={20} />
-          </button>
 
           <div
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-scroll scroll-smooth overflow-hidden p-4"
+            className="flex flex-wrap items-center gap-3"
+            data-aos="fade-up"
+            data-aos-delay="80"
           >
-            {certificates.map((certificate, index) => (
-              <div
-                key={certificate.id}
-                className="bg-white rounded-lg shadow-md w-72 flex-shrink-0 flex flex-col transition-shadow hover:shadow-lg"
-                style={{ minHeight: 420 }}
-                data-aos="fade-up"
-                data-aos-delay={index * 20}
-              >
-                <div className="relative w-full h-48">
-                  <img
-                    src={certificate.image_url}
-                    alt={certificate.name}
-                    className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
-                  />
-                </div>
+            <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm min-w-[120px]">
+              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">
+                Total
+              </p>
+              <p className="text-2xl font-bold text-secondary-color tabular-nums">
+                {certificates.length}
+              </p>
+            </div>
+            <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm min-w-[120px]">
+              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">
+                Issuers
+              </p>
+              <p className="text-2xl font-bold text-secondary-color tabular-nums">
+                {Math.max(organizations.length - 1, 0)}
+              </p>
+            </div>
+          </div>
+        </div>
 
-                <div className="flex flex-col flex-1 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
-                    {certificate.name}
-                  </h3>
-                  <div className="min-h-[32px] mb-2 flex items-center justify-center">
-                    <p className="text-sm text-gray-600 text-center">
-                      {certificate.description || <span>&nbsp;</span>}
-                    </p>
-                  </div>
-                  <div className="mt-auto mb-4">
-                    <p className="text-sm text-gray-500 text-center">
-                      <span className="font-medium text-gray-700">Issued by:</span>{' '}
-                      {certificate.organization}
-                    </p>
-                  </div>
-                  <div className="flex justify-center">
-                    <a
-                      href={certificate.certificate_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center bg-orange-500 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-orange-400 transition-all"
-                    >
-                      <FaDownload className="mr-2" />
-                      View Certificate
-                    </a>
-                  </div>
+        {/* Filter chips */}
+        <div
+          className="flex flex-wrap items-center gap-2"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 mr-1">
+            <LayoutGrid size={13} />
+            Filter
+          </span>
+          {organizations.map((org) => (
+            <button
+              key={org}
+              type="button"
+              onClick={() => setActiveOrg(org)}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium border transition ${
+                activeOrg === org
+                  ? 'bg-main-color text-white border-main-color'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-main-color/40 hover:text-main-color'
+              }`}
+            >
+              {org}
+            </button>
+          ))}
+        </div>
+
+        {/* Structured grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
+          {filtered.map((certificate, index) => (
+            <article
+              key={certificate.id}
+              className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200/90 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-main-color/30 hover:shadow-[0_20px_40px_-28px_rgba(249,115,22,0.45)]"
+              data-aos="fade-up"
+              data-aos-delay={Math.min(index * 60, 240)}
+            >
+              <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
+                <img
+                  src={certificate.image_url}
+                  alt={certificate.name}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-80" />
+                <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-md bg-white/95 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-gray-700 shadow-sm">
+                  <Building2 size={11} className="text-main-color" />
+                  {certificate.organization || 'Issuer'}
+                </span>
+              </div>
+
+              <div className="flex flex-1 flex-col p-5">
+                <h3 className="text-base font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-main-color transition-colors">
+                  {certificate.name}
+                </h3>
+                {certificate.description ? (
+                  <p className="mt-2 text-sm text-gray-500 line-clamp-2">
+                    {certificate.description}
+                  </p>
+                ) : (
+                  <p className="mt-2 text-sm text-gray-400 italic">Verified credential</p>
+                )}
+
+                <div className="mt-auto pt-4">
+                  <a
+                    href={certificate.certificate_link || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary-color px-4 py-2.5 text-sm font-medium text-white transition hover:bg-main-color"
+                  >
+                    View certificate
+                    <ExternalLink size={14} />
+                  </a>
                 </div>
               </div>
-            ))}
-          </div>
-
-          <button
-            onClick={scrollRight}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-900 text-white p-3 rounded-full shadow-md hover:bg-gray-700 transition-all"
-          >
-            <FaArrowRight size={20} />
-          </button>
+            </article>
+          ))}
         </div>
+
+        {filtered.length === 0 ? (
+          <p className="text-center text-sm text-gray-500 py-8">No certificates for this filter.</p>
+        ) : null}
       </div>
-    </div>
+    </section>
   );
 };
 

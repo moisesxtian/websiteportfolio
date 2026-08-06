@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ReactTyped } from 'react-typed';
 import {
   Briefcase,
   Building2,
@@ -8,17 +7,8 @@ import {
   ChevronDown,
   MapPin,
 } from 'lucide-react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 import { useExperiences } from '../Hooks/useExperiences';
 import type { Experience as ExperienceType } from '../types/content';
-
-AOS.init({
-  startEvent: 'load',
-  easing: 'ease-out-cubic',
-  once: true,
-  duration: 400,
-});
 
 function ExperienceCard({
   experience,
@@ -178,7 +168,7 @@ export default function Experience() {
   return (
     <section
       id="Experience"
-      className="relative overflow-hidden font-poppins text-secondary-color"
+      className="section-page section-cut relative overflow-hidden font-poppins text-secondary-color"
     >
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-orange-100/45 blur-3xl" />
@@ -193,35 +183,59 @@ export default function Experience() {
         />
       </div>
 
-      <div className="container mx-auto px-6 md:px-10 py-14 md:py-20">
-        <div className="mx-auto mb-12 md:mb-16 max-w-2xl text-center" data-aos="fade-up">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-orange-200/80 bg-white/80 px-3 py-1 text-xs font-medium text-main-color shadow-sm backdrop-blur">
-            <Briefcase size={13} />
-            Career progression
+      <div className="section-page-inner gap-8 md:gap-10 !justify-start">
+        {/* Always-visible section header */}
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 w-full">
+          <div className="relative w-fit rounded-xl border border-gray-200 bg-white/90 p-4 sm:p-5 shadow-sm">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-main-color">
+              <Briefcase size={12} />
+              Career path
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
+              Work Experience
+            </h2>
+            <p className="mt-3 max-w-md text-sm text-gray-600 leading-relaxed">
+              Roles that shaped how I build — from freelance craft to AI/ML engineering.
+            </p>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
-            <ReactTyped strings={['Work Experience']} typeSpeed={25} showCursor={false} />
-          </h2>
-          <p className="mt-4 text-sm sm:text-base text-gray-600 leading-relaxed">
-            Roles that shaped how I build my skills from freelance craft to AI/ML engineering.
-          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm min-w-[110px]">
+              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Roles</p>
+              <p className="text-2xl font-bold text-secondary-color tabular-nums">
+                {experiences.length}
+              </p>
+            </div>
+            <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm min-w-[110px]">
+              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">
+                Timeline
+              </p>
+              <p className="text-sm font-semibold text-secondary-color pt-1">Latest → Oldest</p>
+            </div>
+          </div>
         </div>
 
-        <div className="relative mx-auto max-w-5xl">
+        <div className="relative mx-auto max-w-5xl w-full">
           <div className="absolute left-[7px] md:left-1/2 top-4 bottom-16 w-px -translate-x-1/2 bg-gradient-to-b from-main-color via-orange-200 to-transparent" />
 
-          <div className="space-y-8 md:space-y-12">
-            {experiences.map((experience, index) => (
-              <ExperienceCard
-                key={experience.id}
-                experience={experience}
-                index={index}
-                total={experiences.length}
-                isActive={openedId === experience.id}
-                onToggle={() => handleToggle(experience.id)}
-              />
-            ))}
-          </div>
+          {experiences.length === 0 ? (
+            <p className="text-center text-sm text-gray-500 py-16">
+              No experience entries yet. Add some from the admin panel.
+            </p>
+          ) : (
+            <div className="space-y-8 md:space-y-12">
+              {experiences.map((experience, index) => (
+                <ExperienceCard
+                  key={experience.id}
+                  experience={experience}
+                  index={index}
+                  total={experiences.length}
+                  isActive={openedId === experience.id}
+                  onToggle={() => handleToggle(experience.id)}
+                />
+              ))}
+            </div>
+          )}
 
           <div className="relative mt-10 flex items-center justify-start md:justify-center">
             <div className="ml-10 md:ml-0 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/90 px-4 py-2 text-xs text-gray-500 shadow-sm backdrop-blur">
