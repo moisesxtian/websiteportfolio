@@ -1,14 +1,68 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Briefcase,
   Building2,
   Calendar,
   CheckCircle2,
   ChevronDown,
-  MapPin,
 } from 'lucide-react';
 import { useExperiences } from '../Hooks/useExperiences';
 import type { Experience as ExperienceType } from '../types/content';
+
+const MONTH_INDEX: Record<string, number> = {
+  january: 0,
+  february: 1,
+  march: 2,
+  april: 3,
+  may: 4,
+  june: 5,
+  july: 6,
+  august: 7,
+  september: 8,
+  october: 9,
+  november: 10,
+  december: 11,
+};
+
+function parsePeriodDate(part: string): Date | null {
+  const trimmed = part.trim();
+  if (/^present$/i.test(trimmed)) return new Date();
+
+  const match = trimmed.match(/^([A-Za-z]+)\s+(\d{4})$/);
+  if (!match) return null;
+
+  const month = MONTH_INDEX[match[1].toLowerCase()];
+  if (month === undefined) return null;
+
+  return new Date(Number(match[2]), month, 1);
+}
+
+/** Inclusive month count for strings like "February 2025 - April 2025". */
+function monthsInPeriod(period: string): number {
+  const [startRaw, endRaw] = period.split(/\s*[-–—]\s*/);
+  if (!startRaw || !endRaw) return 0;
+
+  const start = parsePeriodDate(startRaw);
+  const end = parsePeriodDate(endRaw);
+  if (!start || !end || end < start) return 0;
+
+  return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+}
+
+/**
+ * Professional YOE from all roles except the chronologically first 2
+ * (oldest two — last items in Latest → Oldest list).
+ */
+function formatProfessionalYoe(experiences: ExperienceType[]): string {
+  const professional =
+    experiences.length <= 2 ? [] : experiences.slice(0, experiences.length - 2);
+
+  const totalMonths = professional.reduce((sum, exp) => sum + monthsInPeriod(exp.period), 0);
+  const years = Math.floor(totalMonths / 12);
+
+  if (years < 1) return '< 1 Year';
+  return years === 1 ? '1 Year' : `${years} Years`;
+}
 
 function ExperienceCard({
   experience,
@@ -155,14 +209,10 @@ function ExperienceCard({
 export default function Experience() {
   const { experiences } = useExperiences();
   const [activeId, setActiveId] = useState<string | null>(null);
-
-  const openedId = activeId === null ? experiences[0]?.id ?? null : activeId || null;
+  const yoeLabel = useMemo(() => formatProfessionalYoe(experiences), [experiences]);
 
   const handleToggle = (id: string) => {
-    setActiveId((prev) => {
-      const currentlyOpen = prev === null ? experiences[0]?.id ?? null : prev || null;
-      return currentlyOpen === id ? '' : id;
-    });
+    setActiveId((prev) => (prev === id ? null : id));
   };
 
   return (
@@ -185,8 +235,8 @@ export default function Experience() {
 
       <div className="section-page-inner gap-8 md:gap-10 !justify-start">
         {/* Always-visible section header */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 w-full">
-          <div className="relative w-fit rounded-xl border border-gray-200 bg-white/90 p-4 sm:p-5 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 w-full">
+          <div className="relative w-fit">
             <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-main-color">
               <Briefcase size={12} />
               Career path
@@ -199,18 +249,18 @@ export default function Experience() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm min-w-[110px]">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="rounded-xl bg-white px-4 py-3 min-w-[110px]">
               <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Roles</p>
               <p className="text-2xl font-bold text-secondary-color tabular-nums">
                 {experiences.length}
               </p>
             </div>
-            <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm min-w-[110px]">
+            <div className="rounded-xl bg-white px-4 py-3 min-w-[110px]">
               <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">
-                Timeline
+                YOE
               </p>
-              <p className="text-sm font-semibold text-secondary-color pt-1">Latest → Oldest</p>
+              <p className="text-2xl font-bold text-secondary-color tabular-nums">{yoeLabel}</p>
             </div>
           </div>
         </div>
@@ -230,19 +280,12 @@ export default function Experience() {
                   experience={experience}
                   index={index}
                   total={experiences.length}
-                  isActive={openedId === experience.id}
+                  isActive={activeId === experience.id}
                   onToggle={() => handleToggle(experience.id)}
                 />
               ))}
             </div>
           )}
-
-          <div className="relative mt-10 flex items-center justify-start md:justify-center">
-            <div className="ml-10 md:ml-0 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/90 px-4 py-2 text-xs text-gray-500 shadow-sm backdrop-blur">
-              <MapPin size={12} className="text-main-color" />
-              Journey continues
-            </div>
-          </div>
         </div>
       </div>
     </section>

@@ -203,13 +203,18 @@ function ShowcaseView({
               key={project.id}
               className="relative w-full min-w-full max-w-full flex-shrink-0 snap-center grid grid-cols-1 lg:grid-cols-2 min-h-0 lg:min-h-[480px]"
             >
-              <div className="relative h-48 sm:h-64 lg:min-h-[480px] lg:h-auto overflow-hidden">
+              <div className="group/image relative h-48 sm:h-64 lg:min-h-[480px] lg:h-auto overflow-hidden">
                 <img
                   src={project.image_url}
                   alt={project.title}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover/image:opacity-0"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-secondary-color via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-secondary-color/80" />
+                <img
+                  src={project.hover_image_url || project.image_url}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover/image:opacity-100"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-secondary-color via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-secondary-color/80" />
               </div>
 
               <div className="relative flex flex-col justify-center gap-3 sm:gap-4 p-4 sm:p-6 md:p-8 lg:p-10">

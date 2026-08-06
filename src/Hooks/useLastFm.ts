@@ -13,10 +13,39 @@ export type LastFmTrack = {
 
 type LastFmImage = { size: string; '#text': string };
 
+type LastFmRawTrack = {
+  name?: string;
+  url?: string;
+  artist?: { '#text'?: string; name?: string } | string;
+  album?: { '#text'?: string };
+  image?: LastFmImage[];
+  date?: { uts?: string };
+  '@attr'?: { nowplaying?: string };
+};
+
 function pickImage(images: LastFmImage[] | undefined): string {
   if (!images || images.length === 0) return '';
   const large = images.find((img) => img.size === 'large' || img.size === 'extralarge');
   return (large?.['#text'] || images[images.length - 1]?.['#text'] || '').trim();
+}
+
+function artistName(artist: LastFmRawTrack['artist']): string {
+  if (!artist) return 'Unknown artist';
+  if (typeof artist === 'string') return artist;
+  return artist['#text'] || artist.name || 'Unknown artist';
+}
+
+function toTrack(item: LastFmRawTrack, user: string, nowPlaying: boolean): LastFmTrack {
+  const uts = item.date?.uts ? Number(item.date.uts) : null;
+  return {
+    name: item.name || 'Unknown track',
+    artist: artistName(item.artist),
+    album: item.album?.['#text'] || '',
+    url: item.url || `https://www.last.fm/user/${user}`,
+    image: pickImage(item.image),
+    nowPlaying,
+    playedAt: nowPlaying ? null : Number.isFinite(uts) ? uts : null,
+  };
 }
 
 export function formatPlayedAt(playedAt: number | null, nowPlaying: boolean): string {
@@ -47,6 +76,31 @@ export function formatPlayedAt(playedAt: number | null, nowPlaying: boolean): st
   });
 }
 
+function pickRecentTrack(raw: LastFmRawTrack | LastFmRawTrack[] | undefined): {
+  item: LastFmRawTrack;
+  nowPlaying: boolean;
+} | null {
+  const tracks = Array.isArray(raw) ? raw : raw ? [raw] : [];
+  if (tracks.length === 0) return null;
+
+  // Prefer a live now-playing entry when Last.fm reports one
+  const living = tracks.find((t) => t?.['@attr']?.nowplaying === 'true');
+  if (living) {
+    return { item: living, nowPlaying: true };
+  }
+
+  // Otherwise use the newest completed scrobble (has a timestamp)
+  const scrobbled = tracks
+    .filter((t) => t?.date?.uts && Number.isFinite(Number(t.date.uts)))
+    .sort((a, b) => Number(b.date!.uts) - Number(a.date!.uts));
+
+  if (scrobbled[0]) {
+    return { item: scrobbled[0], nowPlaying: false };
+  }
+
+  return { item: tracks[0], nowPlaying: false };
+}
+
 export function useLastFmTrack(pollMs = 45000) {
   const [track, setTrack] = useState<LastFmTrack | null>(null);
   const [loading, setLoading] = useState(true);
@@ -67,34 +121,22 @@ export function useLastFmTrack(pollMs = 45000) {
         `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks` +
         `&user=${encodeURIComponent(user)}` +
         `&api_key=${encodeURIComponent(apiKey)}` +
-        `&format=json&limit=1`;
+        `&format=json&limit=10&extended=0`;
 
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Last.fm error ${res.status}`);
 
       const data = await res.json();
-      const raw = data?.recenttracks?.track;
-      const item = Array.isArray(raw) ? raw[0] : raw;
+      const picked = pickRecentTrack(data?.recenttracks?.track);
 
-      if (!item) {
+      if (!picked) {
         setTrack(null);
         setError(null);
         setLoading(false);
         return;
       }
 
-      const nowPlaying = item['@attr']?.nowplaying === 'true';
-      const uts = item.date?.uts ? Number(item.date.uts) : null;
-
-      setTrack({
-        name: item.name || 'Unknown track',
-        artist: item.artist?.['#text'] || item.artist?.name || 'Unknown artist',
-        album: item.album?.['#text'] || '',
-        url: item.url || `https://www.last.fm/user/${user}`,
-        image: pickImage(item.image),
-        nowPlaying,
-        playedAt: nowPlaying ? null : Number.isFinite(uts) ? uts : null,
-      });
+      setTrack(toTrack(picked.item, user, picked.nowPlaying));
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load Last.fm');

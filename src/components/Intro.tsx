@@ -16,10 +16,13 @@ import { useSkills } from '../Hooks/useSkills';
 import { useResume } from '../Hooks/useResume';
 import { getSkillIcon } from '../lib/skillIcons';
 import NowPlaying from './NowPlaying';
+import CursorAura from './CursorAura';
+import HomeParticleBackground from './HomeParticleBackground';
 
 const Home = () => {
   const { skills } = useSkills();
   const { resumeUrl } = useResume();
+  const sectionRef = useRef<HTMLElement>(null);
   const floatRef = useRef<HTMLDivElement>(null);
   const tiltRef = useRef<HTMLDivElement>(null);
   const tiltTarget = useRef({ rx: 0, ry: 0 });
@@ -92,8 +95,14 @@ const Home = () => {
   };
 
   return (
-    <section id="Home" className="section-page section-cut font-poppins text-secondary-color">
-      <div className="section-page-inner relative pb-10 md:pb-14">
+    <section
+      ref={sectionRef}
+      id="Home"
+      className="section-page section-cut font-poppins text-secondary-color relative overflow-hidden"
+    >
+      <HomeParticleBackground containerRef={sectionRef} />
+      <CursorAura containerRef={sectionRef} />
+      <div className="section-page-inner relative z-10 pb-10 md:pb-14">
         <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-10 w-full">
           {/* Copy */}
           <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-3 sm:space-y-4 w-full lg:w-[52%] min-w-0">

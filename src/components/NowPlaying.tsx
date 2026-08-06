@@ -58,7 +58,7 @@ export default function NowPlaying() {
 
       <div className="min-w-0 flex-1 text-left">
         <p className="text-[10px] text-gray-400 leading-none mb-0.5">
-          {track.nowPlaying ? 'In my headphones' : 'On repeat lately'} · {whenLabel}
+          {track.nowPlaying ? 'In my headphones · Listening now' : `Last played · ${whenLabel}`}
         </p>
         <p className="truncate text-xs font-semibold text-secondary-color group-hover:text-main-color transition-colors">
           {track.name}

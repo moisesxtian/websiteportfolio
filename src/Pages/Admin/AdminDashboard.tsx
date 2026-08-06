@@ -99,15 +99,57 @@ export default function AdminDashboard() {
 }
 
 function ProjectsPanel() {
-  const { projects, loading, createProject, updateProject, deleteProject, usingFallback } =
-    useProjects();
+  const {
+    projects,
+    loading,
+    createProject,
+    updateProject,
+    deleteProject,
+    reorderProjects,
+    usingFallback,
+  } = useProjects();
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Project | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [overIndex, setOverIndex] = useState<number | null>(null);
+  const [reorderError, setReorderError] = useState<string | null>(null);
+  const [savingOrder, setSavingOrder] = useState(false);
+
+  const handleDrop = async (targetIndex: number) => {
+    if (dragIndex === null || dragIndex === targetIndex) {
+      setDragIndex(null);
+      setOverIndex(null);
+      return;
+    }
+
+    const next = [...projects];
+    const [moved] = next.splice(dragIndex, 1);
+    next.splice(targetIndex, 0, moved);
+
+    setDragIndex(null);
+    setOverIndex(null);
+    setReorderError(null);
+    setSavingOrder(true);
+
+    try {
+      await reorderProjects(next);
+    } catch (err) {
+      setReorderError(err instanceof Error ? err.message : 'Failed to save order');
+    } finally {
+      setSavingOrder(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold">Projects</h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-semibold">Projects</h2>
+          <p className="text-xs text-gray-500 mt-0.5 inline-flex items-center gap-1">
+            <ArrowDownUp size={12} />
+            Drag to reorder · Top = First shown
+          </p>
+        </div>
         <button
           type="button"
           onClick={() => {
@@ -123,57 +165,109 @@ function ProjectsPanel() {
 
       {usingFallback ? (
         <p className="text-sm text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-          Showing local fallback data. Run supabase/schema.sql and seed.sql, then refresh.
+          Showing local fallback data. Run supabase/schema.sql and seed.sql, then refresh. Reorder will
+          not save until then.
         </p>
       ) : null}
+
+      {reorderError ? (
+        <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+          {reorderError}
+        </p>
+      ) : null}
+
+      {savingOrder ? <p className="text-xs text-gray-500">Saving order...</p> : null}
 
       {loading ? (
         <p className="text-sm text-gray-500">Loading...</p>
       ) : (
-        <ul className="divide-y border rounded-lg overflow-hidden">
-          {projects.map((project) => (
-            <li key={project.id} className="flex items-start gap-3 p-4 bg-white">
-              <img
-                src={project.image_url || '/assets/Projects/vitae.png'}
-                alt=""
-                className="w-16 h-16 object-cover rounded-md border flex-shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <p className="font-medium truncate">{project.title}</p>
-                  {project.video_url ? (
-                    <span className="inline-flex items-center gap-1 text-xs text-main-color">
-                      <Play size={12} /> video
+        <ul className="border rounded-lg overflow-hidden divide-y">
+          {projects.map((project, index) => {
+            const isDragging = dragIndex === index;
+            const isOver = overIndex === index && dragIndex !== index;
+
+            return (
+              <li
+                key={project.id}
+                draggable
+                onDragStart={() => {
+                  setDragIndex(index);
+                  setReorderError(null);
+                }}
+                onDragEnd={() => {
+                  setDragIndex(null);
+                  setOverIndex(null);
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setOverIndex(index);
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  void handleDrop(index);
+                }}
+                className={`flex items-start gap-2 p-3 sm:p-4 bg-white transition-all cursor-grab active:cursor-grabbing ${
+                  isDragging ? 'opacity-40' : ''
+                } ${isOver ? 'bg-orange-50 border-t-2 border-t-main-color' : ''}`}
+              >
+                <div
+                  className="mt-1 flex flex-col items-center gap-1 text-gray-400 flex-shrink-0"
+                  title="Drag to reorder"
+                >
+                  <GripVertical size={18} />
+                  <span className="text-[10px] font-semibold text-gray-400 tabular-nums">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {index === 0 ? (
+                    <span className="text-[9px] uppercase tracking-wide text-main-color font-semibold">
+                      First
                     </span>
                   ) : null}
                 </div>
-                <p className="text-xs text-gray-500 line-clamp-2 mt-1">{project.description}</p>
-                <p className="text-xs text-gray-400 mt-1">{project.skills.join(', ')}</p>
-              </div>
-              <div className="flex gap-1">
-                <button
-                  type="button"
-                  className="p-2 hover:bg-gray-100 rounded-lg"
-                  onClick={() => {
-                    setEditing(project);
-                    setShowForm(true);
-                  }}
-                >
-                  <Pencil size={16} />
-                </button>
-                <button
-                  type="button"
-                  className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-                  onClick={async () => {
-                    if (!confirm(`Delete "${project.title}"?`)) return;
-                    await deleteProject(project.id);
-                  }}
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </li>
-          ))}
+
+                <img
+                  src={project.image_url || '/assets/Projects/vitae.png'}
+                  alt=""
+                  className="w-16 h-16 object-cover rounded-md border flex-shrink-0"
+                  draggable={false}
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium truncate">{project.title}</p>
+                    {project.video_url ? (
+                      <span className="inline-flex items-center gap-1 text-xs text-main-color">
+                        <Play size={12} /> video
+                      </span>
+                    ) : null}
+                  </div>
+                  <p className="text-xs text-gray-500 line-clamp-2 mt-1">{project.description}</p>
+                  <p className="text-xs text-gray-400 mt-1">{project.skills.join(', ')}</p>
+                </div>
+                <div className="flex gap-1">
+                  <button
+                    type="button"
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                    onClick={() => {
+                      setEditing(project);
+                      setShowForm(true);
+                    }}
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                    onClick={async () => {
+                      if (!confirm(`Delete "${project.title}"?`)) return;
+                      await deleteProject(project.id);
+                    }}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       )}
 

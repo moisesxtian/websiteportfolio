@@ -1,0 +1,200 @@
+import { useEffect, useRef } from 'react';
+import type { RefObject } from 'react';
+
+type Particle = {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  driftX: number;
+  driftY: number;
+  speed: number;
+  phase: number;
+};
+
+type HomeParticleBackgroundProps = {
+  containerRef: RefObject<HTMLElement | null>;
+};
+
+const COLS = 12;
+const ROWS = 8;
+
+function buildParticles(): Particle[] {
+  const list: Particle[] = [];
+  let id = 0;
+
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      if ((row + col) % 3 === 0) continue;
+
+      list.push({
+        id: id++,
+        x: (col + 0.5) / COLS + (((id * 17) % 7) - 3) * 0.005,
+        y: (row + 0.5) / ROWS + (((id * 13) % 7) - 3) * 0.005,
+        size: 2.6 + (id % 4) * 0.9,
+        opacity: 0.28 + (id % 5) * 0.06,
+        driftX: 6 + (id % 3) * 4,
+        driftY: 8 + (id % 4) * 5,
+        speed: 0.28 + (id % 6) * 0.09,
+        phase: id * 0.55,
+      });
+    }
+  }
+
+  return list;
+}
+
+const PARTICLES = buildParticles();
+
+const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) => {
+  const layerRef = useRef<HTMLDivElement>(null);
+  const patternRef = useRef<HTMLDivElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
+  const mouse = useRef({ x: 0.5, y: 0.5, active: false });
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      mouse.current.x = (e.clientX - rect.left) / rect.width;
+      mouse.current.y = (e.clientY - rect.top) / rect.height;
+      mouse.current.active = true;
+    };
+
+    const onLeave = () => {
+      mouse.current.active = false;
+    };
+
+    container.addEventListener('mousemove', onMove, { passive: true });
+    container.addEventListener('mouseleave', onLeave);
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      return () => {
+        container.removeEventListener('mousemove', onMove);
+        container.removeEventListener('mouseleave', onLeave);
+      };
+    }
+
+    let frame = 0;
+    const startedAt = performance.now();
+    let influenceX = 0.5;
+    let influenceY = 0.5;
+    let influenceStrength = 0;
+
+    const animate = (now: number) => {
+      const t = (now - startedAt) / 1000;
+
+      const targetStrength = mouse.current.active ? 1 : 0;
+      influenceStrength += (targetStrength - influenceStrength) * 0.1;
+      influenceX += (mouse.current.x - influenceX) * 0.14;
+      influenceY += (mouse.current.y - influenceY) * 0.14;
+
+      const px = influenceX * 100;
+      const py = influenceY * 100;
+
+      // Pattern parallax + cursor spotlight
+      const pattern = patternRef.current;
+      if (pattern) {
+        const shiftX = (influenceX - 0.5) * -28 * influenceStrength;
+        const shiftY = (influenceY - 0.5) * -28 * influenceStrength;
+        const scale = 1 + influenceStrength * 0.04;
+        pattern.style.backgroundPosition = `${shiftX}px ${shiftY}px`;
+        pattern.style.transform = `scale(${scale})`;
+        pattern.style.opacity = String(0.35 + influenceStrength * 0.25);
+        pattern.style.maskImage = `radial-gradient(circle 220px at ${px}% ${py}%, black 0%, black 35%, transparent 75%)`;
+        pattern.style.webkitMaskImage = `radial-gradient(circle 220px at ${px}% ${py}%, black 0%, black 35%, transparent 75%)`;
+      }
+
+      // Soft glow that follows cursor over the pattern
+      const spotlight = spotlightRef.current;
+      if (spotlight) {
+        spotlight.style.opacity = String(0.15 + influenceStrength * 0.45);
+        spotlight.style.background = `radial-gradient(circle 180px at ${px}% ${py}%, rgba(249,115,22,0.22) 0%, rgba(249,115,22,0.06) 40%, transparent 70%)`;
+      }
+
+      const layer = layerRef.current;
+      if (layer) {
+        const dots = layer.children;
+        for (let i = 0; i < dots.length; i++) {
+          const p = PARTICLES[i];
+          const ox = Math.sin(t * p.speed + p.phase) * p.driftX;
+          const oy = Math.cos(t * p.speed * 0.85 + p.phase) * p.driftY;
+          const pulse = 0.8 + Math.sin(t * p.speed * 1.1 + p.phase) * 0.2;
+
+          const dx = p.x - influenceX;
+          const dy = p.y - influenceY;
+          const dist = Math.sqrt(dx * dx + dy * dy) + 0.001;
+          const radius = 0.34;
+          const falloff = Math.max(0, 1 - dist / radius);
+          const push = falloff * falloff * influenceStrength * 48;
+          const pushX = (dx / dist) * push;
+          const pushY = (dy / dist) * push;
+          const nearGlow = 1 + falloff * influenceStrength * 0.9;
+
+          const el = dots[i] as HTMLElement;
+          el.style.transform = `translate3d(calc(${p.x * 100}% + ${ox + pushX}px), calc(${p.y * 100}% + ${oy + pushY}px), 0) translate(-50%, -50%)`;
+          el.style.opacity = String(Math.min(0.75, p.opacity * pulse * nearGlow));
+        }
+      }
+
+      frame = requestAnimationFrame(animate);
+    };
+
+    frame = requestAnimationFrame(animate);
+
+    return () => {
+      container.removeEventListener('mousemove', onMove);
+      container.removeEventListener('mouseleave', onLeave);
+      cancelAnimationFrame(frame);
+    };
+  }, [containerRef]);
+
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+      aria-hidden="true"
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(249,115,22,0.07),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(249,115,22,0.05),transparent_50%)]" />
+
+      <div
+        ref={spotlightRef}
+        className="absolute inset-0 will-change-[opacity,background] transition-opacity"
+        style={{ opacity: 0.15 }}
+      />
+
+      <div
+        ref={patternRef}
+        className="absolute inset-0 will-change-transform"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle, rgba(249,115,22,0.38) 1.2px, transparent 1.4px)',
+          backgroundSize: '26px 26px',
+          opacity: 0.35,
+          transformOrigin: 'center center',
+        }}
+      />
+
+      <div ref={layerRef} className="absolute inset-0">
+        {PARTICLES.map((p) => (
+          <span
+            key={p.id}
+            className="absolute left-0 top-0 rounded-full bg-main-color will-change-transform"
+            style={{
+              width: p.size,
+              height: p.size,
+              opacity: p.opacity,
+              boxShadow: '0 0 8px rgba(249,115,22,0.3)',
+              transform: `translate3d(${p.x * 100}%, ${p.y * 100}%, 0) translate(-50%, -50%)`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default HomeParticleBackground;

@@ -36,8 +36,26 @@ export function useProjects() {
   }, [refresh]);
 
   const createProject = async (input: ProjectInput) => {
-    const sort_order = input.sort_order ?? (projects.length + 1);
-    const { error: insertError } = await supabase.from('projects').insert({ ...input, sort_order });
+    // New project = show first → put at top (sort_order 1)
+    const { data: existing } = await supabase
+      .from('projects')
+      .select('id, sort_order')
+      .order('sort_order', { ascending: true });
+
+    if (existing && existing.length > 0) {
+      await Promise.all(
+        existing.map((row, index) =>
+          supabase
+            .from('projects')
+            .update({ sort_order: index + 2 })
+            .eq('id', row.id)
+        )
+      );
+    }
+
+    const { error: insertError } = await supabase
+      .from('projects')
+      .insert({ ...input, sort_order: 1 });
     if (insertError) throw insertError;
     await refresh();
   };
@@ -54,6 +72,32 @@ export function useProjects() {
     await refresh();
   };
 
+  /** Top of list = first shown (sort_order 1). */
+  const reorderProjects = async (reordered: Project[]) => {
+    const withOrder = reordered.map((project, index) => ({
+      ...project,
+      sort_order: index + 1,
+    }));
+
+    setProjects(withOrder);
+
+    if (usingFallback) {
+      throw new Error('Cannot save order while using fallback data. Run schema.sql + seed.sql first.');
+    }
+
+    const results = await Promise.all(
+      withOrder.map((project) =>
+        supabase.from('projects').update({ sort_order: project.sort_order }).eq('id', project.id)
+      )
+    );
+
+    const firstError = results.find((r) => r.error)?.error;
+    if (firstError) {
+      await refresh();
+      throw firstError;
+    }
+  };
+
   return {
     projects,
     loading,
@@ -63,5 +107,6 @@ export function useProjects() {
     createProject,
     updateProject,
     deleteProject,
+    reorderProjects,
   };
 }
