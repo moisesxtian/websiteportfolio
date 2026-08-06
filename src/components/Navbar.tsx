@@ -11,27 +11,24 @@ const navItems = [
 ];
 
 const Navbar = () => {
-  const [nav, setNav] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState<string>('Home');
   const [lastScrollY, setLastScrollY] = useState(0);
   const [navbarVisible, setNavbarVisible] = useState(true);
 
-  const handleNav = () => {
-    setNav(!nav);
-  };
-
-  const handleScroll = () => {
-    const currentScrollY = window.scrollY;
-    if (currentScrollY > lastScrollY && currentScrollY > 50) {
-      setNavbarVisible(false);
-    } else if (currentScrollY < lastScrollY) {
-      setNavbarVisible(true);
-    }
-    setLastScrollY(currentScrollY);
-  };
-
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setNavbarVisible(false);
+        setMenuOpen(false);
+      } else if (currentScrollY < lastScrollY) {
+        setNavbarVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
@@ -45,7 +42,7 @@ const Navbar = () => {
           }
         });
       },
-      { root: null, rootMargin: '0px', threshold: 0.45 }
+      { root: null, rootMargin: '0px', threshold: 0.35 }
     );
 
     sections.forEach((id) => {
@@ -57,63 +54,71 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div
-      className={`fixed backdrop-blur-sm bg-opacity-80 bg-white w-full left-1/2 transform -translate-x-1/2 container mx-auto flex justify-between items-center z-50 transition-all duration-300 ${
-        navbarVisible ? 'top-0' : '-top-20'
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${
+        navbarVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <h1 className="select-none cursor-pointer transition ease-in-out font-poppins font-bold text-3xl text-secondary-color">
-        HYX
-      </h1>
+      <div className="border-b border-gray-200/70 bg-white/85 backdrop-blur-md">
+        <div className="container mx-auto max-w-7xl flex items-center justify-between px-4 sm:px-6 md:px-10 h-14 sm:h-16">
+          <h1 className="select-none font-poppins font-bold text-2xl sm:text-3xl text-secondary-color">
+            HYX
+          </h1>
 
-      <ul className="hidden sm:flex space-x-5 font-medium font-semibold text-sm text-gray-700">
-        {navItems.map(({ label, target, id }) => (
-          <Link key={label} to={target} spy smooth offset={-40} duration={500}>
-            <li
-              className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                activeLink === id ? 'text-main-color' : 'hover:text-main-color'
-              }`}
-            >
-              {label}
-            </li>
-          </Link>
-        ))}
-      </ul>
+          <ul className="hidden md:flex items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700">
+            {navItems.map(({ label, target, id }) => (
+              <Link key={label} to={target} spy smooth offset={-56} duration={500}>
+                <li
+                  className={`cursor-pointer select-none px-3 py-2 rounded-lg transition duration-200 ${
+                    activeLink === id
+                      ? 'text-main-color bg-orange-50'
+                      : 'hover:text-main-color hover:bg-gray-50'
+                  }`}
+                >
+                  {label}
+                </li>
+              </Link>
+            ))}
+          </ul>
 
-      <div onClick={handleNav} className="flex sm:hidden p-4">
-        {!nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
+          </button>
+        </div>
       </div>
 
-      <div
-        className={`${
-          nav
-            ? 'z-0 w-48 fixed right-[-100%] top-16 opacity-0'
-            : 'bg-white w-48 fixed right-5 top-16 opacity-100 border border-gray-300 rounded-xl text-sm ease-in-out duration-500'
-        } sm:hidden`}
-      >
-        <ul>
-          {navItems.map(({ label, target, id }) => (
-            <Link
-              key={label}
-              to={target}
-              spy
-              smooth
-              offset={-40}
-              duration={500}
-              onClick={() => setNav(true)}
-            >
-              <li
-                className={`p-4 cursor-pointer select-none px-4 transition duration-200 ease-in-out ${
-                  activeLink === id ? 'text-main-color' : 'hover:text-main-color'
-                }`}
+      {menuOpen ? (
+        <div className="md:hidden border-b border-gray-200 bg-white shadow-lg">
+          <ul className="container mx-auto max-w-7xl px-4 py-2">
+            {navItems.map(({ label, target, id }) => (
+              <Link
+                key={label}
+                to={target}
+                spy
+                smooth
+                offset={-56}
+                duration={500}
+                onClick={() => setMenuOpen(false)}
               >
-                {label}
-              </li>
-            </Link>
-          ))}
-        </ul>
-      </div>
-    </div>
+                <li
+                  className={`cursor-pointer select-none px-3 py-3 rounded-lg text-sm font-semibold transition ${
+                    activeLink === id ? 'text-main-color bg-orange-50' : 'text-gray-700'
+                  }`}
+                >
+                  {label}
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </header>
   );
 };
 

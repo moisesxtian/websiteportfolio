@@ -7,9 +7,9 @@ const Certificates = () => {
   return (
     <section
       id="Certificates"
-      className="section-cut font-poppins text-secondary-color py-10 md:py-14 scroll-mt-20"
+      className="section-cut font-poppins text-secondary-color py-8 sm:py-10 md:py-14 scroll-mt-16 sm:scroll-mt-20"
     >
-      <div className="container mx-auto px-5 sm:px-8 md:px-10">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-10">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
           <div>
             <div className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-main-color">

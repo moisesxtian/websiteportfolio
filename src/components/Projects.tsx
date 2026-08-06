@@ -84,7 +84,7 @@ const Projects = () => {
               <p className="text-xs font-semibold uppercase tracking-wider text-main-color mb-2">
                 Portfolio
               </p>
-              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
                 Personal Projects
               </h2>
               <p className="mt-2 text-sm text-gray-600 max-w-lg">
@@ -201,9 +201,9 @@ function ShowcaseView({
           {projects.map((project) => (
             <article
               key={project.id}
-              className="relative w-full min-w-full max-w-full flex-shrink-0 snap-center grid grid-cols-1 lg:grid-cols-2 min-h-[420px] md:min-h-[520px]"
+              className="relative w-full min-w-full max-w-full flex-shrink-0 snap-center grid grid-cols-1 lg:grid-cols-2 min-h-0 lg:min-h-[480px]"
             >
-              <div className="relative h-56 sm:h-72 lg:h-auto overflow-hidden">
+              <div className="relative h-48 sm:h-64 lg:min-h-[480px] lg:h-auto overflow-hidden">
                 <img
                   src={project.image_url}
                   alt={project.title}
@@ -212,32 +212,32 @@ function ShowcaseView({
                 <div className="absolute inset-0 bg-gradient-to-t from-secondary-color via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-secondary-color/80" />
               </div>
 
-              <div className="relative flex flex-col justify-center gap-4 p-6 sm:p-8 lg:p-10">
-                <p className="text-[11px] uppercase tracking-[0.16em] text-orange-300 font-semibold">
+              <div className="relative flex flex-col justify-center gap-3 sm:gap-4 p-4 sm:p-6 md:p-8 lg:p-10">
+                <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-orange-300 font-semibold">
                   Featured project
                 </p>
-                <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight">
+                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight">
                   {project.title}
                 </h3>
-                <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-xl">
+                <p className="text-xs sm:text-sm md:text-base text-gray-300 leading-relaxed max-w-xl line-clamp-4 sm:line-clamp-none">
                   {project.description}
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {project.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-[11px] text-orange-200"
+                      className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] text-orange-200"
                     >
                       {skill}
                     </span>
                   ))}
                 </div>
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-1 sm:pt-2">
                   <a
                     href={project.github_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-white text-secondary-color px-4 py-2.5 text-sm font-semibold hover:bg-orange-50 transition"
+                    className="inline-flex items-center gap-2 rounded-lg bg-white text-secondary-color px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold hover:bg-orange-50 transition"
                   >
                     <FaGithub />
                     View Repo
@@ -246,7 +246,7 @@ function ShowcaseView({
                     href={project.live_demo_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-main-color text-white px-4 py-2.5 text-sm font-semibold hover:bg-orange-400 transition"
+                    className="inline-flex items-center gap-2 rounded-lg bg-main-color text-white px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold hover:bg-orange-400 transition"
                   >
                     <FaEye />
                     See Live
@@ -255,7 +255,7 @@ function ShowcaseView({
                     <button
                       type="button"
                       onClick={() => onWatchVideo(project)}
-                      className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-semibold hover:bg-white/10 transition"
+                      className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold hover:bg-white/10 transition"
                     >
                       <Play size={14} />
                       Watch
@@ -270,18 +270,18 @@ function ShowcaseView({
         <button
           type="button"
           onClick={onPrev}
-          className="absolute left-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/60 p-2.5 text-white backdrop-blur hover:bg-main-color transition"
+          className="absolute left-2 sm:left-3 top-48 sm:top-64 -translate-y-1/2 lg:top-1/2 z-20 rounded-full bg-black/60 p-2 sm:p-2.5 text-white backdrop-blur hover:bg-main-color transition"
           aria-label="Previous project"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={18} />
         </button>
         <button
           type="button"
           onClick={onNext}
-          className="absolute right-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/60 p-2.5 text-white backdrop-blur hover:bg-main-color transition"
+          className="absolute right-2 sm:right-3 top-48 sm:top-64 -translate-y-1/2 lg:top-1/2 z-20 rounded-full bg-black/60 p-2 sm:p-2.5 text-white backdrop-blur hover:bg-main-color transition"
           aria-label="Next project"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={18} />
         </button>
       </div>
 
@@ -296,7 +296,7 @@ function ShowcaseView({
                 key={project.id}
                 type="button"
                 onClick={() => onSelect(index)}
-                className={`relative h-14 w-24 overflow-hidden rounded-lg border transition ${
+                className={`relative h-12 w-20 sm:h-14 sm:w-24 overflow-hidden rounded-lg border transition ${
                   index === activeIndex
                     ? 'border-main-color ring-2 ring-main-color/30'
                     : 'border-gray-200 opacity-70 hover:opacity-100'

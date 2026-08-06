@@ -15,6 +15,7 @@ import { IconContext } from 'react-icons';
 import { useSkills } from '../Hooks/useSkills';
 import { useResume } from '../Hooks/useResume';
 import { getSkillIcon } from '../lib/skillIcons';
+import NowPlaying from './NowPlaying';
 
 const Home = () => {
   const { skills } = useSkills();
@@ -26,11 +27,13 @@ const Home = () => {
   useEffect(() => {
     let frame = 0;
     const startedAt = performance.now();
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
 
     const animate = (now: number) => {
       const elapsed = (now - startedAt) / 1000;
-      // Soft float only — keep rotation tiny so image text doesn't warp
-      const floatY = Math.sin((elapsed * Math.PI * 2) / 5.5) * -10;
+      const floatAmount = prefersReduced || isCoarse ? 0 : 10;
+      const floatY = Math.sin((elapsed * Math.PI * 2) / 5.5) * -floatAmount;
 
       const ease = 0.08;
       tiltCurrent.current.rx += (tiltTarget.current.rx - tiltCurrent.current.rx) * ease;
@@ -51,12 +54,12 @@ const Home = () => {
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     const el = cardRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
-    // Very subtle tilt so baked-in image text stays stable
     tiltTarget.current = {
       ry: (x - 0.5) * 3,
       rx: (0.5 - y) * 2,
@@ -84,21 +87,18 @@ const Home = () => {
 
   return (
     <section id="Home" className="section-page section-cut font-poppins text-secondary-color">
-      <div className="section-page-inner relative">
-        <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8 md:gap-6 w-full">
+      <div className="section-page-inner relative pb-10 md:pb-14">
+        <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-10 w-full">
           {/* Copy */}
-          <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-4 w-full md:w-1/2">
-            <h2 className="hero-reveal text-sm font-medium text-secondary-color" style={{ animationDelay: '0ms' }}>
+          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-3 sm:space-y-4 w-full lg:w-[52%] min-w-0">
+            <h2 className="hero-reveal text-xs sm:text-sm font-medium text-secondary-color">
               I AM
             </h2>
-            <h1
-              className="hero-reveal text-3xl sm:text-5xl md:text-7xl font-extrabold leading-tight"
-              style={{ animationDelay: '80ms' }}
-            >
+            <h1 className="hero-reveal text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.1] break-words">
               Christian Moises
             </h1>
-            <h3 className="hero-reveal text-sm sm:text-base" style={{ animationDelay: '140ms' }}>
-              an {' '}
+            <h3 className="hero-reveal text-sm sm:text-base max-w-xl">
+              an{' '}
               <span className="font-bold text-main-color">
                 <ReactTyped
                   strings={['AI Developer', 'Automations Engineer']}
@@ -110,10 +110,7 @@ const Home = () => {
               from the Philippines.
             </h3>
 
-            <div
-              className="hero-reveal flex flex-wrap justify-center md:justify-start gap-3 max-w-xl"
-              style={{ animationDelay: '200ms' }}
-            >
+            <div className="hero-reveal flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-3 max-w-xl">
               {[
                 'Full Stack Development',
                 'Automation Engineering',
@@ -123,7 +120,7 @@ const Home = () => {
               ].map((role) => (
                 <div
                   key={role}
-                  className="role-pill flex items-center space-x-2 rounded-full border border-gray-300 px-3 py-1 text-xs font-light bg-white/70"
+                  className="role-pill flex items-center space-x-2 rounded-full border border-gray-300 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-light bg-white/70"
                 >
                   <span className="block w-2 h-2 bg-main-color rounded-full" />
                   <span>{role}</span>
@@ -131,13 +128,8 @@ const Home = () => {
               ))}
             </div>
 
-            <IconContext.Provider
-              value={{ size: '28', className: 'transition duration-300' }}
-            >
-              <div
-                className="hero-reveal flex justify-center md:justify-start gap-3 sm:gap-4 border border-gray-200 px-5 py-2 rounded-full bg-white/60"
-                style={{ animationDelay: '260ms' }}
-              >
+            <IconContext.Provider value={{ size: '24', className: 'transition duration-300' }}>
+              <div className="hero-reveal flex justify-center lg:justify-start gap-3 sm:gap-4 border border-gray-200 px-4 sm:px-5 py-2 rounded-full bg-white/60">
                 {[
                   { href: 'https://github.com/moisesxtian', Icon: FaGithub },
                   { href: 'https://www.linkedin.com/in/christian-moises/', Icon: FaLinkedin },
@@ -164,29 +156,26 @@ const Home = () => {
               target="_blank"
               rel="noreferrer"
               className="hero-reveal"
-              style={{ animationDelay: '320ms' }}
             >
               <button className="cv-btn w-40 h-9 rounded-xl bg-main-color text-white text-xs">
                 View CV
               </button>
             </a>
 
-            <div
-              className="hero-reveal flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1"
-              style={{ animationDelay: '380ms' }}
-            >
-              <IoTerminal size={36} color="#F97316" className="terminal-pulse" />
-              <div className="text-left">
-                <h1 className="text-main-color font-bold">Technologies & Languages</h1>
-                <p className="text-sm text-gray-600">Technologies I use and have worked with.</p>
+            <div className="hero-reveal flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1 w-full">
+              <IoTerminal size={32} color="#F97316" className="terminal-pulse flex-shrink-0" />
+              <div className="text-left min-w-0">
+                <p className="text-main-color font-bold text-sm sm:text-base">
+                  Technologies & Languages
+                </p>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Technologies I use and have worked with.
+                </p>
               </div>
             </div>
 
             <IconContext.Provider value={{ color: '#F97316' }}>
-              <div
-                className="hero-reveal flex w-full md:w-[620px] overflow-hidden group MyGradient"
-                style={{ animationDelay: '440ms' }}
-              >
+              <div className="hero-reveal flex w-full max-w-full lg:max-w-[620px] overflow-hidden group MyGradient">
                 <div className="flex max-w-none animate-loop-scroll group-hover:paused">
                   {skills.map((skill) => renderSkillChip(skill, 'a'))}
                 </div>
@@ -200,10 +189,10 @@ const Home = () => {
             </IconContext.Provider>
           </div>
 
-          {/* Plain floating image — no card chrome */}
-          <div className="hero-float-stage relative w-full md:w-[42%] flex items-center justify-center">
+          {/* Portrait + soundtrack */}
+          <div className="hero-float-stage relative w-full lg:w-[42%] flex flex-col items-center justify-center gap-3 sm:gap-4">
             <div
-              className="relative w-[min(100%,380px)] md:w-full"
+              className="relative w-[min(72vw,280px)] sm:w-[min(60vw,340px)] lg:w-full"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
@@ -228,15 +217,19 @@ const Home = () => {
                 />
               </div>
             </div>
+
+            <div className="w-full max-w-[320px] sm:max-w-[340px] px-1">
+              <NowPlaying />
+            </div>
           </div>
         </div>
 
         <Link
           to="Experience"
           smooth
-          offset={-40}
+          offset={-56}
           duration={500}
-          className="scroll-hint absolute bottom-0 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-1 text-xs text-gray-400 cursor-pointer hover:text-main-color transition-colors"
+          className="scroll-hint absolute bottom-1 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-1 text-xs text-gray-400 cursor-pointer hover:text-main-color transition-colors"
         >
           <span>Scroll</span>
           <ChevronDown size={16} className="scroll-hint-icon" />

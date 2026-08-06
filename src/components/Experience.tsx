@@ -78,9 +78,9 @@ function ExperienceCard({
               }`}
             />
 
-            <div className="relative p-5 sm:p-6 pl-6 sm:pl-7">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-0 space-y-2.5">
+            <div className="relative p-4 sm:p-6 pl-5 sm:pl-7">
+              <div className="flex flex-wrap items-start justify-between gap-2 sm:gap-3">
+                <div className="min-w-0 space-y-2 sm:space-y-2.5">
                   <div className="flex flex-wrap items-center gap-2">
                     {isLatest ? (
                       <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-main-color">
@@ -91,13 +91,13 @@ function ExperienceCard({
                         {progressLabel}
                       </span>
                     )}
-                    <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                    <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs text-gray-500">
                       <Calendar size={12} className="text-main-color" />
                       {experience.period}
                     </span>
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-bold text-secondary-color leading-snug tracking-tight">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-secondary-color leading-snug tracking-tight">
                     {experience.role}
                   </h3>
 
@@ -191,10 +191,10 @@ export default function Experience() {
               <Briefcase size={12} />
               Career path
             </div>
-            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
               Work Experience
             </h2>
-            <p className="mt-3 max-w-md text-sm text-gray-600 leading-relaxed">
+            <p className="mt-3 max-w-md text-xs sm:text-sm text-gray-600 leading-relaxed">
               Roles that shaped how I build — from freelance craft to AI/ML engineering.
             </p>
           </div>

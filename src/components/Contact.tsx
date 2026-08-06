@@ -82,16 +82,16 @@ const CardsLayout = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Left section */}
         <div className="flex flex-col gap-5">
-          <div className="bg-gray-50 border p-5 rounded-lg shadow-sm">
-            <h2 className="text-6xl font-bold text-secondary-color">
+          <div className="bg-gray-50 border p-4 sm:p-5 rounded-lg shadow-sm">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-color leading-tight">
               Get In Touch <span className="text-main-color">.</span>
             </h2>
-            <p className="text-secondary-color text-sm">
+            <p className="text-secondary-color text-sm mt-2">
               Considering to be in contact with me regarding a project? Perhaps collaboration? Or just about anything?
             </p>
           </div>
-          <div className="flex h-full bg-gray-50 border p-5 rounded-lg shadow-sm">
-            <p className="text-secondary-color">
+          <div className="flex h-full bg-gray-50 border p-4 sm:p-5 rounded-lg shadow-sm">
+            <p className="text-secondary-color text-sm sm:text-base">
               With hands-on freelancing experience across multiple projects, I have honed my skills in delivering tailored solutions
               that meet client needs. While I don't have formal job experience yet, I'm confident that I have the skills to take on
               any challenging job that matches my interest.
@@ -100,7 +100,7 @@ const CardsLayout = () => {
         </div>
 
         {/* Right section with the contact form */}
-        <div className="bg-gray-50 border p-5 rounded-lg shadow-sm col-span-1 md:col-span-2">
+        <div className="bg-gray-50 border p-4 sm:p-5 rounded-lg shadow-sm col-span-1 md:col-span-2">
           <h2 className="text-xl font-bold text-secondary-color">Contact Me</h2>
           <form
             className="space-y-4"

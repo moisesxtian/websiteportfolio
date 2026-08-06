@@ -2,8 +2,8 @@ import { FaGithub, FaLinkedin, FaBehanceSquare, FaDiscord, FaFacebook } from "re
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-gradient-to-tr from-gray-900 via-gray-800 to-gray-900 text-white pt-12 pb-6 mt-20">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+    <footer className="w-full bg-gradient-to-tr from-gray-900 via-gray-800 to-gray-900 text-white pt-10 sm:pt-12 pb-6 mt-10 sm:mt-16">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-8">
         {/* Left: Branding & Social */}
         <div className="flex flex-col items-center md:items-start gap-4">
           <h2 className="text-2xl font-bold font-poppins tracking-wide text-main-color">Christian Moises</h2>
