@@ -178,16 +178,39 @@ function ShowcaseView({
   onWatchVideo: (project: Project) => void;
   onScrollIndex: (index: number) => void;
 }) {
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const syncHeight = () => {
+      const slide = track.children[activeIndex] as HTMLElement | undefined;
+      if (!slide) return;
+      track.style.height = `${slide.offsetHeight}px`;
+    };
+
+    syncHeight();
+
+    const slide = track.children[activeIndex] as HTMLElement | undefined;
+    const observer = slide ? new ResizeObserver(syncHeight) : null;
+    if (slide && observer) observer.observe(slide);
+
+    window.addEventListener('resize', syncHeight);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', syncHeight);
+    };
+  }, [activeIndex, projects, trackRef]);
+
   if (projects.length === 0) {
     return <p className="text-sm text-gray-500 py-10 dark:text-gray-400">No projects yet.</p>;
   }
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <div className="relative rounded-2xl border border-gray-200 bg-[#1a1a1a] text-white shadow-lg dark:border-gray-700">
+      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-[#1a1a1a] text-white shadow-lg dark:border-gray-700">
         <div
           ref={trackRef}
-          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide"
+          className="flex items-start overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth scrollbar-hide transition-[height] duration-300"
           onScroll={(e) => {
             const el = e.currentTarget;
             const width = el.clientWidth;
@@ -201,23 +224,22 @@ function ShowcaseView({
           {projects.map((project) => (
             <article
               key={project.id}
-              className="relative w-full min-w-full max-w-full flex-shrink-0 snap-center grid grid-cols-1 lg:grid-cols-2 min-h-0 lg:min-h-[480px]"
+              className="relative grid w-full min-w-full max-w-full flex-shrink-0 snap-center grid-cols-1 lg:grid-cols-2"
             >
-              <div className="group/image relative h-48 sm:h-64 lg:min-h-[480px] lg:h-auto overflow-hidden">
+              <div className="group/image relative aspect-[16/9] w-full overflow-hidden lg:aspect-auto lg:min-h-full">
                 <img
                   src={project.image_url}
                   alt={project.title}
-                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover/image:opacity-0"
+                  className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300 group-hover/image:opacity-0"
                 />
                 <img
                   src={project.hover_image_url || project.image_url}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover/image:opacity-100"
+                  className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover/image:opacity-100"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[#1a1a1a]/80" />
               </div>
 
-              <div className="relative flex flex-col justify-center gap-3 sm:gap-4 p-4 sm:p-6 md:p-8 lg:p-10">
+              <div className="relative flex flex-col justify-center gap-3 p-4 sm:gap-4 sm:p-6 md:p-8 lg:p-10">
                 <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-orange-300 font-semibold">
                   Featured project
                 </p>
@@ -272,22 +294,24 @@ function ShowcaseView({
           ))}
         </div>
 
-        <button
-          type="button"
-          onClick={onPrev}
-          className="absolute left-2 sm:left-3 top-48 sm:top-64 -translate-y-1/2 lg:top-1/2 z-20 rounded-full bg-black/60 p-2 sm:p-2.5 text-white backdrop-blur hover:bg-main-color transition"
-          aria-label="Previous project"
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          className="absolute right-2 sm:right-3 top-48 sm:top-64 -translate-y-1/2 lg:top-1/2 z-20 rounded-full bg-black/60 p-2 sm:p-2.5 text-white backdrop-blur hover:bg-main-color transition"
-          aria-label="Next project"
-        >
-          <ChevronRight size={18} />
-        </button>
+        <div className="pointer-events-none absolute inset-0 z-20">
+          <button
+            type="button"
+            onClick={onPrev}
+            className="pointer-events-auto absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 sm:p-2.5 text-white backdrop-blur hover:bg-main-color transition"
+            aria-label="Previous project"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            type="button"
+            onClick={onNext}
+            className="pointer-events-auto absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 sm:p-2.5 text-white backdrop-blur hover:bg-main-color transition"
+            aria-label="Next project"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">
