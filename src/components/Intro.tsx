@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  FaGithub,
-  FaLinkedin,
-  FaBehanceSquare,
-  FaDiscord,
-  FaFacebook,
-} from 'react-icons/fa';
 import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-scroll';
 import { IconContext } from 'react-icons';
+import { socials } from '../data/socials';
 import { useResume } from '../Hooks/useResume';
 import { useLoopedSteps } from '../Hooks/useLoopedSteps';
 import CursorAura from './CursorAura';
@@ -20,14 +14,6 @@ const ROLES = [
   'Full Stack Developer',
   'Automation Engineer',
   'AI Developer',
-];
-
-const SOCIALS = [
-  { href: 'https://www.behance.net/hyxchan', Icon: FaBehanceSquare, label: 'Behance' },
-  { href: 'https://github.com/moisesxtian', Icon: FaGithub, label: 'GitHub' },
-  { href: 'https://www.linkedin.com/in/christian-moises/', Icon: FaLinkedin, label: 'LinkedIn' },
-  { href: 'https://discord.com/users/hyx.chan', Icon: FaDiscord, label: 'Discord' },
-  { href: 'https://www.facebook.com/moisesxtian', Icon: FaFacebook, label: 'Facebook' },
 ];
 
 const DISPLAY_NAME = 'Christian Moises';
@@ -55,7 +41,7 @@ function articleFor(role: string) {
  */
 const SENTENCE_BEATS = [
   { letters: { start: 0, length: FIRST_NAME.length }, role: -1, ms: 1150 },
-  { letters: { start: DISPLAY_NAME.indexOf('is', FIRST_NAME.length), length: 2 }, role: -1, ms: 900 },
+  { letters: { start: DISPLAY_NAME.indexOf('is', FIRST_NAME.length), length: 2 }, role: -1, ms: 500 },
   { letters: articleFor(ROLES[0]), role: -1, ms: 850 },
   // The article holds so the phrase still reads as "a/an <role>" while each role grows
   ...ROLES.map((role, index) => ({ letters: articleFor(role), role: index, ms: 1400 })),
@@ -78,7 +64,7 @@ const BOOT_EXPAND_MS = 560;
 const SENTENCE_START_MS = SWAP_TOTAL_MS - BOOT_EXPAND_MS + 900;
 
 const socialStart = BOOT_EXPAND_MS / 1000 + 0.05;
-const skillsStart = socialStart + SOCIALS.length * ITEM_STAGGER + 0.06;
+const skillsStart = socialStart + socials.length * ITEM_STAGGER + 0.06;
 const cvStart = skillsStart + ROLES.length * ITEM_STAGGER;
 const scrollHintStart = cvStart + ITEM_DURATION * 0.5;
 const nowPlayingStart = scrollHintStart + 0.12;
@@ -253,7 +239,7 @@ const Home = () => {
                 ref={socialsRef}
                 className="inline-flex items-center gap-3 sm:gap-4 will-change-transform"
               >
-                {SOCIALS.map(({ href, Icon, label }, index) => (
+                {socials.map(({ href, Icon, label }, index) => (
                   <div key={href} className="inline-flex items-center gap-3 sm:gap-4">
                     {index > 0 ? (
                       <span

@@ -18,7 +18,7 @@ const Certificates = () => {
   return (
     <section
       id="Certificates"
-      className="section-cut font-poppins text-secondary-color py-10 sm:py-12 md:py-16 scroll-mt-16 sm:scroll-mt-20"
+      className="font-poppins text-secondary-color py-10 sm:py-12 md:py-16 scroll-mt-16 sm:scroll-mt-20"
     >
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-10">
         <ScrollReveal className="mb-5 flex items-end justify-between gap-4">

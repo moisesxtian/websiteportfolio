@@ -23,8 +23,10 @@
     scroll-behavior: smooth;
   }
 
+  /* clip instead of hidden: hidden turns the body into a scroll container, which
+     would stop the sticky contact panel from ever sticking */
   body {
-    @apply overflow-x-hidden bg-page-bg text-secondary-color antialiased;
+    @apply overflow-x-clip bg-page-bg text-secondary-color antialiased;
   }
 
   img {
@@ -616,17 +618,21 @@
     will-change: opacity, transform;
   }
 
+  /* The section stack is a card that covers the hero above it and the contact
+     panel below it, so both of its edges cast a shadow onto the layer behind. */
   .hero-cover-stack {
-    border-radius: 1.75rem 1.75rem 0 0;
+    border-radius: 1.75rem;
     box-shadow:
       0 -18px 50px rgba(15, 15, 15, 0.08),
-      0 -1px 0 rgba(255, 255, 255, 0.35);
+      0 -1px 0 rgba(255, 255, 255, 0.35),
+      0 22px 55px rgba(15, 15, 15, 0.12);
   }
 
   .dark .hero-cover-stack {
     box-shadow:
       0 -18px 50px rgba(0, 0, 0, 0.45),
-      0 -1px 0 rgba(255, 255, 255, 0.06);
+      0 -1px 0 rgba(255, 255, 255, 0.06),
+      0 22px 55px rgba(0, 0, 0, 0.55);
   }
 
   @keyframes hero-letter-in {

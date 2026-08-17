@@ -1,10 +1,21 @@
-import { useRef, useState} from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
+import { Link } from "react-scroll";
+import { ChevronUp } from "lucide-react";
+import { IconContext } from "react-icons";
 import ScrollReveal from "./ScrollReveal";
+import CursorAura from "./CursorAura";
+import HomeParticleBackground from "./HomeParticleBackground";
+import { navLinks } from "../data/navLinks";
+import { socials } from "../data/socials";
+
+/** The panel is the Contact section itself, so it only links back up the page */
+const CONTACT_NAV_LINKS = navLinks.filter((link) => link.id !== "Contact");
 
 const WEB3FORMS_API_KEY = "cf56714b-d5fa-4bbd-99d1-b4f6c89239dc";
 
-const CardsLayout = () => {
+const Contact = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -78,70 +89,91 @@ const CardsLayout = () => {
   };
 
   return (
-    <section className="section-page section-cut font-poppins" id="Contact">
-      <div className="section-page-inner">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Left section */}
-        <ScrollReveal className="flex flex-col gap-5">
-          <div className="bg-gray-50 border border-gray-200 p-4 sm:p-5 rounded-lg shadow-sm dark:border-gray-700 dark:bg-neutral-900">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-color leading-tight">
-              Get In Touch <span className="text-main-color">.</span>
-            </h2>
-            <p className="text-secondary-color text-sm mt-2 dark:text-gray-400">
-              Considering to be in contact with me regarding a project? Perhaps collaboration? Or just about anything?
-            </p>
-          </div>
-          <div className="flex h-full bg-gray-50 border border-gray-200 p-4 sm:p-5 rounded-lg shadow-sm dark:border-gray-700 dark:bg-neutral-900">
-            <p className="text-secondary-color text-sm sm:text-base dark:text-gray-400">
-              I grew up naturally lazy. I always try to do the least amount of work possible to get the job done. And now, I do it for a living. Send me a message let's chat for ways I can make your process automated using the skillset I have developed over the years as an AI Developer.
-            </p>
-          </div>
+    <section
+      ref={sectionRef}
+      className="relative flex h-[100svh] w-full flex-col overflow-hidden font-poppins"
+      aria-label="Contact"
+    >
+      <HomeParticleBackground containerRef={sectionRef} />
+      <CursorAura containerRef={sectionRef} />
+
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col px-4 py-8 sm:px-6 sm:py-10 md:px-10">
+        <div className="flex min-h-0 flex-1 flex-col justify-center gap-6">
+        <ScrollReveal className="mx-auto w-full max-w-3xl text-center">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-main-color">
+            Contact
+          </p>
+          <h2 className="text-4xl sm:text-6xl md:text-7xl font-bold leading-tight text-secondary-color">
+            Get In Touch <span className="text-main-color">.</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            Considering to be in contact with me regarding a project? Perhaps collaboration? Or
+            just about anything?
+          </p>
+
+          <IconContext.Provider value={{ size: "22", className: "transition duration-300" }}>
+            <div className="mt-6 flex items-center justify-center gap-4 sm:gap-5">
+              {socials.map(({ href, Icon, label }) => (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="social-icon text-[#494545] dark:text-gray-300"
+                >
+                  <Icon />
+                </a>
+              ))}
+            </div>
+          </IconContext.Provider>
         </ScrollReveal>
 
-        {/* Right section with the contact form */}
-        <ScrollReveal delay={140} className="bg-gray-50 border border-gray-200 p-4 sm:p-5 rounded-lg shadow-sm col-span-1 md:col-span-2 dark:border-gray-700 dark:bg-neutral-900">
-          <h2 className="text-xl font-bold text-secondary-color">Contact Me</h2>
+        <ScrollReveal delay={140} className="mx-auto w-full max-w-2xl">
           <form
             className="space-y-4"
             ref={formRef}
             onSubmit={handleSubmit}
             autoComplete="off"
           >
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-secondary-color">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-main-color bg-white dark:border-gray-600 dark:bg-neutral-950 dark:text-gray-100"
-                placeholder="Your Full Name"
-                required
-              />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="name" className="sr-only">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  className="block w-full rounded-lg border border-gray-300 bg-white/80 p-3 text-sm shadow-sm backdrop-blur-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900/80 dark:text-gray-100"
+                  placeholder="Your Full Name"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="sr-only">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="block w-full rounded-lg border border-gray-300 bg-white/80 p-3 text-sm shadow-sm backdrop-blur-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900/80 dark:text-gray-100"
+                  placeholder="Your Email Address"
+                  required
+                />
+              </div>
             </div>
+
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-secondary-color">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-main-color bg-white dark:border-gray-600 dark:bg-neutral-950 dark:text-gray-100"
-                placeholder="Your Email Address"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-secondary-color">
+              <label htmlFor="message" className="sr-only">
                 Message
               </label>
               <textarea
                 id="message"
                 name="message"
-                className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-main-color bg-white dark:border-gray-600 dark:bg-neutral-950 dark:text-gray-100"
-                rows={5}
+                className="block w-full rounded-lg border border-gray-300 bg-white/80 p-3 text-sm shadow-sm backdrop-blur-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900/80 dark:text-gray-100"
+                rows={4}
                 placeholder="Your Message"
                 required
               ></textarea>
@@ -155,22 +187,53 @@ const CardsLayout = () => {
               autoComplete="off"
             />
 
-            <button
-              type="submit"
-              className="mt-4 w-full py-3 px-5 bg-main-color text-white font-bold rounded-lg shadow-md hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-main-color"
-              disabled={submitting}
-            >
-              {submitting ? "Sending..." : "Send Message"}
-            </button>
-            {result && (
-              <div className="mt-2 text-center text-sm text-main-color">{result}</div>
-            )}
+            <div className="flex flex-col items-center gap-3">
+              <button
+                type="submit"
+                className="cv-btn inline-flex h-11 w-full items-center justify-center rounded-full bg-main-color text-sm font-semibold tracking-wide text-white sm:w-56"
+                disabled={submitting}
+              >
+                <span>{submitting ? "Sending..." : "Send Message"}</span>
+              </button>
+              {result && <p className="text-center text-sm text-main-color">{result}</p>}
+            </div>
           </form>
         </ScrollReveal>
-      </div>
+        </div>
+
+        <div className="mx-auto mt-6 flex w-full max-w-2xl shrink-0 flex-col items-center gap-4">
+          <nav
+            aria-label="Back to sections"
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm"
+          >
+            {CONTACT_NAV_LINKS.map(({ label, target }) => (
+              <Link
+                key={label}
+                to={target}
+                smooth
+                offset={-56}
+                duration={600}
+                className="cursor-pointer font-medium text-gray-500 transition-colors hover:text-main-color dark:text-gray-400"
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+
+          <Link
+            to="Home"
+            smooth
+            offset={0}
+            duration={700}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 text-gray-500 transition-colors hover:border-main-color hover:text-main-color dark:border-gray-700 dark:text-gray-400"
+            aria-label="Back to top"
+          >
+            <ChevronUp size={20} />
+          </Link>
+        </div>
       </div>
     </section>
   );
 };
 
-export default CardsLayout;
+export default Contact;

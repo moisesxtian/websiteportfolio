@@ -3,14 +3,7 @@ import { Link } from 'react-scroll';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../Context/ThemeContext';
-
-const navItems = [
-  { label: 'Home', target: 'Home', id: 'Home' },
-  { label: 'Experience', target: 'Experience', id: 'Experience' },
-  { label: 'Projects', target: 'Projects', id: 'Projects' },
-  { label: 'Certificates', target: 'Certificates', id: 'Certificates' },
-  { label: 'Contact', target: 'Contact', id: 'Contact' },
-];
+import { navLinks } from '../data/navLinks';
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -58,7 +51,7 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const sections = navItems.map((item) => item.id);
+    const sections = navLinks.map((item) => item.id);
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -87,7 +80,7 @@ const Navbar = () => {
       <div className={`nav-bar ${onHero ? '' : 'is-solid'}`}>
         <div className="relative container mx-auto max-w-7xl flex items-center justify-end px-4 sm:px-6 md:px-10 h-14 sm:h-16">
           <ul className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
-            {navItems.map(({ label, target, id }) => (
+            {navLinks.map(({ label, target, id }) => (
               <Link key={label} to={target} spy smooth offset={-56} duration={500}>
                 <li
                   className={`cursor-pointer select-none px-3 py-2 transition-colors duration-200 ${
@@ -130,7 +123,7 @@ const Navbar = () => {
       {menuOpen ? (
         <div className="md:hidden border-b border-black/5 bg-white/90 backdrop-blur-md dark:border-white/10 dark:bg-neutral-950/90">
           <ul className="container mx-auto max-w-7xl px-4 py-2">
-            {navItems.map(({ label, target, id }) => (
+            {navLinks.map(({ label, target, id }) => (
               <Link
                 key={label}
                 to={target}
