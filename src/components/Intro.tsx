@@ -366,7 +366,7 @@ const Home = ({ onBootReady }: HomeProps) => {
           style={{ animationDelay: `${scrollHintStart}s` }}
         >
           <Link
-            to="Experience"
+            to="Projects"
             smooth="easeOutCubic"
             offset={-56}
             duration={450}

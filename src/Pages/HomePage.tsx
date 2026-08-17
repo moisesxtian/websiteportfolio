@@ -39,13 +39,18 @@ export default function HomePage() {
       <ThemeToggle />
       <Intro onBootReady={handleBootReady} />
 
-      {/* Two overlapping layers: the sections slide up over the fixed hero, and the
-          contact panel waits underneath the sections until they scroll off it. */}
+      {/* Overlapping layers: the stack slides up over the fixed hero, Work
+          Experience covers Projects from the bottom, and the contact panel
+          waits underneath until the sections scroll off it. */}
       <div className="relative z-20">
         <div className="hero-cover-stack relative z-10 bg-page-bg">
-          <Experience />
-          <Projects />
-          <Certificates />
+          <div className="section-pin">
+            <Projects />
+          </div>
+          <div className="section-overlay">
+            <Experience />
+            <Certificates />
+          </div>
         </div>
 
         {/* Marks where the contact panel sits in the page flow. The panel itself is
