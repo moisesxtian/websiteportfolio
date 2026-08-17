@@ -90,8 +90,8 @@ const Navbar = () => {
             aria-hidden="true"
           />
         ) : null}
-        <div className="relative container mx-auto max-w-7xl flex items-center justify-between px-4 sm:px-6 md:px-10 h-14 sm:h-16">
-          <ul className="hidden md:flex items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
+        <div className="relative container mx-auto max-w-7xl flex items-center justify-end px-4 sm:px-6 md:px-10 h-14 sm:h-16">
+          <ul className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
             {navItems.map(({ label, target, id }) => (
               <Link key={label} to={target} spy smooth offset={-56} duration={500}>
                 <li
@@ -105,7 +105,7 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <div className="relative z-10 ml-auto flex items-center gap-1">
+          <div className="relative z-10 flex items-center gap-1">
             <button
               type="button"
               onClick={(e) => {
