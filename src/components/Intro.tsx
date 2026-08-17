@@ -16,10 +16,9 @@ import InteractiveName from './InteractiveName';
 import NowPlaying from './NowPlaying';
 
 const ROLES = [
-  'Full Stack Development',
-  'Automation Engineering',
-  'AI Development',
-  'Web Scraping',
+  'Full Stack Developer',
+  'Automation Engineer',
+  'AI Developer',
 ];
 
 const SOCIALS = [
@@ -31,6 +30,9 @@ const SOCIALS = [
 ];
 
 const DISPLAY_NAME = 'Christian Moises';
+/** Shown first so the "ai" reads as AI, then the two letters swap into place */
+const TEASE_NAME = 'Christain Moises';
+const HIGHLIGHT_LETTERS = 'ai';
 const LETTER_STAGGER = 0.045;
 const ITEM_STAGGER = 0.06;
 const ITEM_DURATION = 0.32;
@@ -261,6 +263,9 @@ const Home = () => {
                   <InteractiveName
                     text={DISPLAY_NAME}
                     letterStagger={LETTER_STAGGER}
+                    teaseText={TEASE_NAME}
+                    highlight={HIGHLIGHT_LETTERS}
+                    revealed={revealName}
                     className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl whitespace-nowrap"
                   />
                 </div>

@@ -85,6 +85,12 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
     let influenceY = 0.5;
     let influenceStrength = 0;
 
+    // Rewriting the mask and glow gradients repaints the whole background, so
+    // they are only touched once the cursor has actually moved somewhere new.
+    let paintedX = -1;
+    let paintedY = -1;
+    let paintedStrength = -1;
+
     const animate = (now: number) => {
       const t = (now - startedAt) / 1000;
 
@@ -96,24 +102,36 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
       const px = influenceX * 100;
       const py = influenceY * 100;
 
-      // Pattern parallax + cursor spotlight
-      const pattern = patternRef.current;
-      if (pattern) {
-        const shiftX = (influenceX - 0.5) * -28 * influenceStrength;
-        const shiftY = (influenceY - 0.5) * -28 * influenceStrength;
-        const scale = 1 + influenceStrength * 0.04;
-        pattern.style.backgroundPosition = `${shiftX}px ${shiftY}px`;
-        pattern.style.transform = `scale(${scale})`;
-        pattern.style.opacity = String(0.35 + influenceStrength * 0.25);
-        pattern.style.maskImage = `radial-gradient(circle 220px at ${px}% ${py}%, black 0%, black 35%, transparent 75%)`;
-        pattern.style.webkitMaskImage = `radial-gradient(circle 220px at ${px}% ${py}%, black 0%, black 35%, transparent 75%)`;
-      }
+      const needsRepaint =
+        Math.abs(px - paintedX) > 0.2 ||
+        Math.abs(py - paintedY) > 0.2 ||
+        Math.abs(influenceStrength - paintedStrength) > 0.004;
 
-      // Soft glow that follows cursor over the pattern
-      const spotlight = spotlightRef.current;
-      if (spotlight) {
-        spotlight.style.opacity = String(0.15 + influenceStrength * 0.45);
-        spotlight.style.background = `radial-gradient(circle 180px at ${px}% ${py}%, rgba(249,115,22,0.22) 0%, rgba(249,115,22,0.06) 40%, transparent 70%)`;
+      if (needsRepaint) {
+        paintedX = px;
+        paintedY = py;
+        paintedStrength = influenceStrength;
+
+        // Pattern parallax + cursor spotlight
+        const pattern = patternRef.current;
+        if (pattern) {
+          const shiftX = (influenceX - 0.5) * -28 * influenceStrength;
+          const shiftY = (influenceY - 0.5) * -28 * influenceStrength;
+          const scale = 1 + influenceStrength * 0.04;
+          const mask = `radial-gradient(circle 220px at ${px}% ${py}%, black 0%, black 35%, transparent 75%)`;
+          pattern.style.backgroundPosition = `${shiftX}px ${shiftY}px`;
+          pattern.style.transform = `scale(${scale})`;
+          pattern.style.opacity = String(0.35 + influenceStrength * 0.25);
+          pattern.style.maskImage = mask;
+          pattern.style.webkitMaskImage = mask;
+        }
+
+        // Soft glow that follows cursor over the pattern
+        const spotlight = spotlightRef.current;
+        if (spotlight) {
+          spotlight.style.opacity = String(0.15 + influenceStrength * 0.45);
+          spotlight.style.background = `radial-gradient(circle 180px at ${px}% ${py}%, rgba(249,115,22,0.22) 0%, rgba(249,115,22,0.06) 40%, transparent 70%)`;
+        }
       }
 
       const layer = layerRef.current;

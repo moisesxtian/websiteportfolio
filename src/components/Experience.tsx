@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Briefcase, Building2, Calendar, ChevronDown } from 'lucide-react';
 import { useExperiences } from '../Hooks/useExperiences';
+import { useInView } from '../Hooks/useInView';
 import type { Experience as ExperienceType } from '../types/content';
 import ScrollReveal from './ScrollReveal';
 
@@ -71,12 +72,17 @@ function ExperienceCard({
   onToggle: () => void;
 }) {
   const isLatest = index === 0;
+  const { ref, inView } = useInView<HTMLElement>();
+  const fromSide = index % 2 === 0 ? 'from-left' : 'from-right';
 
   return (
-    <article className="group relative">
+    <article
+      ref={ref}
+      className={`exp-card group relative ${fromSide} ${inView ? 'is-visible' : ''}`}
+    >
       <div className="absolute left-0 top-7 md:left-1/2 md:-translate-x-1/2 z-20">
         <div
-          className={`h-3 w-3 rounded-full ring-4 ring-page-bg ${
+          className={`exp-dot h-3 w-3 rounded-full ring-4 ring-page-bg ${
             isLatest ? 'bg-main-color' : 'bg-gray-300 dark:bg-gray-600'
           }`}
         />
@@ -94,7 +100,7 @@ function ExperienceCard({
           className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 rounded-xl dark:focus-visible:ring-offset-page-bg"
         >
           <div
-            className={`rounded-xl border bg-white p-4 sm:p-5 transition-colors dark:bg-neutral-900 ${
+            className={`exp-box rounded-xl border bg-white p-4 sm:p-5 dark:bg-neutral-900 ${
               isActive
                 ? 'border-main-color/40'
                 : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
@@ -209,14 +215,13 @@ export default function Experience() {
           ) : (
             <div className="space-y-6 md:space-y-8">
               {experiences.map((experience, index) => (
-                <ScrollReveal key={experience.id} delay={Math.min(index * 80, 320)}>
-                  <ExperienceCard
-                    experience={experience}
-                    index={index}
-                    isActive={activeId === experience.id}
-                    onToggle={() => handleToggle(experience.id)}
-                  />
-                </ScrollReveal>
+                <ExperienceCard
+                  key={experience.id}
+                  experience={experience}
+                  index={index}
+                  isActive={activeId === experience.id}
+                  onToggle={() => handleToggle(experience.id)}
+                />
               ))}
             </div>
           )}

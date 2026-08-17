@@ -79,13 +79,7 @@ const CursorAura = ({ containerRef }: CursorAuraProps) => {
         const dots = dotsEl.children;
         for (let i = 0; i < TRAIL_COUNT; i++) {
           const el = dots[i] as HTMLElement;
-          const progress = i / (TRAIL_COUNT - 1);
-          const size = 5 - progress * 3.5;
-          const opacity = 0.45 - progress * 0.38;
-
-          el.style.width = `${size}px`;
-          el.style.height = `${size}px`;
-          el.style.opacity = String(Math.max(0.04, opacity));
+          // Size and opacity are fixed per dot, so only the position changes here
           el.style.transform = `translate3d(${points[i].x}px, ${points[i].y}px, 0) translate(-50%, -50%)`;
         }
       }
@@ -122,17 +116,25 @@ const CursorAura = ({ containerRef }: CursorAuraProps) => {
         }}
       />
       <div ref={dotsRef} className="absolute inset-0">
-        {Array.from({ length: TRAIL_COUNT }, (_, i) => (
-          <span
-            key={i}
-            className="absolute left-0 top-0 rounded-full bg-main-color will-change-transform"
-            style={{
-              boxShadow: '0 0 6px rgba(249,115,22,0.3)',
-              transform: 'translate3d(-9999px, -9999px, 0)',
-              opacity: 0,
-            }}
-          />
-        ))}
+        {Array.from({ length: TRAIL_COUNT }, (_, i) => {
+          const progress = i / (TRAIL_COUNT - 1);
+          const size = 5 - progress * 3.5;
+          const opacity = Math.max(0.04, 0.45 - progress * 0.38);
+
+          return (
+            <span
+              key={i}
+              className="absolute left-0 top-0 rounded-full bg-main-color will-change-transform"
+              style={{
+                width: size,
+                height: size,
+                opacity,
+                boxShadow: '0 0 6px rgba(249,115,22,0.3)',
+                transform: 'translate3d(-9999px, -9999px, 0)',
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );
