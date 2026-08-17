@@ -41,3 +41,16 @@ export type ProjectInput = Omit<Project, 'id' | 'sort_order'> & { sort_order?: n
 export type CertificateInput = Omit<Certificate, 'id' | 'sort_order'> & { sort_order?: number };
 export type ExperienceInput = Omit<Experience, 'id' | 'sort_order'> & { sort_order?: number };
 export type SkillInput = Omit<Skill, 'id' | 'sort_order'> & { sort_order?: number };
+
+export type ChatProfileData = {
+  name: string;
+  nickname: string;
+  relationship: string;
+  age: string;
+  work: string;
+  location: string;
+  languages: string;
+  interests: string;
+  hobbies: string;
+  about: string;
+};

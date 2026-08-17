@@ -13,6 +13,13 @@ insert into public.site_settings (key, value)
 values ('resume_url', '/Moises_Resume.pdf')
 on conflict (key) do update set value = excluded.value, updated_at = now();
 
+insert into public.site_settings (key, value)
+values (
+  'about_chan',
+  '{"name":"Christian Moises","nickname":"Chan","relationship":"Placeholder","age":"Placeholder","work":"Placeholder","location":"Placeholder","languages":"Placeholder","interests":"Placeholder","hobbies":"Placeholder","about":"Placeholder"}'
+)
+on conflict (key) do nothing;
+
 insert into public.skills (name, icon_key, sort_order) values
   ('Java', 'java', 1),
   ('C#', 'csharp', 2),

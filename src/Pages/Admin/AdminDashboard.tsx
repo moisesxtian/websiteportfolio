@@ -13,6 +13,7 @@ import {
   Play,
   GripVertical,
   ArrowDownUp,
+  User,
 } from 'lucide-react';
 import { useAuth } from '../../Context/AuthContext';
 import { useProjects } from '../../Hooks/useProjects';
@@ -23,9 +24,10 @@ import CertificateForm from '../../components/Admin/CertificateForm';
 import ExperienceForm from '../../components/Admin/ExperienceForm';
 import SkillsManager from '../../components/Admin/SkillsManager';
 import ResumeUploader from '../../components/Admin/ResumeUploader';
+import AboutChanForm from '../../components/Admin/AboutChanForm';
 import type { Project, Certificate, Experience } from '../../types/content';
 
-type Tab = 'projects' | 'certificates' | 'experience' | 'skills' | 'resume';
+type Tab = 'projects' | 'certificates' | 'experience' | 'skills' | 'resume' | 'about';
 
 const tabs: { id: Tab; label: string; icon: typeof Briefcase }[] = [
   { id: 'projects', label: 'Projects', icon: Briefcase },
@@ -33,6 +35,7 @@ const tabs: { id: Tab; label: string; icon: typeof Briefcase }[] = [
   { id: 'experience', label: 'Experience', icon: Building2 },
   { id: 'skills', label: 'Skills', icon: Code2 },
   { id: 'resume', label: 'Resume', icon: FileText },
+  { id: 'about', label: 'About Chan', icon: User },
 ];
 
 export default function AdminDashboard() {
@@ -92,6 +95,7 @@ export default function AdminDashboard() {
           {tab === 'experience' ? <ExperiencePanel /> : null}
           {tab === 'skills' ? <SkillsManager /> : null}
           {tab === 'resume' ? <ResumeUploader /> : null}
+          {tab === 'about' ? <AboutChanForm /> : null}
         </div>
       </div>
     </div>

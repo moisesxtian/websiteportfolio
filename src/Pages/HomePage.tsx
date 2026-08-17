@@ -4,6 +4,7 @@ import Projects from '../components/Projects';
 import Certificates from '../components/Certificates';
 import Experience from '../components/Experience';
 import Contact from '../components/Contact';
+import ChatBot from '../components/ChatBot';
 
 export default function HomePage() {
   return (
@@ -29,6 +30,8 @@ export default function HomePage() {
           <Contact />
         </div>
       </div>
+
+      <ChatBot />
     </div>
   );
 }
