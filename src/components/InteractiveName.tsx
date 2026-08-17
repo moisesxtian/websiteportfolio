@@ -1,5 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 
+/** A run of letters to pick out while the rest of the name dims back */
+export type Spotlight = {
+  start: number;
+  length: number;
+};
+
 type InteractiveNameProps = {
   text: string;
   className?: string;
@@ -11,6 +17,8 @@ type InteractiveNameProps = {
   highlight?: string;
   /** Set once the name is on screen, to start the swap sequence */
   revealed?: boolean;
+  /** Letters to light up in the finished name, or null for none */
+  spotlight?: Spotlight | null;
 };
 
 /** misspelled + highlighted -> correct name, with the letters animating across */
@@ -20,6 +28,9 @@ const SWAP_AFTER_MS = 1000;
 /** How long the two letters take to trade places */
 const SWAP_MS = 350;
 
+/** How long the whole misspelling gag takes, for anything that follows it */
+export const SWAP_TOTAL_MS = SWAP_AFTER_MS + SWAP_MS;
+
 const InteractiveName = ({
   text,
   className = '',
@@ -27,6 +38,7 @@ const InteractiveName = ({
   teaseText = '',
   highlight = '',
   revealed = false,
+  spotlight = null,
 }: InteractiveNameProps) => {
   const rootRef = useRef<HTMLHeadingElement>(null);
   const reducedMotion = useRef(false);
@@ -179,13 +191,16 @@ const InteractiveName = ({
   const isSwapLetter = (index: number) =>
     swapStart >= 0 && index >= swapStart && index < swapStart + highlight.length;
 
+  const isLitLetter = (index: number) =>
+    spotlight !== null && index >= spotlight.start && index < spotlight.start + spotlight.length;
+
   let letterIndex = 0;
 
   return (
     <h1
       ref={rootRef}
-      className={`hero-name ai-${phase} ${
-        swapping ? 'is-swapping' : ''
+      className={`hero-name ai-${phase} ${swapping ? 'is-swapping' : ''} ${
+        spotlight ? 'is-reading' : ''
       } mx-auto w-full text-center font-extrabold leading-[1.05] tracking-tight ${className}`}
       aria-label={text}
       onMouseMove={handleMove}
@@ -206,7 +221,9 @@ const InteractiveName = ({
         return (
           <span
             key={`${char}-${index}`}
-            className={`hero-letter inline-block ${isSwapLetter(index) ? 'is-swap' : ''}`}
+            className={`hero-letter inline-block ${isSwapLetter(index) ? 'is-swap' : ''} ${
+              isLitLetter(index) ? 'is-lit' : ''
+            }`}
             style={{ animationDelay: `${delay}s` }}
             aria-hidden="true"
           >

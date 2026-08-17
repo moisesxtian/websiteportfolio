@@ -10,9 +10,10 @@ import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-scroll';
 import { IconContext } from 'react-icons';
 import { useResume } from '../Hooks/useResume';
+import { useLoopedSteps } from '../Hooks/useLoopedSteps';
 import CursorAura from './CursorAura';
 import HomeParticleBackground from './HomeParticleBackground';
-import InteractiveName from './InteractiveName';
+import InteractiveName, { SWAP_TOTAL_MS } from './InteractiveName';
 import NowPlaying from './NowPlaying';
 
 const ROLES = [
@@ -33,11 +34,48 @@ const DISPLAY_NAME = 'Christian Moises';
 /** Shown first so the "ai" reads as AI, then the two letters swap into place */
 const TEASE_NAME = 'Christain Moises';
 const HIGHLIGHT_LETTERS = 'ai';
+const FIRST_NAME = 'Christian';
+
+/** "christiAn" and "christiAn" plus its last letter, for "a" and "an" */
+const A_IN_NAME = { start: DISPLAY_NAME.indexOf('a'), length: 1 };
+const AN_IN_NAME = { start: A_IN_NAME.start, length: 2 };
+
+/** Picks "an Automation Engineer" over "a Automation Engineer" */
+function articleFor(role: string) {
+  const firstLetter = role[0].toLowerCase();
+  const startsWithVowel = ['a', 'e', 'i', 'o', 'u'].includes(firstLetter);
+  return startsWithVowel ? AN_IN_NAME : A_IN_NAME;
+}
+
+/**
+ * The hero reads "Christian is a <role>" out of letters the name already has:
+ * "Christian", then the "is" in moISes, then the "a"/"an" in christiAn. The sentence
+ * is only spelled out once, then each role takes its turn finishing it.
+ * `role` is -1 on beats where nothing below should grow.
+ */
+const SENTENCE_BEATS = [
+  { letters: { start: 0, length: FIRST_NAME.length }, role: -1, ms: 1150 },
+  { letters: { start: DISPLAY_NAME.indexOf('is', FIRST_NAME.length), length: 2 }, role: -1, ms: 900 },
+  { letters: articleFor(ROLES[0]), role: -1, ms: 850 },
+  // The article holds so the phrase still reads as "a/an <role>" while each role grows
+  ...ROLES.map((role, index) => ({ letters: articleFor(role), role: index, ms: 1400 })),
+  // Everything sits plain for a while before the sentence starts over
+  { letters: null, role: -1, ms: 10000 },
+];
+
+/** Read once at module level so the loop is never restarted by a re-render */
+const BEAT_MS = SENTENCE_BEATS.map((beat) => beat.ms);
 const LETTER_STAGGER = 0.045;
 const ITEM_STAGGER = 0.06;
 const ITEM_DURATION = 0.32;
-const BOOT_MIN_MS = 700;
+const BOOT_MIN_MS = 2000;
 const BOOT_EXPAND_MS = 560;
+
+/**
+ * Counted from the moment the hero turns ready, which is BOOT_EXPAND_MS after the
+ * name (and its letter swap) starts, so the two effects never overlap.
+ */
+const SENTENCE_START_MS = SWAP_TOTAL_MS - BOOT_EXPAND_MS + 900;
 
 const socialStart = BOOT_EXPAND_MS / 1000 + 0.05;
 const skillsStart = socialStart + SOCIALS.length * ITEM_STAGGER + 0.06;
@@ -190,6 +228,10 @@ const Home = () => {
   const showLoader = bootPhase === 'loading' || bootPhase === 'expanding';
   const revealName = bootPhase !== 'loading';
 
+  const step = useLoopedSteps(bootPhase === 'ready', BEAT_MS, SENTENCE_START_MS);
+  const beat = step >= 0 ? SENTENCE_BEATS[step] : null;
+  const litRole = beat?.role ?? -1;
+
   return (
     <>
       <div id="Home" className="relative z-0 h-[100svh] w-full scroll-mt-0" aria-hidden="true" />
@@ -266,6 +308,7 @@ const Home = () => {
                     teaseText={TEASE_NAME}
                     highlight={HIGHLIGHT_LETTERS}
                     revealed={revealName}
+                    spotlight={beat?.letters ?? null}
                     className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl whitespace-nowrap"
                   />
                 </div>
@@ -276,15 +319,27 @@ const Home = () => {
               ref={metaRef}
               className="mx-auto flex w-full max-w-2xl flex-col items-center gap-4 sm:gap-5 will-change-transform"
             >
-              <div className="flex flex-wrap justify-center gap-x-3 gap-y-2 sm:gap-x-4">
+              <div
+                className={`role-list flex flex-wrap justify-center gap-x-3 gap-y-2 sm:gap-x-4 ${
+                  litRole >= 0 ? 'is-reading' : ''
+                }`}
+              >
                 {ROLES.map((role, index) => (
                   <div
                     key={role}
-                    className="hero-pop-item role-pill inline-flex items-center gap-2 px-1 py-0.5 text-[11px] sm:text-xs font-light text-gray-600 dark:text-gray-400"
+                    className="hero-pop-item role-pill inline-flex items-center px-1 py-0.5 text-[11px] sm:text-xs font-light text-gray-600 dark:text-gray-400"
                     style={{ animationDelay: `${skillsStart + index * ITEM_STAGGER}s` }}
                   >
-                    <span className="block h-1.5 w-1.5 rounded-full bg-main-color" />
-                    <span>{role}</span>
+                    {/* The pill's own transform belongs to its entrance animation, so
+                        growing and lifting happens on this inner span instead */}
+                    <span
+                      className={`role-pill-inner inline-flex items-center gap-2 ${
+                        litRole === index ? 'is-lit' : ''
+                      }`}
+                    >
+                      <span className="block h-1.5 w-1.5 rounded-full bg-main-color" />
+                      <span>{role}</span>
+                    </span>
                   </div>
                 ))}
               </div>
