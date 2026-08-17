@@ -549,7 +549,9 @@
      between the misspelled and corrected name. */
   .hero-name-sizer {
     grid-area: 1 / 1;
-    padding-inline: 1px;
+    padding-inline: 0.08em;
+    padding-top: 0.04em;
+    padding-bottom: 0.32em;
     visibility: hidden;
     pointer-events: none;
     user-select: none;
@@ -577,6 +579,11 @@
     animation: hero-name-wipe 0.32s 0.12s cubic-bezier(0.65, 0, 0.35, 1) both;
   }
 
+  /* After the wipe, let the 3D letter shadows sit outside the glyphs */
+  .hero-section[data-boot='ready'] .hero-name-mask.is-revealed {
+    overflow: visible;
+  }
+
   .hero-section[data-boot='loading'] .hero-letter,
   .hero-section[data-boot='loading'] .hero-pop-item,
   .hero-section[data-boot='loading'] .hero-enter-fade {
@@ -584,9 +591,16 @@
     opacity: 0 !important;
   }
 
-  .hero-section[data-boot='expanding'] .hero-letter,
-  .hero-section[data-boot='ready'] .hero-letter {
+  .hero-section[data-boot='expanding'] .hero-letter {
     animation: none;
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  .hero-section[data-boot='ready'] .hero-letter {
+    animation: hero-letter-shine 7.5s ease-in-out infinite;
+    animation-delay: calc(var(--letter-i, 0) * 0.08s);
     opacity: 1;
     transform: none;
     will-change: auto;
@@ -674,10 +688,61 @@
     }
   }
 
+  @keyframes hero-letter-shine {
+    0%,
+    48% {
+      background-position: 200% 0, 0 0;
+    }
+    68% {
+      background-position: -100% 0, 0 0;
+    }
+    100% {
+      background-position: -100% 0, 0 0;
+    }
+  }
+
   .hero-letter {
     animation: hero-letter-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--letter-delay, 0s);
     transition: color 0.25s ease-out, opacity 0.3s ease-out;
     transform-origin: center bottom;
+    color: var(--secondary-color);
+    background-image:
+      linear-gradient(
+        105deg,
+        transparent 38%,
+        rgba(255, 255, 255, 0.06) 46%,
+        rgba(255, 255, 255, 0.28) 50%,
+        rgba(255, 255, 255, 0.06) 54%,
+        transparent 62%
+      ),
+      linear-gradient(
+        165deg,
+        color-mix(in srgb, currentColor 82%, white) 0%,
+        currentColor 40%,
+        color-mix(in srgb, currentColor 90%, black) 52%,
+        color-mix(in srgb, currentColor 80%, white) 64%,
+        currentColor 100%
+      );
+    background-size: 220% 100%, 100% 100%;
+    background-position: 200% 0, 0 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 -1px 0 color-mix(in srgb, currentColor 12%, white))
+      drop-shadow(0 1px 0 rgba(0, 0, 0, 0.14))
+      drop-shadow(0 2px 0 rgba(0, 0, 0, 0.08))
+      drop-shadow(0 6px 10px rgba(0, 0, 0, 0.12));
+  }
+
+  .dark .hero-letter {
+    filter:
+      drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.14))
+      drop-shadow(0 1px 0 rgba(0, 0, 0, 0.35))
+      drop-shadow(0 2px 0 rgba(0, 0, 0, 0.22))
+      drop-shadow(0 8px 12px rgba(0, 0, 0, 0.28));
   }
 
   /* "Christain" starts with the ai picked out, then the pair trades places.
@@ -705,9 +770,15 @@
       animation: none;
       opacity: 1;
       transform: none;
-      filter: none;
       clip-path: none;
       width: 100%;
+    }
+
+    .hero-pop-item,
+    .hero-enter-fade,
+    .hero-name-mask,
+    .hero-name-mask.is-revealed {
+      filter: none;
     }
 
     .hero-boot-bar {

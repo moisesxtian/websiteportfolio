@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 import { Link } from "react-scroll";
-import { ChevronUp } from "lucide-react";
 import { IconContext } from "react-icons";
 import ScrollReveal from "./ScrollReveal";
 import CursorAura from "./CursorAura";
@@ -219,17 +218,6 @@ const Contact = () => {
               </Link>
             ))}
           </nav>
-
-          <Link
-            to="Home"
-            smooth="easeInOutCubic"
-            offset={0}
-            duration={900}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 text-gray-500 transition-colors hover:border-main-color hover:text-main-color dark:border-gray-700 dark:text-gray-400"
-            aria-label="Back to top"
-          >
-            <ChevronUp size={20} />
-          </Link>
         </div>
       </div>
     </section>

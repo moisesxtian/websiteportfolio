@@ -216,6 +216,7 @@ const InteractiveName = ({
         }
 
         const delay = letterIndex * letterStagger;
+        const letterI = letterIndex;
         letterIndex += 1;
 
         return (
@@ -224,7 +225,12 @@ const InteractiveName = ({
             className={`hero-letter inline-block ${isSwapLetter(index) ? 'is-swap' : ''} ${
               isLitLetter(index) ? 'is-lit' : ''
             }`}
-            style={{ animationDelay: `${delay}s` }}
+            style={
+              {
+                '--letter-delay': `${delay}s`,
+                '--letter-i': letterI,
+              } as React.CSSProperties
+            }
             aria-hidden="true"
           >
             {char}

@@ -3,6 +3,5 @@ export const navLinks = [
   { label: 'Home', target: 'Home', id: 'Home' },
   { label: 'Experience', target: 'Experience', id: 'Experience' },
   { label: 'Projects', target: 'Projects', id: 'Projects' },
-  { label: 'Certificates', target: 'Certificates', id: 'Certificates' },
   { label: 'Contact', target: 'Contact', id: 'Contact' },
 ];

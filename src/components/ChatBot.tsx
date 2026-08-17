@@ -121,7 +121,7 @@ export default function ChatBot() {
   };
 
   return (
-    <div className="pointer-events-none fixed bottom-5 right-4 z-[60] flex flex-col items-end overflow-x-clip font-poppins sm:bottom-6 sm:right-6">
+    <div className="pointer-events-none fixed bottom-5 right-4 z-[60] flex flex-col items-end overflow-visible font-poppins sm:bottom-6 sm:right-6">
       {open ? (
         <section
           className="chat-panel pointer-events-auto mb-3 flex w-[min(calc(100vw-2.5rem),24rem)] origin-bottom-right flex-col overflow-hidden rounded-2xl bg-white shadow-2xl shadow-neutral-800/15 dark:bg-surface dark:shadow-black/40"

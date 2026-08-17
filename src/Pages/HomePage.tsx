@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
+import ThemeToggle from '../components/ThemeToggle';
 import Intro from '../components/Intro';
 import Projects from '../components/Projects';
 import Certificates from '../components/Certificates';
@@ -35,6 +36,7 @@ export default function HomePage() {
   return (
     <div className="continuous-scroll overflow-x-clip bg-page-bg text-secondary-color">
       <Navbar hidden={!heroReady} />
+      <ThemeToggle />
       <Intro onBootReady={handleBootReady} />
 
       {/* Two overlapping layers: the sections slide up over the fixed hero, and the
