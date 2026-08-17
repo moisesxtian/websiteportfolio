@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Intro from '../components/Intro';
 import Projects from '../components/Projects';
@@ -7,10 +8,34 @@ import Contact from '../components/Contact';
 import ChatBot from '../components/ChatBot';
 
 export default function HomePage() {
+  const [heroReady, setHeroReady] = useState(false);
+
+  const handleBootReady = useCallback(() => {
+    setHeroReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (heroReady) return;
+
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    window.scrollTo(0, 0);
+
+    return () => {
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+    };
+  }, [heroReady]);
+
   return (
     <div className="continuous-scroll overflow-x-clip bg-page-bg text-secondary-color">
-      <Navbar />
-      <Intro />
+      <Navbar hidden={!heroReady} />
+      <Intro onBootReady={handleBootReady} />
 
       {/* Two overlapping layers: the sections slide up over the fixed hero, and the
           contact panel waits underneath the sections until they scroll off it. */}

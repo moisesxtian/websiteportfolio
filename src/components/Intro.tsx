@@ -95,7 +95,11 @@ function applyLayer(
   el.style.filter = blur > 0 ? `blur(${progress * blur}px)` : '';
 }
 
-const Home = () => {
+type HomeProps = {
+  onBootReady?: () => void;
+};
+
+const Home = ({ onBootReady }: HomeProps) => {
   const { resumeUrl } = useResume();
   const sectionRef = useRef<HTMLElement>(null);
   const socialsRef = useRef<HTMLDivElement>(null);
@@ -161,6 +165,10 @@ const Home = () => {
       window.clearTimeout(readyTimer);
     };
   }, []);
+
+  useEffect(() => {
+    if (bootPhase === 'ready') onBootReady?.();
+  }, [bootPhase, onBootReady]);
 
   useEffect(() => {
     if (bootPhase === 'loading') {

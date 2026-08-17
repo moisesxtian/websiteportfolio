@@ -8,6 +8,8 @@ export type ChatMessage = {
   text: string;
 };
 
+const CHAT_TIMEOUT_MS = 20000;
+
 const WELCOME_TEXT =
   "Hi, I'm Chan. Ask me about my work, skills, or anything you see on this site.";
 
@@ -28,6 +30,18 @@ function getSessionId() {
   const id = crypto.randomUUID();
   sessionStorage.setItem(key, id);
   return id;
+}
+
+/** Wakes the chat webhook so the first real message is not waiting on a cold start */
+export function wakeChatSession() {
+  return fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'loadPreviousSession',
+      sessionId: getSessionId(),
+    }),
+  }).catch(() => undefined);
 }
 
 /** n8n and our API can return the reply under a few different keys */
@@ -70,7 +84,7 @@ export function useChatBot() {
     setIsLoading(true);
 
     const controller = new AbortController();
-    const timeoutId = window.setTimeout(() => controller.abort(), 45000);
+    const timeoutId = window.setTimeout(() => controller.abort(), CHAT_TIMEOUT_MS);
 
     try {
       const res = await fetch('/api/chat', {

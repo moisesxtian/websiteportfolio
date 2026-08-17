@@ -41,15 +41,16 @@ export default async function handler(req, res) {
   const body = await readBody(req);
   const message = typeof body.message === 'string' ? body.message.trim() : '';
   const sessionId = typeof body.sessionId === 'string' ? body.sessionId : '';
+  const action = body.action === 'loadPreviousSession' ? 'loadPreviousSession' : 'sendMessage';
 
-  if (!message) {
+  if (action === 'sendMessage' && !message) {
     res.status(400).json({ error: 'Please type a message first.' });
     return;
   }
 
   const auth = Buffer.from(`${WEBHOOK_USER}:${WEBHOOK_PASSWORD}`).toString('base64');
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 45000);
+  const timer = setTimeout(() => controller.abort(), 20000);
 
   try {
     const upstream = await fetch(WEBHOOK_URL, {
@@ -63,7 +64,7 @@ export default async function handler(req, res) {
         message,
         chatInput: message,
         sessionId,
-        action: 'sendMessage',
+        action,
       }),
       signal: controller.signal,
     });

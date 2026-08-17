@@ -3,7 +3,7 @@ import { useChatProfile } from '../../Hooks/useChatProfile';
 import type { ChatProfileData } from '../../types/content';
 
 export default function AboutChanForm() {
-  const { profile, loading, saveProfile, usingFallback } = useChatProfile();
+  const { profile, saveProfile, usingFallback } = useChatProfile();
   const [form, setForm] = useState<ChatProfileData>(profile);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -59,10 +59,7 @@ export default function AboutChanForm() {
         </p>
       ) : null}
 
-      {loading ? (
-        <p className="text-sm text-gray-500">Loading...</p>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
           <fieldset className="space-y-3">
             <legend className="text-sm font-semibold">Personal</legend>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -167,7 +164,6 @@ export default function AboutChanForm() {
             {saving ? 'Saving...' : 'Save'}
           </button>
         </form>
-      )}
     </div>
   );
 }

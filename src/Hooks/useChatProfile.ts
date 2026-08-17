@@ -4,6 +4,7 @@ import { fallbackChatProfile } from '../data/profile';
 import type { ChatProfileData } from '../types/content';
 
 const SETTINGS_KEY = 'about_chan';
+const CACHE_KEY = 'about_chan_cache';
 
 function readText(value: unknown, fallback: string) {
   if (typeof value !== 'string') return fallback;
@@ -34,16 +35,40 @@ function parseProfile(raw: string | null | undefined): ChatProfileData | null {
   }
 }
 
-export function useChatProfile() {
-  const [profile, setProfile] = useState<ChatProfileData>(fallbackChatProfile);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [usingFallback, setUsingFallback] = useState(true);
+function readLocalCache(): ChatProfileData | null {
+  try {
+    return parseProfile(sessionStorage.getItem(CACHE_KEY));
+  } catch {
+    return null;
+  }
+}
 
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+function writeLocalCache(profile: ChatProfileData) {
+  memoryCache = profile;
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify(profile));
+  } catch {
+    // Ignore quota / private mode
+  }
+}
 
+let memoryCache: ChatProfileData | null = null;
+let fetchPromise: Promise<{ profile: ChatProfileData; fromServer: boolean }> | null = null;
+
+function getCachedProfile(): ChatProfileData {
+  if (memoryCache) return memoryCache;
+  const fromSession = readLocalCache();
+  if (fromSession) {
+    memoryCache = fromSession;
+    return fromSession;
+  }
+  return fallbackChatProfile;
+}
+
+function fetchProfile() {
+  if (fetchPromise) return fetchPromise;
+
+  fetchPromise = (async () => {
     const { data, error: fetchError } = await supabase
       .from('site_settings')
       .select('value')
@@ -52,21 +77,43 @@ export function useChatProfile() {
 
     const parsed = parseProfile(data?.value);
 
-    if (fetchError || !parsed) {
-      setProfile(fallbackChatProfile);
-      setUsingFallback(true);
-      if (fetchError) setError(fetchError.message);
-      setLoading(false);
-      return;
+    if (!fetchError && parsed) {
+      writeLocalCache(parsed);
+      return { profile: parsed, fromServer: true };
     }
 
-    setProfile(parsed);
-    setUsingFallback(false);
-    setLoading(false);
+    return { profile: memoryCache ?? fallbackChatProfile, fromServer: false };
+  })().finally(() => {
+    fetchPromise = null;
+  });
+
+  return fetchPromise;
+}
+
+export function useChatProfile() {
+  const [profile, setProfile] = useState<ChatProfileData>(getCachedProfile);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [usingFallback, setUsingFallback] = useState(() => {
+    return memoryCache === null && readLocalCache() === null;
+  });
+
+  const refresh = useCallback(async () => {
+    setError(null);
+
+    try {
+      const result = await fetchProfile();
+      setProfile(result.profile);
+      if (result.fromServer) setUsingFallback(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load About Chan');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    refresh();
+    void refresh();
   }, [refresh]);
 
   const saveProfile = async (next: ChatProfileData) => {
@@ -77,7 +124,11 @@ export function useChatProfile() {
     });
 
     if (upsertError) throw upsertError;
-    await refresh();
+
+    writeLocalCache(next);
+    setProfile(next);
+    setUsingFallback(false);
+    setLoading(false);
   };
 
   return {

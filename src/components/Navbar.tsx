@@ -5,7 +5,7 @@ import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../Context/ThemeContext';
 import { navLinks } from '../data/navLinks';
 
-const Navbar = () => {
+const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState<string>('Home');
@@ -74,8 +74,9 @@ const Navbar = () => {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 will-change-transform transition-transform duration-300 ${
-        navbarVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
+        !hidden && navbarVisible ? 'translate-y-0' : '-translate-y-full'
+      } ${hidden ? 'pointer-events-none' : ''}`}
+      aria-hidden={hidden}
     >
       <div className={`nav-bar ${onHero ? '' : 'is-solid'}`}>
         <div className="relative container mx-auto max-w-7xl flex items-center justify-end px-4 sm:px-6 md:px-10 h-14 sm:h-16">

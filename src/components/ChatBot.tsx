@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Send, X } from 'lucide-react';
-import { useChatBot, type ChatMessage } from '../Hooks/useChatBot';
+import { useChatBot, wakeChatSession, type ChatMessage } from '../Hooks/useChatBot';
 import { PROFILE_AVATAR } from '../data/profile';
+import { useChatProfile } from '../Hooks/useChatProfile';
 import ChatProfile from './ChatProfile';
 
 function TypingDots() {
@@ -61,11 +62,16 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 
 export default function ChatBot() {
   const { messages, isLoading, sendMessage } = useChatBot();
+  useChatProfile();
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [draft, setDraft] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    void wakeChatSession();
+  }, []);
 
   useEffect(() => {
     const list = listRef.current;
