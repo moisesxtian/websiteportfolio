@@ -233,7 +233,7 @@ const Home = ({ onBootReady }: HomeProps) => {
       <section
         ref={sectionRef}
         data-boot={bootPhase === 'ready' ? 'ready' : bootPhase}
-        className="hero-section fixed inset-0 z-[1] flex flex-col overflow-hidden bg-page-bg font-poppins text-secondary-color"
+        className="hero-section fixed inset-0 z-[1] flex flex-col overflow-x-clip overflow-y-hidden bg-page-bg font-poppins text-secondary-color"
         aria-label="Christian Moises"
         aria-busy={bootPhase === 'loading'}
       >
@@ -367,9 +367,9 @@ const Home = ({ onBootReady }: HomeProps) => {
         >
           <Link
             to="Experience"
-            smooth
+            smooth="easeInOutCubic"
             offset={-56}
-            duration={700}
+            duration={800}
             className="scroll-hint pointer-events-auto inline-flex flex-col items-center gap-1 text-xs text-gray-400 dark:text-gray-500 cursor-pointer hover:text-main-color transition-colors"
           >
             <span>Scroll</span>

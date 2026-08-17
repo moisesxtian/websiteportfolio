@@ -210,9 +210,9 @@ const Contact = () => {
               <Link
                 key={label}
                 to={target}
-                smooth
+                smooth="easeInOutCubic"
                 offset={-56}
-                duration={600}
+                duration={800}
                 className="cursor-pointer font-medium text-gray-500 transition-colors hover:text-main-color dark:text-gray-400"
               >
                 {label}
@@ -222,9 +222,9 @@ const Contact = () => {
 
           <Link
             to="Home"
-            smooth
+            smooth="easeInOutCubic"
             offset={0}
-            duration={700}
+            duration={900}
             className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 text-gray-500 transition-colors hover:border-main-color hover:text-main-color dark:border-gray-700 dark:text-gray-400"
             aria-label="Back to top"
           >

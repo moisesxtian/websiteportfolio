@@ -74,7 +74,7 @@ export default function ChatProfile({ onBack }: ChatProfileProps) {
         <p className="text-xs font-medium text-secondary-color">About Chan</p>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-3">
+      <div className="min-h-0 flex-1 overflow-y-auto scroll-smooth scrollbar-hide px-3 pb-3">
         <div className="mb-3 flex items-center gap-3">
           <img
             src={PROFILE_AVATAR}

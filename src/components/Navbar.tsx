@@ -82,7 +82,7 @@ const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
         <div className="relative container mx-auto max-w-7xl flex items-center justify-end px-4 sm:px-6 md:px-10 h-14 sm:h-16">
           <ul className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
             {navLinks.map(({ label, target, id }) => (
-              <Link key={label} to={target} spy smooth offset={-56} duration={500}>
+              <Link key={label} to={target} spy smooth="easeInOutCubic" offset={-56} duration={800}>
                 <li
                   className={`cursor-pointer select-none px-3 py-2 transition-colors duration-200 ${
                     activeLink === id ? 'text-main-color' : 'hover:text-main-color'
@@ -129,9 +129,9 @@ const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
                 key={label}
                 to={target}
                 spy
-                smooth
+                smooth="easeInOutCubic"
                 offset={-56}
-                duration={500}
+                duration={800}
                 onClick={() => setMenuOpen(false)}
               >
                 <li

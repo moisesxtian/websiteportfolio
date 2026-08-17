@@ -21,12 +21,32 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
+    background-color: var(--page-bg);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 
   /* clip instead of hidden: hidden turns the body into a scroll container, which
      would stop the sticky contact panel from ever sticking */
   body {
     @apply overflow-x-clip bg-page-bg text-secondary-color antialiased;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
   }
 
   img {
@@ -611,17 +631,25 @@
     --hero-exit: 0;
   }
 
+  /* Zoom out on scroll would shrink this layer and show the glow's box edge.
+     Scale up instead so overflow on .hero-section clips it. */
   .hero-section > [aria-hidden='true'] {
     opacity: calc(1 - var(--hero-exit) * 0.9);
-    transform: scale(calc(1 - var(--hero-exit) * 0.06));
+    transform: scale(calc(1 + var(--hero-exit) * 0.06));
     transform-origin: center center;
     will-change: opacity, transform;
   }
 
   /* The section stack is a card that covers the hero above it and the contact
-     panel below it, so both of its edges cast a shadow onto the layer behind. */
+     panel below it. Side radius is pushed off-screen so it does not leave a
+     visible box edge on the hero while scrolling. */
   .hero-cover-stack {
-    border-radius: 1.75rem;
+    width: calc(100% + 3.5rem);
+    margin-left: -1.75rem;
+    margin-right: -1.75rem;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+    border-radius: 1.75rem 1.75rem 0 0;
     box-shadow:
       0 -18px 50px rgba(15, 15, 15, 0.08),
       0 -1px 0 rgba(255, 255, 255, 0.35),
@@ -662,14 +690,9 @@
   /* The travel itself is driven by element.animate in InteractiveName.tsx so it
      can be composited; only the colour transition lives here. */
 
-  /* Reads "Christian is a <role>" by lighting one run of letters at a time and
-     letting the rest of the name step back. Outranks the data-boot opacity above. */
-  .hero-section .hero-name.is-reading .hero-letter {
-    opacity: 0.24;
-  }
-
+  /* Reads "Christian is a <role>" by lighting one run of letters at a time.
+     Unlit letters stay full black. */
   .hero-section .hero-name.is-reading .hero-letter.is-lit {
-    opacity: 1;
     color: #f97316;
   }
 
@@ -877,14 +900,14 @@
       opacity: 0.45;
     }
     100% {
-      transform: scale(1.45);
+      transform: scale(1.22);
       opacity: 0;
     }
   }
 
   .chat-fab-pulse {
     position: absolute;
-    inset: -6px;
+    inset: -3px;
     border-radius: 999px;
     background: #f97316;
     animation: chat-fab-pulse 2s ease-out infinite;

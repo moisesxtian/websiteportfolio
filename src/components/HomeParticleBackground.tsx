@@ -176,7 +176,9 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       aria-hidden="true"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(249,115,22,0.07),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(249,115,22,0.05),transparent_50%)]" />
+      {/* Oversized so the ellipse never meets a hard box edge. Fade to the
+          same orange at 0 alpha — `transparent` is black and leaves a brown rim. */}
+      <div className="absolute -inset-[30%] bg-[radial-gradient(ellipse_at_top_right,rgba(249,115,22,0.07),rgba(249,115,22,0)_70%),radial-gradient(ellipse_at_bottom_left,rgba(249,115,22,0.05),rgba(249,115,22,0)_65%)]" />
 
       <div
         ref={spotlightRef}

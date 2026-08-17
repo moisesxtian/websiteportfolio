@@ -76,7 +76,7 @@ export default function ChatBot() {
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
-    list.scrollTop = list.scrollHeight;
+    list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
   }, [messages, isLoading, open, profileOpen]);
 
   useEffect(() => {
@@ -121,10 +121,10 @@ export default function ChatBot() {
   };
 
   return (
-    <div className="pointer-events-none fixed bottom-5 right-4 z-[60] flex flex-col items-end font-poppins sm:bottom-6 sm:right-6">
+    <div className="pointer-events-none fixed bottom-5 right-4 z-[60] flex flex-col items-end overflow-x-clip font-poppins sm:bottom-6 sm:right-6">
       {open ? (
         <section
-          className="chat-panel pointer-events-auto mb-3 flex w-[min(100vw-2rem,24rem)] origin-bottom-right flex-col overflow-hidden rounded-2xl bg-white shadow-2xl shadow-neutral-800/15 dark:bg-surface dark:shadow-black/40"
+          className="chat-panel pointer-events-auto mb-3 flex w-[min(calc(100vw-2.5rem),24rem)] origin-bottom-right flex-col overflow-hidden rounded-2xl bg-white shadow-2xl shadow-neutral-800/15 dark:bg-surface dark:shadow-black/40"
           style={{ height: 'min(32rem, calc(100svh - 7.5rem))' }}
           aria-label={profileOpen ? 'About Chan' : 'Chat with Chan'}
         >
@@ -164,7 +164,7 @@ export default function ChatBot() {
 
           <div
             ref={listRef}
-            className="flex-1 space-y-3 overflow-y-auto px-3 py-3"
+            className="flex-1 space-y-3 overflow-y-auto scroll-smooth scrollbar-hide px-3 py-3"
           >
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
