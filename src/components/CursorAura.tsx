@@ -27,8 +27,18 @@ const CursorAura = ({ containerRef }: CursorAuraProps) => {
 
     const onMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
-      mouse.current.x = e.clientX - rect.left;
-      mouse.current.y = e.clientY - rect.top;
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      if (!mouse.current.inside) {
+        trail.current.forEach((point) => {
+          point.x = x;
+          point.y = y;
+        });
+      }
+
+      mouse.current.x = x;
+      mouse.current.y = y;
       mouse.current.inside = true;
     };
 
@@ -99,6 +109,7 @@ const CursorAura = ({ containerRef }: CursorAuraProps) => {
   return (
     <div
       className="pointer-events-none absolute inset-0 z-[5] overflow-hidden transition-opacity duration-200"
+      style={{ opacity: 0 }}
       aria-hidden="true"
     >
       <div
@@ -107,6 +118,7 @@ const CursorAura = ({ containerRef }: CursorAuraProps) => {
         style={{
           background:
             'radial-gradient(circle, rgba(249,115,22,0.14) 0%, rgba(249,115,22,0.04) 40%, transparent 70%)',
+          transform: 'translate3d(-9999px, -9999px, 0)',
         }}
       />
       <div ref={dotsRef} className="absolute inset-0">
@@ -116,6 +128,8 @@ const CursorAura = ({ containerRef }: CursorAuraProps) => {
             className="absolute left-0 top-0 rounded-full bg-main-color will-change-transform"
             style={{
               boxShadow: '0 0 6px rgba(249,115,22,0.3)',
+              transform: 'translate3d(-9999px, -9999px, 0)',
+              opacity: 0,
             }}
           />
         ))}

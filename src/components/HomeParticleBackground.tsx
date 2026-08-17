@@ -136,7 +136,7 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
           const nearGlow = 1 + falloff * influenceStrength * 0.9;
 
           const el = dots[i] as HTMLElement;
-          el.style.transform = `translate3d(calc(${p.x * 100}% + ${ox + pushX}px), calc(${p.y * 100}% + ${oy + pushY}px), 0) translate(-50%, -50%)`;
+          el.style.transform = `translate3d(${ox + pushX}px, ${oy + pushY}px, 0) translate(-50%, -50%)`;
           el.style.opacity = String(Math.min(0.75, p.opacity * pulse * nearGlow));
         }
       }
@@ -182,13 +182,15 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
         {PARTICLES.map((p) => (
           <span
             key={p.id}
-            className="absolute left-0 top-0 rounded-full bg-main-color will-change-transform"
+            className="absolute rounded-full bg-main-color will-change-transform"
             style={{
+              left: `${p.x * 100}%`,
+              top: `${p.y * 100}%`,
               width: p.size,
               height: p.size,
               opacity: p.opacity,
               boxShadow: '0 0 8px rgba(249,115,22,0.3)',
-              transform: `translate3d(${p.x * 100}%, ${p.y * 100}%, 0) translate(-50%, -50%)`,
+              transform: 'translate(-50%, -50%)',
             }}
           />
         ))}

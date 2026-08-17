@@ -8,19 +8,15 @@ import {
   FaDiscord,
   FaFacebook,
 } from 'react-icons/fa';
-import { IoTerminal } from 'react-icons/io5';
 import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-scroll';
 import { IconContext } from 'react-icons';
-import { useSkills } from '../Hooks/useSkills';
 import { useResume } from '../Hooks/useResume';
-import { getSkillIcon } from '../lib/skillIcons';
 import NowPlaying from './NowPlaying';
 import CursorAura from './CursorAura';
 import HomeParticleBackground from './HomeParticleBackground';
 
 const Home = () => {
-  const { skills } = useSkills();
   const { resumeUrl } = useResume();
   const sectionRef = useRef<HTMLElement>(null);
   const floatRef = useRef<HTMLDivElement>(null);
@@ -79,21 +75,6 @@ const Home = () => {
     tiltTarget.current = { rx: 0, ry: 0 };
   };
 
-  const renderSkillChip = (
-    skill: { id: string; name: string; icon_key: string | null },
-    keyPrefix: string
-  ) => {
-    const Icon = getSkillIcon(skill.icon_key);
-    return (
-      <div key={`${keyPrefix}-${skill.id}`} className="flex p-1">
-        <div className="skill-chip flex gap-2 rounded-lg p-1.5 border border-gray-300 text-xs items-center whitespace-nowrap bg-white/80 dark:border-gray-600 dark:bg-neutral-900/80">
-          <Icon size={15} />
-          <span>{skill.name}</span>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <section
       ref={sectionRef}
@@ -104,7 +85,6 @@ const Home = () => {
       <CursorAura containerRef={sectionRef} />
       <div className="section-page-inner relative z-10 pb-10 md:pb-14">
         <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-10 w-full">
-          {/* Copy */}
           <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-3 sm:space-y-4 w-full lg:w-[52%] min-w-0">
             <h2 className="hero-reveal text-xs sm:text-sm font-medium text-secondary-color">
               I AM
@@ -176,35 +156,8 @@ const Home = () => {
                 View CV
               </button>
             </a>
-
-            <div className="hero-reveal flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1 w-full">
-              <IoTerminal size={32} color="#F97316" className="terminal-pulse flex-shrink-0" />
-              <div className="text-left min-w-0">
-                <p className="text-main-color font-bold text-sm sm:text-base">
-                  Technologies & Languages
-                </p>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                  Technologies I use and have worked with.
-                </p>
-              </div>
-            </div>
-
-            <IconContext.Provider value={{ color: '#F97316' }}>
-              <div className="hero-reveal flex w-full max-w-full lg:max-w-[620px] overflow-hidden group MyGradient">
-                <div className="flex max-w-none animate-loop-scroll group-hover:paused">
-                  {skills.map((skill) => renderSkillChip(skill, 'a'))}
-                </div>
-                <div
-                  className="flex max-w-none animate-loop-scroll group-hover:paused"
-                  aria-hidden="true"
-                >
-                  {skills.map((skill) => renderSkillChip(skill, 'b'))}
-                </div>
-              </div>
-            </IconContext.Provider>
           </div>
 
-          {/* Portrait + soundtrack */}
           <div className="hero-float-stage relative w-full lg:w-[42%] flex flex-col items-center justify-center">
             <div
               className="relative w-[min(92vw,380px)] sm:w-[min(70vw,400px)] lg:w-full"
@@ -212,10 +165,7 @@ const Home = () => {
               onMouseLeave={handleMouseLeave}
             >
               <div className="hero-float-shadow absolute -bottom-2 left-1/2 h-6 w-2/3 -translate-x-1/2 rounded-[100%] bg-black/20 blur-xl" />
-              <div
-                ref={floatRef}
-                className="relative will-change-transform"
-              >
+              <div ref={floatRef} className="relative will-change-transform">
                 <div
                   ref={tiltRef}
                   className="relative will-change-transform"

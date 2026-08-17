@@ -65,7 +65,7 @@ function setCircleOrigin(event?: MouseEvent<HTMLElement>) {
 function canUseViewTransition(): boolean {
   if (typeof document.startViewTransition !== 'function') return false;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
-  // View Transitions can be flaky on some mobile browsers — skip animation, still toggle.
+  // View Transitions can be flaky on some mobile browsers - skip animation, still toggle.
   if (window.matchMedia('(pointer: coarse)').matches) return false;
   return true;
 }

@@ -1,11 +1,5 @@
 import { useMemo, useState } from 'react';
-import {
-  Briefcase,
-  Building2,
-  Calendar,
-  CheckCircle2,
-  ChevronDown,
-} from 'lucide-react';
+import { Briefcase, Building2, Calendar, ChevronDown } from 'lucide-react';
 import { useExperiences } from '../Hooks/useExperiences';
 import type { Experience as ExperienceType } from '../types/content';
 
@@ -51,7 +45,7 @@ function monthsInPeriod(period: string): number {
 
 /**
  * Professional YOE from all roles except the chronologically first 2
- * (oldest two — last items in Latest → Oldest list).
+ * (oldest two are the last items in Latest to Oldest list).
  */
 function formatProfessionalYoe(experiences: ExperienceType[]): string {
   const professional =
@@ -67,39 +61,28 @@ function formatProfessionalYoe(experiences: ExperienceType[]): string {
 function ExperienceCard({
   experience,
   index,
-  total,
   isActive,
   onToggle,
 }: {
   experience: ExperienceType;
   index: number;
-  total: number;
   isActive: boolean;
   onToggle: () => void;
 }) {
   const isLatest = index === 0;
-  const progressLabel = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
 
   return (
-    <article className={`experience-card group relative ${isActive ? 'is-active' : ''}`}>
-      {/* Timeline node */}
-      <div className="absolute left-0 top-8 md:left-1/2 md:-translate-x-1/2 z-20">
+    <article className="group relative">
+      <div className="absolute left-0 top-7 md:left-1/2 md:-translate-x-1/2 z-20">
         <div
-          className={`relative flex h-4 w-4 items-center justify-center rounded-full ring-4 ring-white transition-colors duration-200 dark:ring-page-bg ${
-            isLatest
-              ? 'bg-main-color shadow-[0_0_0_6px_rgba(249,115,22,0.18)]'
-              : 'bg-gray-300 group-hover:bg-main-color group-hover:shadow-[0_0_0_6px_rgba(249,115,22,0.12)] dark:bg-gray-600'
+          className={`h-3 w-3 rounded-full ring-4 ring-page-bg ${
+            isLatest ? 'bg-main-color' : 'bg-gray-300 dark:bg-gray-600'
           }`}
-        >
-          {isLatest ? (
-            <span className="absolute inset-0 rounded-full bg-main-color/35 animate-ping" />
-          ) : null}
-        </div>
+        />
       </div>
 
-      {/* Card — alternating sides on desktop */}
       <div
-        className={`ml-10 md:ml-0 md:w-[calc(50%-2.5rem)] ${
+        className={`ml-8 md:ml-0 md:w-[calc(50%-2rem)] ${
           index % 2 === 0 ? 'md:mr-auto md:pr-2' : 'md:ml-auto md:pl-2'
         }`}
       >
@@ -107,96 +90,62 @@ function ExperienceCard({
           type="button"
           onClick={onToggle}
           aria-expanded={isActive}
-          className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 rounded-2xl dark:focus-visible:ring-offset-page-bg"
+          className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 rounded-xl dark:focus-visible:ring-offset-page-bg"
         >
           <div
-            className={`relative overflow-hidden rounded-2xl border bg-white/95 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-200 ease-out dark:bg-neutral-900/95 ${
+            className={`rounded-xl border bg-white p-4 sm:p-5 transition-colors dark:bg-neutral-900 ${
               isActive
-                ? 'border-main-color/35 shadow-[0_22px_55px_-28px_rgba(249,115,22,0.55)] -translate-y-0.5'
-                : 'border-gray-200/90 shadow-sm hover:border-main-color/25 hover:shadow-md dark:border-gray-700/90'
+                ? 'border-main-color/40'
+                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
             }`}
           >
-            <div
-              className={`absolute inset-y-0 left-0 w-1 transition-colors duration-200 ${
-                isActive || isLatest
-                  ? 'bg-main-color'
-                  : 'bg-gray-200 group-hover:bg-main-color/50 dark:bg-gray-700'
-              }`}
-            />
-
-            <div
-              className={`pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full blur-2xl transition-opacity duration-200 ${
-                isActive
-                  ? 'opacity-100 bg-orange-200/50 dark:bg-orange-500/20'
-                  : 'opacity-0 group-hover:opacity-70 bg-orange-100/60 dark:bg-orange-500/15'
-              }`}
-            />
-
-            <div className="relative p-4 sm:p-6 pl-5 sm:pl-7">
-              <div className="flex flex-wrap items-start justify-between gap-2 sm:gap-3">
-                <div className="min-w-0 space-y-2 sm:space-y-2.5">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {isLatest ? (
-                      <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-main-color dark:bg-orange-950/60">
-                        Current chapter
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:bg-neutral-800 dark:text-gray-400">
-                        {progressLabel}
-                      </span>
-                    )}
-                    <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs text-gray-500 dark:text-gray-400">
-                      <Calendar size={12} className="text-main-color" />
-                      {experience.period}
-                    </span>
-                  </div>
-
-                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-secondary-color leading-snug tracking-tight">
-                    {experience.role}
-                  </h3>
-
-                  <p className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-400">
-                    <Building2 size={14} className="text-main-color flex-shrink-0" />
-                    {experience.company}
-                  </p>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 space-y-1.5">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar size={12} />
+                    {experience.period}
+                  </span>
+                  {isLatest ? (
+                    <span className="font-medium text-main-color">Current</span>
+                  ) : null}
                 </div>
 
-                <div
-                  className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border transition-all duration-200 ${
-                    isActive
-                      ? 'border-main-color bg-main-color text-white rotate-180'
-                      : 'border-gray-200 bg-gray-50 text-gray-500 group-hover:border-main-color/40 group-hover:text-main-color dark:border-gray-700 dark:bg-neutral-800 dark:text-gray-400'
-                  }`}
-                >
-                  <ChevronDown size={16} />
-                </div>
+                <h3 className="text-base sm:text-lg font-bold text-secondary-color leading-snug">
+                  {experience.role}
+                </h3>
+
+                <p className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+                  <Building2 size={14} className="flex-shrink-0" />
+                  {experience.company}
+                </p>
               </div>
 
-              <div
-                className={`grid transition-[grid-template-rows,margin] duration-200 ease-out ${
-                  isActive ? 'grid-rows-[1fr] mt-5' : 'grid-rows-[0fr] mt-0'
+              <ChevronDown
+                size={18}
+                className={`mt-1 flex-shrink-0 text-gray-400 transition-transform duration-200 ${
+                  isActive ? 'rotate-180 text-main-color' : ''
                 }`}
-              >
-                <div className="overflow-hidden">
-                  <div className="border-t border-dashed border-gray-200 pt-4 dark:border-gray-700">
-                    <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
-                      Highlights & responsibilities
-                    </p>
-                    <ul className="space-y-2.5">
-                      {experience.duties.map((duty, dutyIndex) => (
-                        <li
-                          key={dutyIndex}
-                          className="flex gap-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400"
-                        >
-                          <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-50 text-main-color ring-1 ring-orange-100 dark:bg-orange-950/50 dark:ring-orange-900/50">
-                            <CheckCircle2 size={13} strokeWidth={2.5} />
-                          </span>
-                          <span className="pt-0.5">{duty}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+              />
+            </div>
+
+            <div
+              className={`grid transition-[grid-template-rows,margin] duration-200 ease-out ${
+                isActive ? 'grid-rows-[1fr] mt-4' : 'grid-rows-[0fr] mt-0'
+              }`}
+            >
+              <div className="overflow-hidden">
+                <ul className="space-y-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+                  {experience.duties.map((duty, dutyIndex) => (
+                    <li
+                      key={dutyIndex}
+                      className="flex gap-2.5 text-sm leading-relaxed text-gray-600 dark:text-gray-400"
+                    >
+                      <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-main-color" />
+                      <span>{duty}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
@@ -220,24 +169,10 @@ export default function Experience() {
       id="Experience"
       className="section-page section-cut relative overflow-hidden font-poppins text-secondary-color"
     >
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-orange-100/45 blur-3xl dark:bg-orange-500/10" />
-        <div className="absolute bottom-10 left-0 h-64 w-64 rounded-full bg-stone-200/50 blur-3xl dark:bg-neutral-700/30" />
-        <div
-          className="absolute inset-0 opacity-[0.28]"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 1px 1px, rgba(249,115,22,0.14) 1px, transparent 0)',
-            backgroundSize: '28px 28px',
-          }}
-        />
-      </div>
-
       <div className="section-page-inner gap-8 md:gap-10 !justify-start">
-        {/* Always-visible section header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 w-full">
-          <div className="relative w-fit">
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-main-color dark:border-orange-800 dark:bg-orange-950/50">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 w-full">
+          <div>
+            <div className="mb-2 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-main-color">
               <Briefcase size={12} />
               Career path
             </div>
@@ -245,41 +180,38 @@ export default function Experience() {
               Work Experience
             </h2>
             <p className="mt-3 max-w-md text-xs sm:text-sm text-gray-600 leading-relaxed dark:text-gray-400">
-              Roles that shaped how I build — from freelance craft to AI/ML engineering.
+              Roles that shaped how I build, from freelance craft to AI/ML engineering.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="rounded-xl bg-white px-4 py-3 min-w-[110px] dark:bg-neutral-900">
+          <div className="flex flex-wrap items-center gap-6 text-sm">
+            <div>
               <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Roles</p>
-              <p className="text-2xl font-bold text-secondary-color tabular-nums">
+              <p className="text-xl font-bold text-secondary-color tabular-nums">
                 {experiences.length}
               </p>
             </div>
-            <div className="rounded-xl bg-white px-4 py-3 min-w-[110px] dark:bg-neutral-900">
-              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">
-                YOE
-              </p>
-              <p className="text-2xl font-bold text-secondary-color tabular-nums">{yoeLabel}</p>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">YOE</p>
+              <p className="text-xl font-bold text-secondary-color tabular-nums">{yoeLabel}</p>
             </div>
           </div>
         </div>
 
         <div className="relative w-full">
-          <div className="absolute left-[7px] md:left-1/2 top-4 bottom-16 w-px -translate-x-1/2 bg-gradient-to-b from-main-color via-orange-200 to-transparent dark:via-orange-800" />
+          <div className="absolute left-[5px] md:left-1/2 top-4 bottom-8 w-px -translate-x-1/2 bg-gray-200 dark:bg-gray-700" />
 
           {experiences.length === 0 ? (
             <p className="text-center text-sm text-gray-500 py-16 dark:text-gray-400">
               No experience entries yet. Add some from the admin panel.
             </p>
           ) : (
-            <div className="space-y-8 md:space-y-12">
+            <div className="space-y-6 md:space-y-8">
               {experiences.map((experience, index) => (
                 <ExperienceCard
                   key={experience.id}
                   experience={experience}
                   index={index}
-                  total={experiences.length}
                   isActive={activeId === experience.id}
                   onToggle={() => handleToggle(experience.id)}
                 />
