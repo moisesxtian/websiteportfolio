@@ -20,7 +20,8 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* react-scroll animates with scrollTo(); CSS smooth would delay every frame */
+    scroll-behavior: auto;
     overflow-x: clip;
     background-color: var(--page-bg);
     -ms-overflow-style: none;
@@ -134,7 +135,7 @@
   }
 
   .continuous-scroll {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
 
   .scroll-reveal {

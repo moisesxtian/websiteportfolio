@@ -79,15 +79,19 @@ const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
         <div className="relative container mx-auto max-w-7xl flex items-center justify-end px-4 sm:px-6 md:px-10 max-md:pr-16 h-14 sm:h-16">
           <ul className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
             {navLinks.map(({ label, target, id }) => (
-              <Link key={label} to={target} spy smooth="easeInOutCubic" offset={-56} duration={800}>
-                <li
-                  className={`cursor-pointer select-none px-3 py-2 transition-colors duration-200 ${
+              <li key={label}>
+                <Link
+                  to={target}
+                  smooth="easeOutCubic"
+                  offset={-56}
+                  duration={450}
+                  className={`block cursor-pointer select-none px-3 py-2 transition-colors duration-200 ${
                     activeLink === id ? 'text-main-color' : 'hover:text-main-color'
                   }`}
                 >
                   {label}
-                </li>
-              </Link>
+                </Link>
+              </li>
             ))}
           </ul>
 
@@ -107,25 +111,22 @@ const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
         <div className="md:hidden border-b border-black/5 bg-white/90 backdrop-blur-md dark:border-white/10 dark:bg-neutral-950/90">
           <ul className="container mx-auto max-w-7xl px-4 py-2">
             {navLinks.map(({ label, target, id }) => (
-              <Link
-                key={label}
-                to={target}
-                spy
-                smooth="easeInOutCubic"
-                offset={-56}
-                duration={800}
-                onClick={() => setMenuOpen(false)}
-              >
-                <li
-                  className={`cursor-pointer select-none px-3 py-3 text-sm font-semibold transition-colors ${
+              <li key={label}>
+                <Link
+                  to={target}
+                  smooth="easeOutCubic"
+                  offset={-56}
+                  duration={450}
+                  onClick={() => setMenuOpen(false)}
+                  className={`block cursor-pointer select-none px-3 py-3 text-sm font-semibold transition-colors ${
                     activeLink === id
                       ? 'text-main-color'
                       : 'text-gray-700 hover:text-main-color dark:text-gray-300'
                   }`}
                 >
                   {label}
-                </li>
-              </Link>
+                </Link>
+              </li>
             ))}
           </ul>
         </div>

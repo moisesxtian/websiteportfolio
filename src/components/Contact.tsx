@@ -209,9 +209,9 @@ const Contact = () => {
               <Link
                 key={label}
                 to={target}
-                smooth="easeInOutCubic"
+                smooth="easeOutCubic"
                 offset={-56}
-                duration={800}
+                duration={450}
                 className="cursor-pointer font-medium text-gray-500 transition-colors hover:text-main-color dark:text-gray-400"
               >
                 {label}

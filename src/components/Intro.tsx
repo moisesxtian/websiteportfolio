@@ -367,9 +367,9 @@ const Home = ({ onBootReady }: HomeProps) => {
         >
           <Link
             to="Experience"
-            smooth="easeInOutCubic"
+            smooth="easeOutCubic"
             offset={-56}
-            duration={800}
+            duration={450}
             className="scroll-hint pointer-events-auto inline-flex flex-col items-center gap-1 text-xs text-gray-400 dark:text-gray-500 cursor-pointer hover:text-main-color transition-colors"
           >
             <span>Scroll</span>
