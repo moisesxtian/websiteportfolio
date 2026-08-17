@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-scroll';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { Moon, Sun } from 'lucide-react';
@@ -16,31 +16,46 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState<string>('Home');
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [navbarVisible, setNavbarVisible] = useState(true);
   const [onHero, setOnHero] = useState(true);
+  const lastScrollY = useRef(0);
+  const onHeroRef = useRef(true);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const atHero = currentScrollY < 40;
+
+      // The hero fades out over 85% of the viewport (see Intro.tsx), so the nav stays
+      // part of the hero until then. The lower exit point stops it flipping back and forth.
+      const heroExit = window.innerHeight * 0.85;
+      const atHero = onHeroRef.current
+        ? currentScrollY < heroExit
+        : currentScrollY < heroExit - 80;
+
+      onHeroRef.current = atHero;
       setOnHero(atHero);
 
       if (atHero) {
         setNavbarVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 50) {
+      } else if (currentScrollY > lastScrollY.current) {
         setNavbarVisible(false);
         setMenuOpen(false);
-      } else if (currentScrollY < lastScrollY) {
+      } else if (currentScrollY < lastScrollY.current) {
         setNavbarVisible(true);
       }
-      setLastScrollY(currentScrollY);
+
+      lastScrollY.current = currentScrollY;
     };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+    window.addEventListener('resize', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const sections = navItems.map((item) => item.id);
@@ -63,17 +78,13 @@ const Navbar = () => {
     return () => observer.disconnect();
   }, []);
 
-  const barStyle = onHero
-    ? 'bg-transparent'
-    : 'bg-white/80 backdrop-blur-md border-b border-black/5 dark:bg-neutral-950/80 dark:border-white/10';
-
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 will-change-transform transition-transform duration-300 ${
         navbarVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div className={`transition-colors duration-300 ${barStyle}`}>
+      <div className={`nav-bar ${onHero ? '' : 'is-solid'}`}>
         <div className="relative container mx-auto max-w-7xl flex items-center justify-end px-4 sm:px-6 md:px-10 h-14 sm:h-16">
           <ul className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
             {navItems.map(({ label, target, id }) => (

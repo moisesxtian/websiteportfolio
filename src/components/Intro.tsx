@@ -13,6 +13,7 @@ import { useResume } from '../Hooks/useResume';
 import CursorAura from './CursorAura';
 import HomeParticleBackground from './HomeParticleBackground';
 import InteractiveName from './InteractiveName';
+import NowPlaying from './NowPlaying';
 
 const ROLES = [
   'Full Stack Development',
@@ -40,7 +41,8 @@ const socialStart = BOOT_EXPAND_MS / 1000 + 0.05;
 const skillsStart = socialStart + SOCIALS.length * ITEM_STAGGER + 0.06;
 const cvStart = skillsStart + ROLES.length * ITEM_STAGGER;
 const scrollHintStart = cvStart + ITEM_DURATION * 0.5;
-const entranceTotalMs = Math.ceil((scrollHintStart + ITEM_DURATION + 0.05) * 1000);
+const nowPlayingStart = scrollHintStart + 0.12;
+const entranceTotalMs = Math.ceil((nowPlayingStart + ITEM_DURATION + 0.05) * 1000);
 
 type BootPhase = 'loading' | 'expanding' | 'ready';
 
@@ -74,6 +76,7 @@ const Home = () => {
   const nameRef = useRef<HTMLDivElement>(null);
   const metaRef = useRef<HTMLDivElement>(null);
   const scrollHintRef = useRef<HTMLDivElement>(null);
+  const nowPlayingRef = useRef<HTMLDivElement>(null);
   const prefersReduced = useRef(false);
   const entranceDone = useRef(false);
   const [bootPhase, setBootPhase] = useState<BootPhase>('loading');
@@ -159,6 +162,7 @@ const Home = () => {
       applyLayer(nameRef.current, progress, { y: -10, fade: 1.05, scale: 0.04, blur: 3 });
       applyLayer(metaRef.current, progress, { y: 16, fade: 1.2, scale: 0.02, blur: 3 });
       applyLayer(scrollHintRef.current, progress, { y: 12, fade: 1.5, blur: 3 });
+      applyLayer(nowPlayingRef.current, progress, { y: 14, fade: 1.4, blur: 3 });
 
       section.style.setProperty('--hero-exit', String(progress));
       section.style.pointerEvents = progress > 0.8 ? 'none' : 'auto';
@@ -295,8 +299,16 @@ const Home = () => {
         </div>
 
         <div
+          ref={nowPlayingRef}
+          className="hero-enter-fade absolute bottom-5 left-4 z-30 hidden w-72 will-change-transform sm:block sm:bottom-6 sm:left-6 md:left-10"
+          style={{ animationDelay: `${nowPlayingStart}s` }}
+        >
+          <NowPlaying />
+        </div>
+
+        <div
           ref={scrollHintRef}
-          className="hero-enter-fade relative z-10 mb-5 flex justify-center will-change-transform sm:mb-6"
+          className="hero-enter-fade pointer-events-none relative z-10 mb-5 flex justify-center will-change-transform sm:mb-6"
           style={{ animationDelay: `${scrollHintStart}s` }}
         >
           <Link
@@ -304,7 +316,7 @@ const Home = () => {
             smooth
             offset={-56}
             duration={700}
-            className="scroll-hint inline-flex flex-col items-center gap-1 text-xs text-gray-400 dark:text-gray-500 cursor-pointer hover:text-main-color transition-colors"
+            className="scroll-hint pointer-events-auto inline-flex flex-col items-center gap-1 text-xs text-gray-400 dark:text-gray-500 cursor-pointer hover:text-main-color transition-colors"
           >
             <span>Scroll</span>
             <ChevronDown size={16} className="scroll-hint-icon" />
