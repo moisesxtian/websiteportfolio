@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useProjects } from '../Hooks/useProjects';
 import type { Project } from '../types/content';
+import ScrollReveal from './ScrollReveal';
 
 type ViewMode = 'showcase' | 'grid';
 
@@ -79,7 +80,7 @@ const Projects = () => {
         className="section-page section-cut font-poppins text-secondary-color"
       >
         <div className="section-page-inner gap-5 md:gap-6 !justify-start">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 w-full">
+          <ScrollReveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 w-full">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-main-color mb-2">
                 Portfolio
@@ -118,25 +119,27 @@ const Projects = () => {
                 Card view
               </button>
             </div>
-          </div>
+          </ScrollReveal>
 
-          {viewMode === 'showcase' ? (
-            <ShowcaseView
-              projects={projects}
-              activeIndex={activeIndex}
-              trackRef={trackRef}
-              isJumping={isJumping}
-              onSelect={scrollToIndex}
-              onPrev={goPrev}
-              onNext={goNext}
-              onWatchVideo={setVideoProject}
-              onScrollIndex={(index) => {
-                if (!isJumping.current) setActiveIndex(index);
-              }}
-            />
-          ) : (
-            <GridView projects={projects} onWatchVideo={setVideoProject} />
-          )}
+          <ScrollReveal delay={120} className="w-full">
+            {viewMode === 'showcase' ? (
+              <ShowcaseView
+                projects={projects}
+                activeIndex={activeIndex}
+                trackRef={trackRef}
+                isJumping={isJumping}
+                onSelect={scrollToIndex}
+                onPrev={goPrev}
+                onNext={goNext}
+                onWatchVideo={setVideoProject}
+                onScrollIndex={(index) => {
+                  if (!isJumping.current) setActiveIndex(index);
+                }}
+              />
+            ) : (
+              <GridView projects={projects} onWatchVideo={setVideoProject} />
+            )}
+          </ScrollReveal>
         </div>
       </section>
 

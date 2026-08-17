@@ -3,9 +3,11 @@ import { useEffect, useRef, type MouseEvent } from 'react';
 type InteractiveNameProps = {
   text: string;
   className?: string;
+  /** Seconds between each letter starting its pop-in */
+  letterStagger?: number;
 };
 
-const InteractiveName = ({ text, className = '' }: InteractiveNameProps) => {
+const InteractiveName = ({ text, className = '', letterStagger = 0.045 }: InteractiveNameProps) => {
   const rootRef = useRef<HTMLHeadingElement>(null);
   const reducedMotion = useRef(false);
 
@@ -25,6 +27,7 @@ const InteractiveName = ({ text, className = '' }: InteractiveNameProps) => {
   const handleMove = (e: MouseEvent<HTMLHeadingElement>) => {
     if (reducedMotion.current) return;
     if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (window.scrollY > 24) return;
 
     const letters = e.currentTarget.querySelectorAll<HTMLElement>('.hero-letter');
     letters.forEach((el) => {
@@ -34,13 +37,12 @@ const InteractiveName = ({ text, className = '' }: InteractiveNameProps) => {
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const radius = 90;
+      const radius = 70;
       const force = Math.max(0, 1 - dist / radius);
 
       if (force > 0) {
-        const lift = -14 * force;
-        const scale = 1 + 0.14 * force;
-        el.style.transform = `translate3d(0, ${lift}px, 0) scale(${scale})`;
+        const lift = -4 * force;
+        el.style.transform = `translate3d(0, ${lift}px, 0)`;
         el.style.color = force > 0.2 ? '#f97316' : '';
       } else {
         el.style.transform = '';
@@ -48,6 +50,8 @@ const InteractiveName = ({ text, className = '' }: InteractiveNameProps) => {
       }
     });
   };
+
+  let letterIndex = 0;
 
   return (
     <h1
@@ -66,11 +70,14 @@ const InteractiveName = ({ text, className = '' }: InteractiveNameProps) => {
           );
         }
 
+        const delay = letterIndex * letterStagger;
+        letterIndex += 1;
+
         return (
           <span
             key={`${char}-${index}`}
-            className="hero-letter inline-block will-change-transform"
-            style={{ animationDelay: `${0.12 + index * 0.035}s` }}
+            className="hero-letter inline-block"
+            style={{ animationDelay: `${delay}s` }}
             aria-hidden="true"
           >
             {char}

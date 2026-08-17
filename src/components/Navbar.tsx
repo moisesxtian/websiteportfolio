@@ -63,13 +63,9 @@ const Navbar = () => {
     return () => observer.disconnect();
   }, []);
 
-  const linkActive = onHero
-    ? 'text-main-color'
-    : 'text-main-color bg-white/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] ring-1 ring-white/70 backdrop-blur-md dark:bg-white/[0.12] dark:ring-white/15 dark:shadow-none';
-
-  const linkIdle = onHero
-    ? 'hover:text-main-color'
-    : 'hover:text-main-color hover:bg-white/30 dark:hover:bg-white/[0.08]';
+  const barStyle = onHero
+    ? 'bg-transparent'
+    : 'bg-white/80 backdrop-blur-md border-b border-black/5 dark:bg-neutral-950/80 dark:border-white/10';
 
   return (
     <header
@@ -77,26 +73,14 @@ const Navbar = () => {
         navbarVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div
-        className={`relative transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ${
-          onHero
-            ? 'border-b border-transparent bg-transparent'
-            : 'nav-glass border-b border-white/50 bg-white/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.65),0_8px_32px_rgba(15,15,15,0.04)] backdrop-blur-[28px] backdrop-saturate-200 dark:border-white/[0.12] dark:bg-white/[0.06] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_8px_32px_rgba(0,0,0,0.25)]'
-        }`}
-      >
-        {!onHero ? (
-          <div
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/50 via-white/10 to-transparent dark:from-white/[0.08] dark:via-transparent dark:to-transparent"
-            aria-hidden="true"
-          />
-        ) : null}
+      <div className={`transition-colors duration-300 ${barStyle}`}>
         <div className="relative container mx-auto max-w-7xl flex items-center justify-end px-4 sm:px-6 md:px-10 h-14 sm:h-16">
           <ul className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
             {navItems.map(({ label, target, id }) => (
               <Link key={label} to={target} spy smooth offset={-56} duration={500}>
                 <li
-                  className={`cursor-pointer select-none px-3 py-2 rounded-lg transition duration-200 ${
-                    activeLink === id ? linkActive : linkIdle
+                  className={`cursor-pointer select-none px-3 py-2 transition-colors duration-200 ${
+                    activeLink === id ? 'text-main-color' : 'hover:text-main-color'
                   }`}
                 >
                   {label}
@@ -105,7 +89,7 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <div className="relative z-10 flex items-center gap-1">
+          <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={(e) => {
@@ -113,9 +97,7 @@ const Navbar = () => {
                 e.stopPropagation();
                 toggleTheme(e);
               }}
-              className={`relative z-10 min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-gray-700 dark:text-gray-300 transition-colors touch-manipulation ${
-                onHero ? 'hover:text-main-color' : 'hover:bg-white/35 dark:hover:bg-white/[0.08]'
-              }`}
+              className="min-h-11 min-w-11 inline-flex items-center justify-center text-gray-700 transition-colors hover:text-main-color dark:text-gray-300 touch-manipulation"
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -124,9 +106,7 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
-              className={`md:hidden relative z-10 min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-secondary-color touch-manipulation ${
-                onHero ? 'hover:text-main-color' : 'hover:bg-white/35 dark:hover:bg-white/[0.08]'
-              }`}
+              className="md:hidden min-h-11 min-w-11 inline-flex items-center justify-center text-secondary-color transition-colors hover:text-main-color touch-manipulation"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
             >
@@ -137,14 +117,8 @@ const Navbar = () => {
       </div>
 
       {menuOpen ? (
-        <div
-          className={`relative z-10 md:hidden border-b ${
-            onHero
-              ? 'border-gray-200/60 bg-page-bg/95 backdrop-blur-md dark:border-gray-700/60'
-              : 'nav-glass border-white/50 bg-white/25 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.55),0_16px_48px_rgba(15,15,15,0.08)] backdrop-blur-[28px] backdrop-saturate-200 dark:border-white/[0.12] dark:bg-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_16px_48px_rgba(0,0,0,0.35)]'
-          }`}
-        >
-          <ul className="relative container mx-auto max-w-7xl px-4 py-2">
+        <div className="md:hidden border-b border-black/5 bg-white/90 backdrop-blur-md dark:border-white/10 dark:bg-neutral-950/90">
+          <ul className="container mx-auto max-w-7xl px-4 py-2">
             {navItems.map(({ label, target, id }) => (
               <Link
                 key={label}
@@ -156,7 +130,7 @@ const Navbar = () => {
                 onClick={() => setMenuOpen(false)}
               >
                 <li
-                  className={`cursor-pointer select-none px-3 py-3 rounded-lg text-sm font-semibold transition ${
+                  className={`cursor-pointer select-none px-3 py-3 text-sm font-semibold transition-colors ${
                     activeLink === id
                       ? 'text-main-color'
                       : 'text-gray-700 hover:text-main-color dark:text-gray-300'
@@ -166,7 +140,7 @@ const Navbar = () => {
                 </li>
               </Link>
             ))}
-            <li className="mt-1 border-t border-gray-200/70 pt-2 dark:border-gray-700/70">
+            <li className="mt-1 border-t border-black/5 pt-2 dark:border-white/10">
               <button
                 type="button"
                 onClick={(e) => {
@@ -174,7 +148,7 @@ const Navbar = () => {
                   e.stopPropagation();
                   toggleTheme(e);
                 }}
-                className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold text-gray-700 hover:text-main-color dark:text-gray-300 touch-manipulation"
+                className="flex w-full items-center justify-between px-3 py-3 text-sm font-semibold text-gray-700 transition-colors hover:text-main-color dark:text-gray-300 touch-manipulation"
               >
                 <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
                 {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}

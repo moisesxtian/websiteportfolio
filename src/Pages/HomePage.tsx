@@ -8,24 +8,17 @@ import Footer from '../components/Footer';
 
 export default function HomePage() {
   return (
-    <div className="overflow-x-hidden snap-y snap-proximity bg-page-bg text-secondary-color">
+    <div className="continuous-scroll overflow-x-hidden bg-page-bg text-secondary-color">
       <Navbar />
-      <div className="snap-start">
-        <Intro />
-      </div>
-      <div className="snap-start">
+      <Intro />
+
+      <div className="hero-cover-stack relative z-20 bg-page-bg">
         <Experience />
-      </div>
-      <div className="snap-start">
         <Projects />
-      </div>
-      <div className="snap-start">
         <Certificates />
-      </div>
-      <div className="snap-start">
         <Contact />
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 }

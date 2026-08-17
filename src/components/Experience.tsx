@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Briefcase, Building2, Calendar, ChevronDown } from 'lucide-react';
 import { useExperiences } from '../Hooks/useExperiences';
 import type { Experience as ExperienceType } from '../types/content';
+import ScrollReveal from './ScrollReveal';
 
 const MONTH_INDEX: Record<string, number> = {
   january: 0,
@@ -170,7 +171,7 @@ export default function Experience() {
       className="section-page section-cut relative overflow-hidden font-poppins text-secondary-color"
     >
       <div className="section-page-inner gap-8 md:gap-10 !justify-start">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 w-full">
+        <ScrollReveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 w-full">
           <div>
             <div className="mb-2 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-main-color">
               <Briefcase size={12} />
@@ -196,7 +197,7 @@ export default function Experience() {
               <p className="text-xl font-bold text-secondary-color tabular-nums">{yoeLabel}</p>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         <div className="relative w-full">
           <div className="absolute left-[5px] md:left-1/2 top-4 bottom-8 w-px -translate-x-1/2 bg-gray-200 dark:bg-gray-700" />
@@ -208,13 +209,14 @@ export default function Experience() {
           ) : (
             <div className="space-y-6 md:space-y-8">
               {experiences.map((experience, index) => (
-                <ExperienceCard
-                  key={experience.id}
-                  experience={experience}
-                  index={index}
-                  isActive={activeId === experience.id}
-                  onToggle={() => handleToggle(experience.id)}
-                />
+                <ScrollReveal key={experience.id} delay={Math.min(index * 80, 320)}>
+                  <ExperienceCard
+                    experience={experience}
+                    index={index}
+                    isActive={activeId === experience.id}
+                    onToggle={() => handleToggle(experience.id)}
+                  />
+                </ScrollReveal>
               ))}
             </div>
           )}

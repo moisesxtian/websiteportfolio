@@ -1,5 +1,6 @@
 import { useRef, useState} from "react";
 import axios from "axios";
+import ScrollReveal from "./ScrollReveal";
 
 const WEB3FORMS_API_KEY = "cf56714b-d5fa-4bbd-99d1-b4f6c89239dc";
 
@@ -81,7 +82,7 @@ const CardsLayout = () => {
       <div className="section-page-inner">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Left section */}
-        <div className="flex flex-col gap-5">
+        <ScrollReveal className="flex flex-col gap-5">
           <div className="bg-gray-50 border border-gray-200 p-4 sm:p-5 rounded-lg shadow-sm dark:border-gray-700 dark:bg-neutral-900">
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-color leading-tight">
               Get In Touch <span className="text-main-color">.</span>
@@ -95,10 +96,10 @@ const CardsLayout = () => {
               I grew up naturally lazy. I always try to do the least amount of work possible to get the job done. And now, I do it for a living. Send me a message let's chat for ways I can make your process automated using the skillset I have developed over the years as an AI Developer.
             </p>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Right section with the contact form */}
-        <div className="bg-gray-50 border border-gray-200 p-4 sm:p-5 rounded-lg shadow-sm col-span-1 md:col-span-2 dark:border-gray-700 dark:bg-neutral-900">
+        <ScrollReveal delay={140} className="bg-gray-50 border border-gray-200 p-4 sm:p-5 rounded-lg shadow-sm col-span-1 md:col-span-2 dark:border-gray-700 dark:bg-neutral-900">
           <h2 className="text-xl font-bold text-secondary-color">Contact Me</h2>
           <form
             className="space-y-4"
@@ -165,7 +166,7 @@ const CardsLayout = () => {
               <div className="mt-2 text-center text-sm text-main-color">{result}</div>
             )}
           </form>
-        </div>
+        </ScrollReveal>
       </div>
       </div>
     </section>
