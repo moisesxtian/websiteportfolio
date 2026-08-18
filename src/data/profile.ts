@@ -1,6 +1,6 @@
 import type { ChatProfileData } from '../types/content';
 
-export const PROFILE_AVATAR = '/chan-avatar.png';
+export const PROFILE_AVATAR = '/chan-avatar.webp';
 
 /** Used until About Chan is saved from /admin */
 export const fallbackChatProfile: ChatProfileData = {

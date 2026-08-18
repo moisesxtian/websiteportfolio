@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { runWhenIdle } from '../lib/idle';
 import type { Experience, ExperienceInput } from '../types/content';
 import { fallbackExperiences } from '../data/fallbacks';
 
-export function useExperiences() {
+export function useExperiences(defer = false) {
   const [experiences, setExperiences] = useState<Experience[]>(fallbackExperiences);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,8 +33,15 @@ export function useExperiences() {
   }, []);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (!defer) {
+      void refresh();
+      return;
+    }
+
+    return runWhenIdle(() => {
+      void refresh();
+    });
+  }, [refresh, defer]);
 
   const createExperience = async (input: ExperienceInput) => {
     // New experience = latest → put at top (sort_order 1)

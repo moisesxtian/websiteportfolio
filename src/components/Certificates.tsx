@@ -1,10 +1,11 @@
 import { useRef } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useCertificates } from '../Hooks/useCertificates';
+import { toLocalWebp } from '../lib/assets';
 import ScrollReveal from './ScrollReveal';
 
 const Certificates = () => {
-  const { certificates } = useCertificates();
+  const { certificates } = useCertificates(true);
   const trackRef = useRef<HTMLDivElement>(null);
 
   const scrollByCard = (direction: -1 | 1) => {
@@ -63,8 +64,10 @@ const Certificates = () => {
               >
                 <div className="h-28 overflow-hidden bg-gray-100 dark:bg-neutral-800">
                   <img
-                    src={certificate.image_url}
+                    src={toLocalWebp(certificate.image_url)}
                     alt={certificate.name}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>

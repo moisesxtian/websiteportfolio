@@ -41,7 +41,7 @@ function articleFor(role: string) {
  */
 const SENTENCE_BEATS = [
   { letters: { start: 0, length: FIRST_NAME.length }, role: -1, ms: 1150 },
-  { letters: { start: DISPLAY_NAME.indexOf('is', FIRST_NAME.length), length: 2 }, role: -1, ms: 500 },
+  { letters: { start: DISPLAY_NAME.indexOf('is', FIRST_NAME.length), length: 2 }, role: -1, ms: 1000 },
   { letters: articleFor(ROLES[0]), role: -1, ms: 850 },
   // The article holds so the phrase still reads as "a/an <role>" while each role grows
   ...ROLES.map((role, index) => ({ letters: articleFor(role), role: index, ms: 1400 })),
@@ -55,6 +55,8 @@ const LETTER_STAGGER = 0.045;
 const ITEM_STAGGER = 0.06;
 const ITEM_DURATION = 0.32;
 const BOOT_MIN_MS = 2000;
+const BOOT_MIN_MOBILE_MS = 500;
+const FONT_WAIT_MS = 600;
 const BOOT_EXPAND_MS = 560;
 
 /**
@@ -100,7 +102,7 @@ type HomeProps = {
 };
 
 const Home = ({ onBootReady }: HomeProps) => {
-  const { resumeUrl } = useResume();
+  const { resumeUrl } = useResume(true);
   const sectionRef = useRef<HTMLElement>(null);
   const socialsRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
@@ -110,6 +112,15 @@ const Home = ({ onBootReady }: HomeProps) => {
   const prefersReduced = useRef(false);
   const entranceDone = useRef(false);
   const [bootPhase, setBootPhase] = useState<BootPhase>('loading');
+  const [showNowPlaying, setShowNowPlaying] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 640px)');
+    const sync = () => setShowNowPlaying(media.matches);
+    sync();
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
   useEffect(() => {
     prefersReduced.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -136,20 +147,21 @@ const Home = ({ onBootReady }: HomeProps) => {
     const waitForLoad = async () => {
       try {
         if (document.fonts?.ready) {
-          await document.fonts.ready;
+          await Promise.race([
+            document.fonts.ready,
+            new Promise<void>((resolve) => {
+              window.setTimeout(resolve, FONT_WAIT_MS);
+            }),
+          ]);
         }
       } catch {
         // ignore font readiness errors
       }
 
-      if (document.readyState !== 'complete') {
-        await new Promise<void>((resolve) => {
-          window.addEventListener('load', () => resolve(), { once: true });
-        });
-      }
-
+      const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+      const minMs = isCoarse ? BOOT_MIN_MOBILE_MS : BOOT_MIN_MS;
       const elapsed = performance.now() - startedAt;
-      const wait = Math.max(0, BOOT_MIN_MS - elapsed);
+      const wait = Math.max(0, minMs - elapsed);
       await new Promise<void>((resolve) => {
         readyTimer = window.setTimeout(resolve, wait);
       });
@@ -352,13 +364,15 @@ const Home = ({ onBootReady }: HomeProps) => {
           </div>
         </div>
 
-        <div
-          ref={nowPlayingRef}
-          className="hero-enter-fade absolute bottom-5 left-4 z-30 hidden w-72 will-change-transform sm:block sm:bottom-6 sm:left-6 md:left-10"
-          style={{ animationDelay: `${nowPlayingStart}s` }}
-        >
-          <NowPlaying />
-        </div>
+        {showNowPlaying ? (
+          <div
+            ref={nowPlayingRef}
+            className="hero-enter-fade absolute bottom-5 left-4 z-30 w-72 will-change-transform sm:bottom-6 sm:left-6 md:left-10"
+            style={{ animationDelay: `${nowPlayingStart}s` }}
+          >
+            <NowPlaying />
+          </div>
+        ) : null}
 
         <div
           ref={scrollHintRef}

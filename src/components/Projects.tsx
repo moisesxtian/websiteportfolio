@@ -9,13 +9,82 @@ import {
   X,
 } from 'lucide-react';
 import { useProjects } from '../Hooks/useProjects';
+import { toLocalWebp } from '../lib/assets';
 import type { Project } from '../types/content';
 import ScrollReveal from './ScrollReveal';
+
+function useFineHover() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const sync = () => setEnabled(media.matches);
+    sync();
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
+
+  return enabled;
+}
+
+function ProjectCover({
+  imageUrl,
+  hoverUrl,
+  alt,
+  eager = false,
+  className,
+}: {
+  imageUrl: string;
+  hoverUrl?: string | null;
+  alt: string;
+  eager?: boolean;
+  className: string;
+}) {
+  const canHover = useFineHover();
+  const [showHover, setShowHover] = useState(false);
+  const [hoverReady, setHoverReady] = useState(false);
+  const src = toLocalWebp(imageUrl);
+  const hoverSrc = toLocalWebp(hoverUrl);
+  const hasHover = canHover && Boolean(hoverSrc) && hoverSrc !== src;
+
+  return (
+    <div
+      className={className}
+      onMouseEnter={() => {
+        if (!hasHover) return;
+        setHoverReady(true);
+        setShowHover(true);
+      }}
+      onMouseLeave={() => setShowHover(false)}
+    >
+      <img
+        src={src}
+        alt={alt}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+          showHover ? 'opacity-0' : 'opacity-100'
+        }`}
+      />
+      {hasHover && hoverReady ? (
+        <img
+          src={hoverSrc}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+            showHover ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ) : null}
+    </div>
+  );
+}
 
 type ViewMode = 'showcase' | 'grid';
 
 const Projects = () => {
-  const { projects } = useProjects();
+  const { projects } = useProjects(true);
   const [viewMode, setViewMode] = useState<ViewMode>('showcase');
   const [activeIndex, setActiveIndex] = useState(0);
   const [videoProject, setVideoProject] = useState<Project | null>(null);
@@ -224,23 +293,18 @@ function ShowcaseView({
             }
           }}
         >
-          {projects.map((project) => (
+          {projects.map((project, index) => (
             <article
               key={project.id}
               className="relative grid w-full min-w-full max-w-full flex-shrink-0 snap-center grid-cols-1 lg:grid-cols-2"
             >
-              <div className="group/image relative aspect-[16/9] w-full overflow-hidden lg:aspect-auto lg:min-h-full">
-                <img
-                  src={project.image_url}
-                  alt={project.title}
-                  className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300 group-hover/image:opacity-0"
-                />
-                <img
-                  src={project.hover_image_url || project.image_url}
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover/image:opacity-100"
-                />
-              </div>
+              <ProjectCover
+                imageUrl={project.image_url}
+                hoverUrl={project.hover_image_url}
+                alt={project.title}
+                eager={index === 0}
+                className="relative aspect-[16/9] w-full overflow-hidden lg:aspect-auto lg:min-h-full"
+              />
 
               <div className="relative flex flex-col justify-center gap-3 p-4 sm:gap-4 sm:p-6 md:p-8 lg:p-10">
                 <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-orange-300 font-semibold">
@@ -335,8 +399,10 @@ function ShowcaseView({
                 }`}
               >
                 <img
-                  src={project.image_url}
+                  src={toLocalWebp(project.image_url)}
                   alt={project.title}
+                  loading={index < 3 ? 'eager' : 'lazy'}
+                  decoding="async"
                   className="h-full w-full object-cover"
                 />
               </button>
@@ -363,21 +429,17 @@ function GridView({
           className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-main-color/30 hover:shadow-md dark:border-gray-700 dark:bg-neutral-900"
         >
           <div className="relative h-36 overflow-hidden">
-            <img
-              src={project.image_url}
+            <ProjectCover
+              imageUrl={project.image_url}
+              hoverUrl={project.hover_image_url}
               alt={project.title}
-              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-0"
-            />
-            <img
-              src={project.hover_image_url || project.image_url}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              className="absolute inset-0"
             />
             {project.video_url ? (
               <button
                 type="button"
                 onClick={() => onWatchVideo(project)}
-                className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] text-white"
+                className="absolute bottom-2 right-2 z-10 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] text-white"
               >
                 <Play size={10} />
                 Watch

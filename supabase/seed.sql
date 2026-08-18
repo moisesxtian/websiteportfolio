@@ -44,8 +44,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['React','Tailwind CSS','FastAPI','Pydantic','Jinja2','ChatGPT API','Vercel','Render'],
   'https://github.com/moisesxtian/Vitae',
   'https://vitae.hyxcreation.tech',
-  '/assets/Projects/vitae.png',
-  '/assets/Projects/vitae-hovered.png',
+  '/assets/Projects/vitae.webp',
+  '/assets/Projects/vitae-hovered.webp',
   null,
   1
 ),
@@ -55,8 +55,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['N8N','Facebook API','Telegram API','Google Sheets API','Google Calendar API','LLM','WebHooks'],
   'https://github.com/moisesxtian/N8N--Workflows',
   'https://github.com/moisesxtian/N8N--Workflows',
-  '/assets/Projects/n8n.png',
-  '/assets/Projects/n8n-hover.png',
+  '/assets/Projects/n8n.webp',
+  '/assets/Projects/n8n-hover.webp',
   null,
   2
 ),
@@ -66,8 +66,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['MongoDB','ExpressJS','React','NodeJS','JWT','Mongoose','Tailwind'],
   'https://github.com/moisesxtian/ExerciseTracker',
   'https://reptr.vercel.app',
-  '/assets/Projects/reptr-1.png',
-  '/assets/Projects/reptr-2.png',
+  '/assets/Projects/reptr-1.webp',
+  '/assets/Projects/reptr-2.webp',
   null,
   3
 ),
@@ -77,8 +77,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['React','FastAPI','Langchain','RAG','OpenAI','Tailwind','Express'],
   'https://github.com/moisesxtian/cs-chatbot/tree/main',
   'https://github.com/moisesxtian/cs-chatbot/tree/main',
-  '/assets/Projects/chatbot-1.png',
-  '/assets/Projects/chatbot-2.png',
+  '/assets/Projects/chatbot-1.webp',
+  '/assets/Projects/chatbot-2.webp',
   null,
   4
 ),
@@ -88,8 +88,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['Python','YOLOv8','FastAPI','Roboflow','PaddleOCR','numpy','Pillow','CNN'],
   'https://github.com/moisesxtian/conduction-extraction',
   'https://github.com/moisesxtian/conduction-extraction',
-  '/assets/Projects/conduction-1.png',
-  '/assets/Projects/conduction-2.png',
+  '/assets/Projects/conduction-1.webp',
+  '/assets/Projects/conduction-2.webp',
   null,
   5
 ),
@@ -99,8 +99,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['Kotlin','Python','MediaPipe','TensorFlow','Sci-kit Learn','Android Studio'],
   'https://github.com/moisesxtian/ASL-Recognition-app',
   'https://drive.google.com/drive/folders/1PwizLoIWeM4PoqLsopeR6ucKD9pHHBVz?usp=sharing',
-  '/assets/Projects/mira-asl-app-mockup.png',
-  '/assets/Projects/m-h.png',
+  '/assets/Projects/mira-asl-app-mockup.webp',
+  '/assets/Projects/m-h.webp',
   null,
   6
 ),
@@ -110,8 +110,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['CSS','HTML','Javascript','Figma','UI/UX','Web3Forms'],
   'https://github.com/moisesxtian/tails-of-manila-website',
   'http://www.tailsofmanila.vercel.app',
-  '/assets/Projects/Tails of Manila Mock Up.png',
-  '/assets/Projects/tom-h.png',
+  '/assets/Projects/Tails of Manila Mock Up.webp',
+  '/assets/Projects/tom-h.webp',
   null,
   7
 ),
@@ -121,8 +121,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['C#','Unity','Photoshop'],
   'https://github.com/moisesxtian/websiteportfolio',
   'https://drive.google.com/drive/folders/1jUzX2mEZIs-Z3y5UXam2eG72B36NVesL?usp=sharing',
-  '/assets/Projects/penguin-rush.png',
-  '/assets/Projects/pr-mm.png',
+  '/assets/Projects/penguin-rush.webp',
+  '/assets/Projects/pr-mm.webp',
   null,
   8
 ),
@@ -132,8 +132,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['Numpy','Pandas','Python','Linear Regression','XG Boost'],
   'https://github.com/moisesxtian/MLNotebook',
   'https://github.com/moisesxtian/MLNotebook',
-  '/assets/Projects/CarPrice Prediction.png',
-  '/assets/Projects/CarPrice Prediction.png',
+  '/assets/Projects/CarPrice Prediction.webp',
+  '/assets/Projects/CarPrice Prediction.webp',
   null,
   9
 ),
@@ -143,8 +143,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['Figma','Canva','Iconify','Vector','Adobe Creative','Wireframing','Prototyping'],
   'https://www.figma.com/design/aUz4m8i074AQ40ZU5WWqWF/MOISES_PORTFOLIO?node-id=0-1&t=pZ3L4mkVbroB2BE1-1',
   'https://www.figma.com/design/aUz4m8i074AQ40ZU5WWqWF/MOISES_PORTFOLIO?node-id=0-1&t=pZ3L4mkVbroB2BE1-1',
-  '/assets/Projects/mobtech-prototype.png',
-  '/assets/Projects/mtp-h.png',
+  '/assets/Projects/mobtech-prototype.webp',
+  '/assets/Projects/mtp-h.webp',
   null,
   10
 ),
@@ -154,8 +154,8 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['C#'],
   'https://github.com/moisesxtian/Calculator',
   'https://github.com/moisesxtian/Calculator',
-  '/assets/Projects/calcoolator.png',
-  '/assets/Projects/calcoolator.png',
+  '/assets/Projects/calcoolator.webp',
+  '/assets/Projects/calcoolator.webp',
   null,
   11
 ),
@@ -165,19 +165,19 @@ insert into public.projects (title, description, skills, github_link, live_demo_
   array['HTML/CSS','JavaScript','Figma','Photoshop'],
   'https://github.com/moisesxtian/moisesxtian.github.io',
   'https://moisesxtian.github.io',
-  '/assets/Projects/portfolio-website-v1.png',
-  '/assets/Projects/pw-h.png',
+  '/assets/Projects/portfolio-website-v1.webp',
+  '/assets/Projects/pw-h.webp',
   null,
   12
 );
 
 insert into public.certificates (name, description, organization, image_url, certificate_link, sort_order) values
-  ('Supervised Learning with Scikit Learn', '', 'DataCamp', '/assets/Certificates/1.png', '#', 1),
-  ('Intermediate Python', '', 'DataCamp', '/assets/Certificates/2.png', '#', 2),
-  ('Data Science in Python', '', 'DataCamp', '/assets/Certificates/3.png', '#', 3),
-  ('Java Foundation', '', 'Oracle', '/assets/Certificates/4.png', '#', 4),
-  ('AI For Everyone', '', 'DeelLearning.AI', '/assets/Certificates/5.png', '/assets/Certificates/5.png', 5),
-  ('UI/UX', '', 'GreatLearning', '/assets/Certificates/6.png', '#', 6);
+  ('Supervised Learning with Scikit Learn', '', 'DataCamp', '/assets/Certificates/1.webp', '#', 1),
+  ('Intermediate Python', '', 'DataCamp', '/assets/Certificates/2.webp', '#', 2),
+  ('Data Science in Python', '', 'DataCamp', '/assets/Certificates/3.webp', '#', 3),
+  ('Java Foundation', '', 'Oracle', '/assets/Certificates/4.webp', '#', 4),
+  ('AI For Everyone', '', 'DeelLearning.AI', '/assets/Certificates/5.webp', '/assets/Certificates/5.webp', 5),
+  ('UI/UX', '', 'GreatLearning', '/assets/Certificates/6.webp', '#', 6);
 
 insert into public.experiences (company, period, role, duties, sort_order) values
 (

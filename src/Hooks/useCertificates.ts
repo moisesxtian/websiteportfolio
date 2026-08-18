@@ -1,9 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { toLocalWebp } from '../lib/assets';
+import { runWhenIdle } from '../lib/idle';
 import type { Certificate, CertificateInput } from '../types/content';
 import { fallbackCertificates } from '../data/fallbacks';
 
-export function useCertificates() {
+function withWebpImages(certificate: Certificate): Certificate {
+  return {
+    ...certificate,
+    image_url: toLocalWebp(certificate.image_url),
+    certificate_link: toLocalWebp(certificate.certificate_link) || certificate.certificate_link,
+  };
+}
+
+export function useCertificates(defer = false) {
   const [certificates, setCertificates] = useState<Certificate[]>(fallbackCertificates);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,14 +36,21 @@ export function useCertificates() {
       return;
     }
 
-    setCertificates(data as Certificate[]);
+    setCertificates((data as Certificate[]).map(withWebpImages));
     setUsingFallback(false);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (!defer) {
+      void refresh();
+      return;
+    }
+
+    return runWhenIdle(() => {
+      void refresh();
+    });
+  }, [refresh, defer]);
 
   const createCertificate = async (input: CertificateInput) => {
     const sort_order = input.sort_order ?? certificates.length + 1;

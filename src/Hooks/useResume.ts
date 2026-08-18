@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase, uploadFile } from '../lib/supabase';
+import { runWhenIdle } from '../lib/idle';
 import { fallbackResumeUrl } from '../data/fallbacks';
 
-export function useResume() {
+export function useResume(defer = false) {
   const [resumeUrl, setResumeUrl] = useState(fallbackResumeUrl);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,8 +33,15 @@ export function useResume() {
   }, []);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (!defer) {
+      void refresh();
+      return;
+    }
+
+    return runWhenIdle(() => {
+      void refresh();
+    });
+  }, [refresh, defer]);
 
   const uploadResume = async (file: File) => {
     const url = await uploadFile('resumes', file, 'cv');

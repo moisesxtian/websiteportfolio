@@ -1,9 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { toLocalWebp } from '../lib/assets';
+import { runWhenIdle } from '../lib/idle';
 import type { Project, ProjectInput } from '../types/content';
 import { fallbackProjects } from '../data/fallbacks';
 
-export function useProjects() {
+function withWebpImages(project: Project): Project {
+  return {
+    ...project,
+    image_url: toLocalWebp(project.image_url),
+    hover_image_url: project.hover_image_url
+      ? toLocalWebp(project.hover_image_url)
+      : project.hover_image_url,
+  };
+}
+
+export function useProjects(defer = false) {
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,14 +38,21 @@ export function useProjects() {
       return;
     }
 
-    setProjects(data as Project[]);
+    setProjects((data as Project[]).map(withWebpImages));
     setUsingFallback(false);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (!defer) {
+      void refresh();
+      return;
+    }
+
+    return runWhenIdle(() => {
+      void refresh();
+    });
+  }, [refresh, defer]);
 
   const createProject = async (input: ProjectInput) => {
     // New project = show first → put at top (sort_order 1)

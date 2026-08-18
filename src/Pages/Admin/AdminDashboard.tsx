@@ -230,7 +230,7 @@ function ProjectsPanel() {
                 </div>
 
                 <img
-                  src={project.image_url || '/assets/Projects/vitae.png'}
+                  src={project.image_url || '/assets/Projects/vitae.webp'}
                   alt=""
                   className="w-16 h-16 object-cover rounded-md border flex-shrink-0"
                   draggable={false}

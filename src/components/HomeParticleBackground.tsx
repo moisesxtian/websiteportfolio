@@ -57,6 +57,12 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
     const container = containerRef.current;
     if (!container) return;
 
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+    if (prefersReduced || isCoarse) {
+      return;
+    }
+
     const onMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       mouse.current.x = (e.clientX - rect.left) / rect.width;
@@ -71,15 +77,8 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
     container.addEventListener('mousemove', onMove, { passive: true });
     container.addEventListener('mouseleave', onLeave);
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) {
-      return () => {
-        container.removeEventListener('mousemove', onMove);
-        container.removeEventListener('mouseleave', onLeave);
-      };
-    }
-
     let frame = 0;
+    let visible = false;
     const startedAt = performance.now();
     let influenceX = 0.5;
     let influenceY = 0.5;
@@ -92,6 +91,11 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
     let paintedStrength = -1;
 
     const animate = (now: number) => {
+      if (!visible) {
+        frame = 0;
+        return;
+      }
+
       const t = (now - startedAt) / 1000;
 
       const targetStrength = mouse.current.active ? 1 : 0;
@@ -162,11 +166,21 @@ const HomeParticleBackground = ({ containerRef }: HomeParticleBackgroundProps) =
       frame = requestAnimationFrame(animate);
     };
 
-    frame = requestAnimationFrame(animate);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        visible = entries[0]?.isIntersecting ?? false;
+        if (visible && frame === 0) {
+          frame = requestAnimationFrame(animate);
+        }
+      },
+      { rootMargin: '80px' }
+    );
+    observer.observe(container);
 
     return () => {
       container.removeEventListener('mousemove', onMove);
       container.removeEventListener('mouseleave', onLeave);
+      observer.disconnect();
       cancelAnimationFrame(frame);
     };
   }, [containerRef]);

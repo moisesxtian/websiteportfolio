@@ -63,15 +63,12 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 export default function ChatBot() {
   const { messages, isLoading, sendMessage } = useChatBot();
   useChatProfile();
+  const wokeRef = useRef(false);
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [draft, setDraft] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    void wakeChatSession();
-  }, []);
 
   useEffect(() => {
     const list = listRef.current;
@@ -107,8 +104,17 @@ export default function ChatBot() {
 
   const toggleChat = () => {
     setOpen((current) => {
-      if (current) setProfileOpen(false);
-      return !current;
+      if (current) {
+        setProfileOpen(false);
+        return false;
+      }
+
+      if (!wokeRef.current) {
+        wokeRef.current = true;
+        void wakeChatSession();
+      }
+
+      return true;
     });
   };
 

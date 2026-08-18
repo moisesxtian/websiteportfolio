@@ -163,7 +163,7 @@ function ExperienceCard({
 }
 
 export default function Experience() {
-  const { experiences } = useExperiences();
+  const { experiences } = useExperiences(true);
   const [activeId, setActiveId] = useState<string | null>(null);
   const yoeLabel = useMemo(() => formatProfessionalYoe(experiences), [experiences]);
 

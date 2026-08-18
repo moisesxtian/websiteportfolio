@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import ThemeToggle from '../components/ThemeToggle';
 import Intro from '../components/Intro';
@@ -6,7 +6,8 @@ import Projects from '../components/Projects';
 import Certificates from '../components/Certificates';
 import Experience from '../components/Experience';
 import Contact from '../components/Contact';
-import ChatBot from '../components/ChatBot';
+
+const ChatBot = lazy(() => import('../components/ChatBot'));
 
 export default function HomePage() {
   const [heroReady, setHeroReady] = useState(false);
@@ -63,7 +64,11 @@ export default function HomePage() {
         </div>
       </div>
 
-      <ChatBot />
+      {heroReady ? (
+        <Suspense fallback={null}>
+          <ChatBot />
+        </Suspense>
+      ) : null}
     </div>
   );
 }
