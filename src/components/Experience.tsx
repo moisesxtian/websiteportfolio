@@ -147,8 +147,7 @@ function ExperienceCard({
               {formatPeriod(experience.period)}
             </p>
             {isCurrent ? (
-              <span className="exp-now inline-flex w-fit items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-main-color">
-                <span className="exp-now-dot" aria-hidden="true" />
+              <span className="exp-now inline-flex w-fit text-[10px] font-semibold uppercase tracking-wider text-main-color">
                 Present
               </span>
             ) : null}
