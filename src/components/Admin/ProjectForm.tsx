@@ -13,6 +13,7 @@ type ProjectFormProps = {
     live_demo_link: string;
     image_url: string;
     hover_image_url: string;
+    gallery_urls: string[];
     video_url: string | null;
   }) => Promise<void>;
   onClose: () => void;
@@ -26,6 +27,7 @@ export default function ProjectForm({ initial, onSubmit, onClose }: ProjectFormP
   const [liveDemoLink, setLiveDemoLink] = useState(initial?.live_demo_link ?? '');
   const [imageUrl, setImageUrl] = useState(initial?.image_url ?? '');
   const [hoverImageUrl, setHoverImageUrl] = useState(initial?.hover_image_url ?? '');
+  const [galleryUrls, setGalleryUrls] = useState<string[]>(initial?.gallery_urls ?? []);
   const [videoUrl, setVideoUrl] = useState(initial?.video_url ?? '');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +50,7 @@ export default function ProjectForm({ initial, onSubmit, onClose }: ProjectFormP
         live_demo_link: liveDemoLink.trim(),
         image_url: imageUrl,
         hover_image_url: hoverImageUrl,
+        gallery_urls: galleryUrls,
         video_url: videoUrl || null,
       });
       onClose();
@@ -130,6 +133,38 @@ export default function ProjectForm({ initial, onSubmit, onClose }: ProjectFormP
               value={hoverImageUrl}
               onChange={setHoverImageUrl}
               folder="hover"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-gray-700">More images</p>
+            {galleryUrls.length > 0 ? (
+              <div className="grid grid-cols-3 gap-2">
+                {galleryUrls.map((url) => (
+                  <div key={url} className="relative overflow-hidden rounded-lg border bg-gray-50">
+                    <img src={url} alt="" className="h-24 w-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setGalleryUrls((prev) => prev.filter((item) => item !== url))}
+                      className="absolute top-1 right-1 rounded-full bg-white p-1 shadow"
+                      aria-label="Remove image"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            <MediaUpload
+              key={galleryUrls.length}
+              label="Add another image"
+              bucket="project-media"
+              accept="image/*"
+              value=""
+              onChange={(url) => {
+                if (url) setGalleryUrls((prev) => [...prev, url]);
+              }}
+              folder="gallery"
             />
           </div>
 

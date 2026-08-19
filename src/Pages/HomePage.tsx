@@ -11,9 +11,14 @@ const ChatBot = lazy(() => import('../components/ChatBot'));
 
 export default function HomePage() {
   const [heroReady, setHeroReady] = useState(false);
+  const [pinProjects, setPinProjects] = useState(false);
 
   const handleBootReady = useCallback(() => {
     setHeroReady(true);
+  }, []);
+
+  const handleProjectsViewMode = useCallback((mode: 'showcase' | 'grid') => {
+    setPinProjects(mode === 'showcase');
   }, []);
 
   useEffect(() => {
@@ -45,8 +50,8 @@ export default function HomePage() {
           waits underneath until the sections scroll off it. */}
       <div className="relative z-20">
         <div className="hero-cover-stack relative z-10 bg-page-bg">
-          <div className="section-pin">
-            <Projects />
+          <div className={pinProjects ? 'section-pin' : 'section-flow'}>
+            <Projects onViewModeChange={handleProjectsViewMode} />
           </div>
           <div className="section-overlay">
             <Experience />

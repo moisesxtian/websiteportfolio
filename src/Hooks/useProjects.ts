@@ -5,14 +5,27 @@ import { runWhenIdle } from '../lib/idle';
 import type { Project, ProjectInput } from '../types/content';
 import { fallbackProjects } from '../data/fallbacks';
 
-function withWebpImages(project: Project): Project {
+function normalizeProject(project: Project): Project {
+  const gallery = Array.isArray(project.gallery_urls)
+    ? project.gallery_urls.map((url) => toLocalWebp(url)).filter(Boolean)
+    : [];
+
   return {
     ...project,
     image_url: toLocalWebp(project.image_url),
-    hover_image_url: project.hover_image_url
-      ? toLocalWebp(project.hover_image_url)
-      : project.hover_image_url,
+    hover_image_url: project.hover_image_url ? toLocalWebp(project.hover_image_url) : '',
+    gallery_urls: gallery,
   };
+}
+
+function schemaError(error: { code?: string; message?: string }) {
+  if (error.code === 'PGRST204') {
+    return new Error(
+      'Your projects table is missing gallery_urls. In Supabase, open SQL Editor and run supabase/migrate-project-gallery.sql, then save again.'
+    );
+  }
+
+  return error instanceof Error ? error : new Error(error.message || 'Failed to save project');
 }
 
 export function useProjects(defer = false) {
@@ -38,7 +51,7 @@ export function useProjects(defer = false) {
       return;
     }
 
-    setProjects((data as Project[]).map(withWebpImages));
+    setProjects((data as Project[]).map(normalizeProject));
     setUsingFallback(false);
     setLoading(false);
   }, []);
@@ -75,13 +88,13 @@ export function useProjects(defer = false) {
     const { error: insertError } = await supabase
       .from('projects')
       .insert({ ...input, sort_order: 1 });
-    if (insertError) throw insertError;
+    if (insertError) throw schemaError(insertError);
     await refresh();
   };
 
   const updateProject = async (id: string, input: Partial<ProjectInput>) => {
     const { error: updateError } = await supabase.from('projects').update(input).eq('id', id);
-    if (updateError) throw updateError;
+    if (updateError) throw schemaError(updateError);
     await refresh();
   };
 

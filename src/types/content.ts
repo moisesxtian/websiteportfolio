@@ -14,6 +14,7 @@ export type Project = {
   live_demo_link: string;
   image_url: string;
   hover_image_url: string;
+  gallery_urls: string[];
   video_url: string | null;
   sort_order: number;
 };

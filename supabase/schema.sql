@@ -24,10 +24,14 @@ create table if not exists public.projects (
   live_demo_link text not null default '',
   image_url text not null default '',
   hover_image_url text not null default '',
+  gallery_urls text[] not null default '{}',
   video_url text,
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- Existing databases created before extra project images existed
+alter table public.projects add column if not exists gallery_urls text[] not null default '{}';
 
 -- Certificates
 create table if not exists public.certificates (
