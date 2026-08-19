@@ -170,7 +170,7 @@ function ExperienceCard({
               >
                 <HoverWords text={experience.role} />
               </h3>
-              <p className="mt-0.5 text-sm font-medium text-main-color">
+              <p className="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
                 @ <HoverWords text={experience.company} />
               </p>
             </div>

@@ -181,19 +181,31 @@ function ImageGallery({
   alt,
   eager = false,
   className,
+  activeIndex,
+  onIndexChange,
 }: {
   images: string[];
   alt: string;
   eager?: boolean;
   className: string;
+  activeIndex?: number;
+  onIndexChange?: (index: number) => void;
 }) {
-  const [index, setIndex] = useState(0);
+  const [internalIndex, setInternalIndex] = useState(0);
+  const index = activeIndex ?? internalIndex;
   const current = images[index] || images[0];
   const hasMany = images.length > 1;
 
-  const go = (next: number) => {
+  const setIndex = (next: number) => {
+    if (activeIndex === undefined) {
+      setInternalIndex(next);
+    }
+    onIndexChange?.(next);
+  };
+
+  const go = (step: number) => {
     if (!hasMany) return;
-    setIndex((prev) => (prev + next + images.length) % images.length);
+    setIndex((index + step + images.length) % images.length);
   };
 
   if (!current) {
@@ -253,6 +265,131 @@ function ImageGallery({
         </>
       ) : null}
     </div>
+  );
+}
+
+function ShowcaseSlide({
+  project,
+  eager,
+  isOpen,
+  onToggle,
+  onWatchVideo,
+}: {
+  project: Project;
+  eager: boolean;
+  isOpen: boolean;
+  onToggle: () => void;
+  onWatchVideo: (project: Project) => void;
+}) {
+  const images = projectImages(project);
+  const [imageIndex, setImageIndex] = useState(0);
+
+  return (
+    <article className="relative grid w-full min-w-full max-w-full flex-shrink-0 snap-center grid-cols-1 lg:grid-cols-2">
+      <ImageGallery
+        images={images}
+        alt={project.title}
+        eager={eager}
+        activeIndex={imageIndex}
+        onIndexChange={setImageIndex}
+        className="relative aspect-[16/9] w-full overflow-hidden lg:aspect-auto lg:min-h-full"
+      />
+
+      <div className="relative flex flex-col justify-center gap-3 p-4 sm:gap-4 sm:p-6 md:p-8 lg:p-10">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-orange-300 sm:text-[11px]">
+          Featured project
+        </p>
+        <h3 className="text-xl font-extrabold leading-tight sm:text-2xl md:text-3xl lg:text-4xl">
+          <HoverWords text={project.title} />
+        </h3>
+        <p
+          className={`text-xs leading-relaxed text-gray-300 sm:text-sm md:text-base ${
+            isOpen ? '' : 'line-clamp-3 sm:line-clamp-4'
+          }`}
+        >
+          {project.description}
+        </p>
+
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+          {project.skills.map((skill) => (
+            <span
+              key={skill}
+              className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] text-orange-200 sm:px-2.5 sm:py-1 sm:text-[11px]"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={onToggle}
+          className="inline-flex w-fit items-center gap-1 text-xs font-semibold text-orange-200 hover:text-white"
+          aria-expanded={isOpen}
+        >
+          {isOpen ? 'Show less' : 'More photos'}
+          <ChevronDown
+            size={14}
+            className={`transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`}
+          />
+        </button>
+
+        <div className={`exp-details ${isOpen ? 'is-open' : ''}`}>
+          <div className="min-h-0 overflow-hidden">
+            {images.length > 1 ? (
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                {images.map((src, index) => (
+                  <button
+                    key={src}
+                    type="button"
+                    onClick={() => setImageIndex(index)}
+                    className={`exp-duty h-14 w-20 flex-shrink-0 overflow-hidden rounded-lg ${
+                      index === imageIndex ? 'ring-2 ring-main-color' : 'hover:ring-2 hover:ring-white/50'
+                    }`}
+                    style={{ '--i': index } as CSSProperties}
+                    aria-label={`Show ${project.title} photo ${index + 1}`}
+                    aria-pressed={index === imageIndex}
+                  >
+                    <img src={src} alt="" className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 pt-1 sm:gap-3 sm:pt-2">
+          <a
+            href={project.github_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-[#252525] transition hover:bg-orange-50 sm:px-4 sm:py-2.5 sm:text-sm"
+          >
+            <FaGithub />
+            View Repo
+          </a>
+          <a
+            href={project.live_demo_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-main-color px-3 py-2 text-xs font-semibold text-white transition hover:bg-orange-400 sm:px-4 sm:py-2.5 sm:text-sm"
+          >
+            <FaEye />
+            See Live
+          </a>
+          {project.video_url ? (
+            <button
+              type="button"
+              onClick={() => onWatchVideo(project)}
+              className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-3 py-2 text-xs font-semibold transition hover:bg-white/10 sm:px-4 sm:py-2.5 sm:text-sm"
+            >
+              <Play size={14} />
+              Watch
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </article>
   );
 }
 
@@ -320,113 +457,16 @@ function ShowcaseView({
             }
           }}
         >
-          {projects.map((project, index) => {
-            const images = projectImages(project);
-            const isOpen = openId === project.id;
-
-            return (
-              <article
-                key={project.id}
-                className="relative grid w-full min-w-full max-w-full flex-shrink-0 snap-center grid-cols-1 lg:grid-cols-2"
-              >
-                <ImageGallery
-                  images={images}
-                  alt={project.title}
-                  eager={index === 0}
-                  className="relative aspect-[16/9] w-full overflow-hidden lg:aspect-auto lg:min-h-full"
-                />
-
-                <div className="relative flex flex-col justify-center gap-3 p-4 sm:gap-4 sm:p-6 md:p-8 lg:p-10">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-orange-300 sm:text-[11px]">
-                    Featured project
-                  </p>
-                  <h3 className="text-xl font-extrabold leading-tight sm:text-2xl md:text-3xl lg:text-4xl">
-                    <HoverWords text={project.title} />
-                  </h3>
-                  <p
-                    className={`text-xs leading-relaxed text-gray-300 sm:text-sm md:text-base ${
-                      isOpen ? '' : 'line-clamp-3 sm:line-clamp-4'
-                    }`}
-                  >
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                    {project.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] text-orange-200 sm:px-2.5 sm:py-1 sm:text-[11px]"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setOpenId(isOpen ? null : project.id)}
-                    className="inline-flex w-fit items-center gap-1 text-xs font-semibold text-orange-200 hover:text-white"
-                    aria-expanded={isOpen}
-                  >
-                    {isOpen ? 'Show less' : 'More photos'}
-                    <ChevronDown
-                      size={14}
-                      className={`transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`}
-                    />
-                  </button>
-
-                  <div className={`exp-details ${isOpen ? 'is-open' : ''}`}>
-                    <div className="min-h-0 overflow-hidden">
-                      {images.length > 1 ? (
-                        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                          {images.map((src, imageIndex) => (
-                            <img
-                              key={src}
-                              src={src}
-                              alt=""
-                              className="exp-duty h-14 w-20 flex-shrink-0 rounded-lg object-cover"
-                              style={{ '--i': imageIndex } as CSSProperties}
-                            />
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2 pt-1 sm:gap-3 sm:pt-2">
-                    <a
-                      href={project.github_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-[#252525] transition hover:bg-orange-50 sm:px-4 sm:py-2.5 sm:text-sm"
-                    >
-                      <FaGithub />
-                      View Repo
-                    </a>
-                    <a
-                      href={project.live_demo_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-lg bg-main-color px-3 py-2 text-xs font-semibold text-white transition hover:bg-orange-400 sm:px-4 sm:py-2.5 sm:text-sm"
-                    >
-                      <FaEye />
-                      See Live
-                    </a>
-                    {project.video_url ? (
-                      <button
-                        type="button"
-                        onClick={() => onWatchVideo(project)}
-                        className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-3 py-2 text-xs font-semibold transition hover:bg-white/10 sm:px-4 sm:py-2.5 sm:text-sm"
-                      >
-                        <Play size={14} />
-                        Watch
-                      </button>
-                    ) : null}
-                  </div>
-                </div>
-              </article>
-            );
-          })}
+          {projects.map((project, index) => (
+            <ShowcaseSlide
+              key={project.id}
+              project={project}
+              eager={index === 0}
+              isOpen={openId === project.id}
+              onToggle={() => setOpenId(openId === project.id ? null : project.id)}
+              onWatchVideo={onWatchVideo}
+            />
+          ))}
         </div>
 
         <div className="pointer-events-none absolute inset-0 z-20">
@@ -522,6 +562,7 @@ function ProjectCard({
 }) {
   const images = projectImages(project);
   const detailsId = `project-details-${project.id}`;
+  const [imageIndex, setImageIndex] = useState(0);
 
   return (
     <article className="proj-card overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-neutral-900">
@@ -529,6 +570,8 @@ function ProjectCard({
         <ImageGallery
           images={images}
           alt={project.title}
+          activeIndex={imageIndex}
+          onIndexChange={setImageIndex}
           className="relative h-40 w-full overflow-hidden"
         />
       </div>
@@ -577,14 +620,20 @@ function ProjectCard({
 
             {images.length > 1 ? (
               <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-                {images.map((src, imageIndex) => (
-                  <img
+                {images.map((src, index) => (
+                  <button
                     key={src}
-                    src={src}
-                    alt=""
-                    className="exp-duty h-16 w-24 flex-shrink-0 rounded-lg object-cover"
-                    style={{ '--i': imageIndex } as CSSProperties}
-                  />
+                    type="button"
+                    onClick={() => setImageIndex(index)}
+                    className={`exp-duty h-16 w-24 flex-shrink-0 overflow-hidden rounded-lg ${
+                      index === imageIndex ? 'ring-2 ring-main-color' : 'hover:ring-2 hover:ring-main-color/50'
+                    }`}
+                    style={{ '--i': index } as CSSProperties}
+                    aria-label={`Show ${project.title} photo ${index + 1}`}
+                    aria-pressed={index === imageIndex}
+                  >
+                    <img src={src} alt="" className="h-full w-full object-cover" />
+                  </button>
                 ))}
               </div>
             ) : null}
