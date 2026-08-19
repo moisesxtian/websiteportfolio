@@ -1,8 +1,35 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { runWhenIdle } from '../lib/idle';
+import { toLocalWebp } from '../lib/assets';
 import type { Experience, ExperienceInput } from '../types/content';
 import { fallbackExperiences } from '../data/fallbacks';
+
+function normalizeExperience(row: Experience): Experience {
+  const fallback = fallbackExperiences.find(
+    (item) => item.company === row.company && item.role === row.role
+  );
+
+  const skills = Array.isArray(row.skills) ? row.skills : [];
+  const imageUrl = toLocalWebp(row.image_url);
+
+  return {
+    ...row,
+    duties: Array.isArray(row.duties) ? row.duties : [],
+    skills: skills.length > 0 ? skills : fallback?.skills ?? [],
+    image_url: imageUrl || fallback?.image_url || '',
+  };
+}
+
+function schemaError(error: { code?: string; message?: string }) {
+  if (error.code === 'PGRST204') {
+    return new Error(
+      "Your experiences table is missing the new columns. In Supabase, open SQL Editor and run supabase/migrate-experience-columns.sql, then save again."
+    );
+  }
+
+  return error instanceof Error ? error : new Error(error.message || 'Failed to save experience');
+}
 
 export function useExperiences(defer = false) {
   const [experiences, setExperiences] = useState<Experience[]>(fallbackExperiences);
@@ -27,7 +54,7 @@ export function useExperiences(defer = false) {
       return;
     }
 
-    setExperiences(data as Experience[]);
+    setExperiences((data as Experience[]).map(normalizeExperience));
     setUsingFallback(false);
     setLoading(false);
   }, []);
@@ -64,13 +91,13 @@ export function useExperiences(defer = false) {
     const { error: insertError } = await supabase
       .from('experiences')
       .insert({ ...input, sort_order: 1 });
-    if (insertError) throw insertError;
+    if (insertError) throw schemaError(insertError);
     await refresh();
   };
 
   const updateExperience = async (id: string, input: Partial<ExperienceInput>) => {
     const { error: updateError } = await supabase.from('experiences').update(input).eq('id', id);
-    if (updateError) throw updateError;
+    if (updateError) throw schemaError(updateError);
     await refresh();
   };
 

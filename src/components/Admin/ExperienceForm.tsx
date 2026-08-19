@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { X } from 'lucide-react';
 import type { Experience } from '../../types/content';
+import MediaUpload from './MediaUpload';
 
 type ExperienceFormProps = {
   initial?: Experience | null;
@@ -9,6 +10,8 @@ type ExperienceFormProps = {
     period: string;
     role: string;
     duties: string[];
+    skills: string[];
+    image_url: string;
   }) => Promise<void>;
   onClose: () => void;
 };
@@ -18,6 +21,8 @@ export default function ExperienceForm({ initial, onSubmit, onClose }: Experienc
   const [period, setPeriod] = useState(initial?.period ?? '');
   const [role, setRole] = useState(initial?.role ?? '');
   const [dutiesText, setDutiesText] = useState((initial?.duties ?? []).join('\n'));
+  const [skillsText, setSkillsText] = useState((initial?.skills ?? []).join(', '));
+  const [imageUrl, setImageUrl] = useState(initial?.image_url ?? '');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,11 +36,18 @@ export default function ExperienceForm({ initial, onSubmit, onClose }: Experienc
         .map((d) => d.trim())
         .filter(Boolean);
 
+      const skills = skillsText
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+
       await onSubmit({
         company: company.trim(),
         period: period.trim(),
         role: role.trim(),
         duties,
+        skills,
+        image_url: imageUrl,
       });
       onClose();
     } catch (err) {
@@ -83,6 +95,16 @@ export default function ExperienceForm({ initial, onSubmit, onClose }: Experienc
           </div>
 
           <label className="block space-y-1">
+            <span className="text-sm font-medium">Skills (comma separated)</span>
+            <input
+              className="admin-input"
+              value={skillsText}
+              onChange={(e) => setSkillsText(e.target.value)}
+              placeholder="Python, FastAPI, Tailwind CSS"
+            />
+          </label>
+
+          <label className="block space-y-1">
             <span className="text-sm font-medium">Duties (one per line)</span>
             <textarea
               className="admin-input min-h-[140px]"
@@ -90,6 +112,15 @@ export default function ExperienceForm({ initial, onSubmit, onClose }: Experienc
               onChange={(e) => setDutiesText(e.target.value)}
             />
           </label>
+
+          <MediaUpload
+            label="Company logo"
+            bucket="project-media"
+            accept="image/*"
+            value={imageUrl}
+            onChange={setImageUrl}
+            folder="experience"
+          />
 
           {error ? <p className="text-sm text-red-500">{error}</p> : null}
 

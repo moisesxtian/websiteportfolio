@@ -179,7 +179,7 @@ insert into public.certificates (name, description, organization, image_url, cer
   ('AI For Everyone', '', 'DeelLearning.AI', '/assets/Certificates/5.webp', '/assets/Certificates/5.webp', 5),
   ('UI/UX', '', 'GreatLearning', '/assets/Certificates/6.webp', '#', 6);
 
-insert into public.experiences (company, period, role, duties, sort_order) values
+insert into public.experiences (company, period, role, duties, skills, image_url, sort_order) values
 (
   'SP Madrid & Associates',
   'February 2025 - April 2025',
@@ -190,6 +190,8 @@ insert into public.experiences (company, period, role, duties, sort_order) value
     'Optimized model performance by fine-tuning hyperparameters and applying data augmentation techniques.',
     'Created FastAPI routes for the models to be consumed by the front-end.'
   ],
+  array['Python', 'YOLOv8', 'FastAPI', 'Computer Vision', 'PaddleOCR', 'Roboflow'],
+  '/assets/Experience/sp-madrid.webp',
   1
 ),
 (
@@ -201,6 +203,8 @@ insert into public.experiences (company, period, role, duties, sort_order) value
     'Designed, developed, and scheduled engaging content (posts, images, videos) to maintain the brand''s online presence.',
     'Monitored comments, messages, and trends to interact with followers, answer inquiries, and manage brand reputation.'
   ],
+  array['Canva', 'Content Design', 'Data Analysis', 'Facebook', 'Scheduling'],
+  '/assets/Experience/tails-of-manila.webp',
   2
 ),
 (
@@ -212,5 +216,7 @@ insert into public.experiences (company, period, role, duties, sort_order) value
     'Designed, created, and illustrated graphic illustrations and vector designs using tools from Adobe Creative Suite.',
     'Achieved "Level 2" badge on Fiverr for exceptional freelance performance.'
   ],
+  array['Adobe Illustrator', 'Photoshop', 'Graphic Design', 'Vector Art'],
+  '/assets/Experience/fiverr.webp',
   3
 );

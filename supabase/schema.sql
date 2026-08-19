@@ -48,9 +48,15 @@ create table if not exists public.experiences (
   period text not null default '',
   role text not null default '',
   duties text[] not null default '{}',
+  skills text[] not null default '{}',
+  image_url text not null default '',
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- Existing databases created before skills / company logos existed
+alter table public.experiences add column if not exists skills text[] not null default '{}';
+alter table public.experiences add column if not exists image_url text not null default '';
 
 -- Site settings (resume URL, etc.)
 create table if not exists public.site_settings (

@@ -523,11 +523,25 @@ function ExperiencePanel() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium">{exp.company}</p>
-                  <p className="text-xs text-gray-500">
-                    {exp.role} · {exp.period}
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1">{exp.duties.length} duties</p>
+                  <div className="flex items-start gap-3">
+                    {exp.image_url ? (
+                      <img
+                        src={exp.image_url}
+                        alt=""
+                        className="h-10 w-10 flex-shrink-0 rounded-md object-cover bg-gray-100"
+                      />
+                    ) : null}
+                    <div className="min-w-0">
+                      <p className="font-medium">{exp.company}</p>
+                      <p className="text-xs text-gray-500">
+                        {exp.role} · {exp.period}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {exp.duties.length} duties
+                        {(exp.skills?.length ?? 0) > 0 ? ` · ${exp.skills.length} skills` : ''}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex gap-1">

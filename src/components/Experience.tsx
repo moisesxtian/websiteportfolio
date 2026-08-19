@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Briefcase, Building2, Calendar, ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useExperiences } from '../Hooks/useExperiences';
 import { useInView } from '../Hooks/useInView';
 import type { Experience as ExperienceType } from '../types/content';
@@ -60,115 +60,165 @@ function formatProfessionalYoe(experiences: ExperienceType[]): string {
   return years === 1 ? '1 Year' : `${years} Years`;
 }
 
+function formatPeriod(period: string) {
+  return period.replace(/\s*[-–—]\s*/g, ' – ');
+}
+
+function companyInitials(company: string) {
+  const words = company
+    .trim()
+    .split(/\s+/)
+    .filter((word) => !['&', 'and', 'of', 'the', '@'].includes(word.toLowerCase()));
+
+  if (words.length === 0) return '?';
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return (words[0][0] + words[1][0]).toUpperCase();
+}
+
+function CompanyLogo({ src, company }: { src: string; company: string }) {
+  const [failed, setFailed] = useState(false);
+  const initials = companyInitials(company);
+  const showImage = Boolean(src) && !failed;
+
+  if (!showImage) {
+    return (
+      <div
+        className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm font-bold text-main-color dark:bg-neutral-800"
+        aria-hidden="true"
+      >
+        {initials}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt=""
+      width={48}
+      height={48}
+      loading="lazy"
+      decoding="async"
+      onError={() => setFailed(true)}
+      className="h-12 w-12 flex-shrink-0 rounded-lg object-cover"
+    />
+  );
+}
+
 function ExperienceCard({
   experience,
-  index,
-  isActive,
+  isOpen,
   onToggle,
 }: {
   experience: ExperienceType;
-  index: number;
-  isActive: boolean;
+  isOpen: boolean;
   onToggle: () => void;
 }) {
-  const isLatest = index === 0;
   const { ref, inView } = useInView<HTMLElement>();
-  const fromSide = index % 2 === 0 ? 'from-left' : 'from-right';
+  const detailsId = `experience-details-${experience.id}`;
+  const hasDetails = experience.skills.length > 0 || experience.duties.length > 0;
 
   return (
     <article
       ref={ref}
-      className={`exp-card group relative ${fromSide} ${inView ? 'is-visible' : ''}`}
+      className={`exp-row border-b border-gray-200 last:border-b-0 dark:border-gray-800 ${
+        inView ? 'is-visible' : ''
+      }`}
     >
-      <div className="absolute left-0 top-7 md:left-1/2 md:-translate-x-1/2 z-20">
-        <div
-          className={`exp-dot h-3 w-3 rounded-full ring-4 ring-page-bg ${
-            isLatest ? 'bg-main-color' : 'bg-gray-300 dark:bg-gray-600'
-          }`}
-        />
-      </div>
-
-      <div
-        className={`ml-8 md:ml-0 md:w-[calc(50%-2rem)] ${
-          index % 2 === 0 ? 'md:mr-auto md:pr-2' : 'md:ml-auto md:pl-2'
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={hasDetails ? detailsId : undefined}
+        className={`exp-row-trigger group w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 dark:focus-visible:ring-offset-page-bg ${
+          isOpen ? 'pt-6 pb-4 sm:pt-7' : 'py-6 sm:py-7'
         }`}
       >
-        <button
-          type="button"
-          onClick={onToggle}
-          aria-expanded={isActive}
-          className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 rounded-xl dark:focus-visible:ring-offset-page-bg"
-        >
-          <div
-            className={`exp-box rounded-xl border bg-white p-4 sm:p-5 dark:bg-neutral-900 ${
-              isActive
-                ? 'border-main-color/40'
-                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-            }`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0 space-y-1.5">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
-                  <span className="inline-flex items-center gap-1">
-                    <Calendar size={12} />
-                    {experience.period}
-                  </span>
-                  {isLatest ? (
-                    <span className="font-medium text-main-color">Current</span>
-                  ) : null}
-                </div>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-8 md:gap-12">
+          <p className="w-full flex-shrink-0 pt-1 text-xs text-gray-500 dark:text-gray-400 sm:w-40 md:w-44">
+            {formatPeriod(experience.period)}
+          </p>
 
-                <h3 className="text-base sm:text-lg font-bold text-secondary-color leading-snug">
-                  {experience.role}
-                </h3>
+          <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
+            <CompanyLogo
+              key={experience.image_url || experience.company}
+              src={experience.image_url}
+              company={experience.company}
+            />
 
-                <p className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-                  <Building2 size={14} className="flex-shrink-0" />
-                  {experience.company}
-                </p>
-              </div>
-
-              <ChevronDown
-                size={18}
-                className={`mt-1 flex-shrink-0 text-gray-400 transition-transform duration-200 ${
-                  isActive ? 'rotate-180 text-main-color' : ''
-                }`}
-              />
+            <div className="min-w-0 flex-1">
+              <h3 className="text-lg font-extrabold leading-tight tracking-tight text-gray-900 sm:text-xl dark:text-white">
+                {experience.role}
+              </h3>
+              <p className="mt-0.5 text-sm font-medium text-main-color">@ {experience.company}</p>
             </div>
 
-            <div
-              className={`grid transition-[grid-template-rows,margin] duration-200 ease-out ${
-                isActive ? 'grid-rows-[1fr] mt-4' : 'grid-rows-[0fr] mt-0'
-              }`}
-            >
-              <div className="overflow-hidden">
-                <ul className="space-y-2 border-t border-gray-100 pt-4 dark:border-gray-800">
-                  {experience.duties.map((duty, dutyIndex) => (
-                    <li
-                      key={dutyIndex}
-                      className="flex gap-2.5 text-sm leading-relaxed text-gray-600 dark:text-gray-400"
-                    >
-                      <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-main-color" />
-                      <span>{duty}</span>
-                    </li>
-                  ))}
-                </ul>
+            {hasDetails ? (
+              <ChevronDown
+                size={18}
+                className={`mt-1 flex-shrink-0 text-gray-400 transition-transform duration-300 ${
+                  isOpen ? 'rotate-180 text-main-color' : 'group-hover:text-main-color'
+                }`}
+              />
+            ) : null}
+          </div>
+        </div>
+      </button>
+
+      {hasDetails ? (
+        <div
+          id={detailsId}
+          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+            isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+          }`}
+          aria-hidden={!isOpen}
+        >
+          <div className="min-h-0 overflow-hidden">
+            <div className="flex flex-col pb-6 sm:flex-row sm:gap-8 md:gap-12">
+              <div className="hidden flex-shrink-0 sm:block sm:w-40 md:w-44" aria-hidden="true" />
+              <div className="flex min-w-0 flex-1 flex-col gap-4">
+                {experience.skills.length > 0 ? (
+                  <ul className="flex flex-wrap gap-1.5">
+                    {experience.skills.map((skill) => (
+                      <li
+                        key={skill}
+                        className="rounded-full border border-gray-300 px-2.5 py-0.5 text-[11px] text-gray-500 dark:border-gray-600 dark:text-gray-400"
+                      >
+                        {skill}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {experience.duties.length > 0 ? (
+                  <ul className="space-y-2">
+                    {experience.duties.map((duty) => (
+                      <li
+                        key={duty}
+                        className="flex gap-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400"
+                      >
+                        <ChevronRight size={14} className="mt-1 flex-shrink-0 text-main-color" />
+                        <span>{duty}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
             </div>
           </div>
-        </button>
-      </div>
+        </div>
+      ) : null}
     </article>
   );
 }
 
 export default function Experience() {
   const { experiences } = useExperiences(true);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<string | null>(null);
   const yoeLabel = useMemo(() => formatProfessionalYoe(experiences), [experiences]);
 
   const handleToggle = (id: string) => {
-    setActiveId((prev) => (prev === id ? null : id));
+    setOpenId((prev) => (prev === id ? null : id));
   };
 
   return (
@@ -177,55 +227,46 @@ export default function Experience() {
       className="section-page section-cut relative overflow-hidden font-poppins text-secondary-color"
     >
       <div className="section-page-inner gap-8 md:gap-10 !justify-start">
-        <ScrollReveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 w-full">
+        <ScrollReveal className="flex w-full flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="mb-2 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-main-color">
-              <Briefcase size={12} />
-              Career path
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
-              Work Experience
+            <h2 className="text-3xl font-extrabold tracking-tight text-main-color sm:text-4xl md:text-5xl">
+              Experience
             </h2>
-            <p className="mt-3 max-w-md text-xs sm:text-sm text-gray-600 leading-relaxed dark:text-gray-400">
+            <p className="mt-3 max-w-md text-xs leading-relaxed text-gray-600 sm:text-sm dark:text-gray-400">
               Roles that shaped how I build, from freelance craft to AI/ML engineering.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-6 text-sm">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Roles</p>
-              <p className="text-xl font-bold text-secondary-color tabular-nums">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Roles</p>
+              <p className="text-xl font-bold tabular-nums text-secondary-color">
                 {experiences.length}
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">YOE</p>
-              <p className="text-xl font-bold text-secondary-color tabular-nums">{yoeLabel}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">YOE</p>
+              <p className="text-xl font-bold tabular-nums text-secondary-color">{yoeLabel}</p>
             </div>
           </div>
         </ScrollReveal>
 
-        <div className="relative w-full">
-          <div className="absolute left-[5px] md:left-1/2 top-4 bottom-8 w-px -translate-x-1/2 bg-gray-200 dark:bg-gray-700" />
-
-          {experiences.length === 0 ? (
-            <p className="text-center text-sm text-gray-500 py-16 dark:text-gray-400">
-              No experience entries yet. Add some from the admin panel.
-            </p>
-          ) : (
-            <div className="space-y-6 md:space-y-8">
-              {experiences.map((experience, index) => (
-                <ExperienceCard
-                  key={experience.id}
-                  experience={experience}
-                  index={index}
-                  isActive={activeId === experience.id}
-                  onToggle={() => handleToggle(experience.id)}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        {experiences.length === 0 ? (
+          <p className="py-16 text-center text-sm text-gray-500 dark:text-gray-400">
+            No experience entries yet. Add some from the admin panel.
+          </p>
+        ) : (
+          <div className="w-full border-t border-gray-200 dark:border-gray-800">
+            {experiences.map((experience) => (
+              <ExperienceCard
+                key={experience.id}
+                experience={experience}
+                isOpen={openId === experience.id}
+                onToggle={() => handleToggle(experience.id)}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

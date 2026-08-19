@@ -4,7 +4,9 @@ export function toLocalWebp(url: string | null | undefined): string {
   if (url === '/chan-avatar.png') return '/chan-avatar.webp';
 
   const isLocalAsset =
-    url.startsWith('/assets/Projects/') || url.startsWith('/assets/Certificates/');
+    url.startsWith('/assets/Projects/') ||
+    url.startsWith('/assets/Certificates/') ||
+    url.startsWith('/assets/Experience/');
   if (isLocalAsset && url.toLowerCase().endsWith('.png')) {
     return url.slice(0, -4) + '.webp';
   }

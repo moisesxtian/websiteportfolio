@@ -242,6 +242,8 @@ export const fallbackExperiences: Experience[] = [
     company: 'SP Madrid & Associates',
     period: 'February 2025 - April 2025',
     role: 'AI/ML Intern',
+    skills: ['Python', 'YOLOv8', 'FastAPI', 'Computer Vision', 'PaddleOCR', 'Roboflow'],
+    image_url: '/assets/Experience/sp-madrid.webp',
     duties: [
       'Developed and deployed machine learning models for tasks such as conduction sticker text detection and vehicle classification using YOLO-based architectures.',
       'Built data preprocessing pipelines and annotated custom datasets to train high-accuracy computer vision models.',
@@ -255,6 +257,8 @@ export const fallbackExperiences: Experience[] = [
     company: 'Tails of Manila',
     period: 'September 2023 - January 2025',
     role: 'Social Media Manager',
+    skills: ['Canva', 'Content Design', 'Data Analysis', 'Facebook', 'Scheduling'],
+    image_url: '/assets/Experience/tails-of-manila.webp',
     duties: [
       'Applied skills in data analysis and visualization to drive targeted marketing campaigns and increase online visibility.',
       "Designed, developed, and scheduled engaging content (posts, images, videos) to maintain the brand's online presence.",
@@ -267,6 +271,8 @@ export const fallbackExperiences: Experience[] = [
     company: 'Fiverr',
     period: 'January 2019 - Present',
     role: 'Freelance Multimedia Editor',
+    skills: ['Adobe Illustrator', 'Photoshop', 'Graphic Design', 'Vector Art'],
+    image_url: '/assets/Experience/fiverr.webp',
     duties: [
       'Collaborated with clients to analyze multimedia data and optimize content performance.',
       'Designed, created, and illustrated graphic illustrations and vector designs using tools from Adobe Creative Suite.',

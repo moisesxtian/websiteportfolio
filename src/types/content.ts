@@ -34,6 +34,8 @@ export type Experience = {
   period: string;
   role: string;
   duties: string[];
+  skills: string[];
+  image_url: string;
   sort_order: number;
 };
 
