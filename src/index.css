@@ -109,6 +109,13 @@
     @apply container mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-10 flex-1 flex flex-col justify-start md:justify-center;
   }
 
+  /* Combined Experience + Certificates stay on one screen, title first. */
+  .section-page.is-packed {
+    justify-content: flex-start;
+    padding-top: clamp(3.5rem, 8vh, 6rem);
+    padding-bottom: clamp(1.75rem, 4vh, 3rem);
+  }
+
   /* Card view lists every project, so the section must grow with the grid
      instead of staying one screen tall and getting covered by Experience. */
   .section-page.is-unbounded {
@@ -296,6 +303,55 @@
 
   .exp-row-trigger:hover .exp-logo::after {
     transform: translateX(120%);
+  }
+
+  .exp-row.is-current {
+    position: relative;
+  }
+
+  .exp-row.is-current::before {
+    content: '';
+    position: absolute;
+    top: 0.15rem;
+    bottom: 0.15rem;
+    left: -0.85rem;
+    right: -0.85rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(
+      90deg,
+      rgba(249, 115, 22, 0.1) 0%,
+      rgba(249, 115, 22, 0.03) 55%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  .exp-now-dot {
+    display: block;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 999px;
+    background-color: #f97316;
+    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.55);
+    animation: exp-now-pulse 1.8s ease-out infinite;
+  }
+
+  @keyframes exp-now-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.55);
+    }
+    70% {
+      box-shadow: 0 0 0 8px rgba(249, 115, 22, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .exp-now-dot {
+      animation: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -845,10 +901,13 @@
   }
 
   .exp-title-letter {
-    opacity: 0;
     transition:
       color 0.25s ease-out,
       -webkit-text-fill-color 0.25s ease-out;
+  }
+
+  .scroll-reveal:not(.is-visible) .exp-title-letter {
+    opacity: 0;
   }
 
   .scroll-reveal.is-visible .exp-title-letter {

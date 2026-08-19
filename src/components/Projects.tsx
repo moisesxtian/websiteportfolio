@@ -23,7 +23,7 @@ type ProjectsProps = {
 
 const Projects = ({ onViewModeChange }: ProjectsProps) => {
   const { projects } = useProjects(true);
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [viewMode, setViewMode] = useState<ViewMode>('showcase');
   const [activeIndex, setActiveIndex] = useState(0);
   const [openId, setOpenId] = useState<string | null>(null);
   const [videoProject, setVideoProject] = useState<Project | null>(null);
@@ -100,7 +100,9 @@ const Projects = ({ onViewModeChange }: ProjectsProps) => {
                 className="text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-4xl md:text-5xl"
               />
               <p className="mt-2 max-w-lg text-sm text-gray-600 dark:text-gray-400">
-                Click a card to expand photos, skills, and links.
+                {viewMode === 'grid'
+                  ? 'Click a card to expand photos, skills, and links.'
+                  : 'Swipe or use the arrows to browse each project in full.'}
               </p>
             </div>
 

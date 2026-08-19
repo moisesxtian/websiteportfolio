@@ -1,99 +1,124 @@
-import { useRef } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Maximize2, X } from 'lucide-react';
 import { useCertificates } from '../Hooks/useCertificates';
 import { toLocalWebp } from '../lib/assets';
+import type { Certificate } from '../types/content';
 import ScrollReveal from './ScrollReveal';
 
-const Certificates = () => {
-  const { certificates } = useCertificates(true);
-  const trackRef = useRef<HTMLDivElement>(null);
+type CertificatesProps = {
+  embedded?: boolean;
+};
 
-  const scrollByCard = (direction: -1 | 1) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.querySelector('article');
-    const amount = card ? card.getBoundingClientRect().width + 12 : 220;
-    track.scrollBy({ left: direction * amount, behavior: 'smooth' });
-  };
+const Certificates = ({ embedded = false }: CertificatesProps) => {
+  const { certificates } = useCertificates(true);
+  const [openCertificate, setOpenCertificate] = useState<Certificate | null>(null);
+
+  useEffect(() => {
+    if (!openCertificate) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenCertificate(null);
+    };
+
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [openCertificate]);
+
+  const body = (
+    <>
+      <ScrollReveal className="mb-2 flex items-baseline justify-between gap-4">
+        <div>
+          <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wider text-main-color">
+            Credentials
+          </p>
+          <h2 className="text-lg font-extrabold tracking-tight text-gray-900 sm:text-xl dark:text-gray-100">
+            Certificates
+          </h2>
+        </div>
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+          {certificates.length}
+        </p>
+      </ScrollReveal>
+
+      <ScrollReveal delay={80}>
+        <div className="grid grid-cols-1 gap-x-8 border-t border-gray-200/80 sm:grid-cols-2 lg:grid-cols-3 dark:border-gray-800">
+          {certificates.map((certificate) => (
+            <div
+              key={certificate.id}
+              className="flex items-center justify-between gap-3 border-b border-gray-200/80 py-2 dark:border-gray-800"
+            >
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-gray-900 dark:text-gray-100">
+                  {certificate.name}
+                </p>
+                <p className="truncate text-[11px] text-gray-500 dark:text-gray-400">
+                  {certificate.organization || 'Issuer'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpenCertificate(certificate)}
+                className="inline-flex shrink-0 items-center gap-1 text-[11px] font-semibold text-gray-500 transition hover:text-main-color dark:text-gray-400"
+              >
+                View
+                <Maximize2 size={11} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </ScrollReveal>
+    </>
+  );
 
   return (
-    <section
-      id="Certificates"
-      className="font-poppins text-secondary-color py-10 sm:py-12 md:py-16 scroll-mt-16 sm:scroll-mt-20"
-    >
-      <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-10">
-        <ScrollReveal className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-main-color">
-              Credentials
-            </p>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
-              Certificates
-            </h2>
-          </div>
+    <>
+      {embedded ? (
+        <div id="Certificates" className="w-full shrink-0 pt-2">
+          {body}
+        </div>
+      ) : (
+        <section
+          id="Certificates"
+          className="py-8 font-poppins text-secondary-color sm:py-10"
+        >
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-10">{body}</div>
+        </section>
+      )}
 
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => scrollByCard(-1)}
-              className="inline-flex h-8 w-8 items-center justify-center text-gray-500 transition hover:text-main-color dark:text-gray-400"
-              aria-label="Previous certificates"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollByCard(1)}
-              className="inline-flex h-8 w-8 items-center justify-center text-gray-500 transition hover:text-main-color dark:text-gray-400"
-              aria-label="Next certificates"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal delay={120}>
+      {openCertificate ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setOpenCertificate(null)}
+        >
           <div
-            ref={trackRef}
-            className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide snap-x snap-mandatory"
+            className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-neutral-950"
+            onClick={(event) => event.stopPropagation()}
           >
-            {certificates.map((certificate) => (
-              <article
-                key={certificate.id}
-                className="snap-start flex w-[200px] sm:w-[220px] flex-shrink-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-neutral-900"
-              >
-                <div className="h-28 overflow-hidden bg-gray-100 dark:bg-neutral-800">
-                  <img
-                    src={toLocalWebp(certificate.image_url)}
-                    alt={certificate.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="flex flex-1 flex-col gap-1 p-3">
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400">
-                    {certificate.organization || 'Issuer'}
-                  </p>
-                  <h3 className="text-xs font-semibold text-gray-900 leading-snug line-clamp-2 dark:text-gray-100">
-                    {certificate.name}
-                  </h3>
-                  <a
-                    href={certificate.certificate_link || '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-auto inline-flex items-center gap-1 pt-1 text-[11px] text-gray-500 hover:text-main-color dark:text-gray-400"
-                  >
-                    View
-                    <ExternalLink size={11} />
-                  </a>
-                </div>
-              </article>
-            ))}
+            <button
+              type="button"
+              onClick={() => setOpenCertificate(null)}
+              className="absolute right-3 top-3 z-10 rounded-full bg-white/90 p-2 hover:bg-white dark:bg-neutral-800 dark:text-gray-100 dark:hover:bg-neutral-700"
+              aria-label="Close certificate"
+            >
+              <X size={18} />
+            </button>
+            <img
+              src={toLocalWebp(openCertificate.image_url)}
+              alt={openCertificate.name}
+              className="max-h-[78vh] w-full bg-neutral-100 object-contain dark:bg-neutral-900"
+            />
+            <div className="px-4 py-3">
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                {openCertificate.name}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {openCertificate.organization || 'Issuer'}
+              </p>
+            </div>
           </div>
-        </ScrollReveal>
-      </div>
-    </section>
+        </div>
+      ) : null}
+    </>
   );
 };
 

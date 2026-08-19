@@ -1,11 +1,10 @@
 import { useRef, useState } from "react";
 import axios from "axios";
-import { Link } from "react-scroll";
 import { IconContext } from "react-icons";
 import ScrollReveal from "./ScrollReveal";
 import CursorAura from "./CursorAura";
 import HomeParticleBackground from "./HomeParticleBackground";
-import { navLinks } from "../data/navLinks";
+import { navLinks, scrollToSection } from "../data/navLinks";
 import { socials } from "../data/socials";
 
 /** The panel is the Contact section itself, so it only links back up the page */
@@ -206,16 +205,14 @@ const Contact = () => {
             className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm"
           >
             {CONTACT_NAV_LINKS.map(({ label, target }) => (
-              <Link
+              <button
                 key={label}
-                to={target}
-                smooth="easeOutCubic"
-                offset={-56}
-                duration={450}
-                className="cursor-pointer font-medium text-gray-500 transition-colors hover:text-main-color dark:text-gray-400"
+                type="button"
+                onClick={() => scrollToSection(target)}
+                className="cursor-pointer bg-transparent font-medium text-gray-500 transition-colors hover:text-main-color dark:text-gray-400"
               >
                 {label}
-              </Link>
+              </button>
             ))}
           </nav>
         </div>

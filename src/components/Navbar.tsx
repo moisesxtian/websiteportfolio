@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-scroll';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
-import { navLinks } from '../data/navLinks';
+import { navLinks, scrollToSection } from '../data/navLinks';
 
 const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -80,17 +79,15 @@ const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
           <ul className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:gap-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
             {navLinks.map(({ label, target, id }) => (
               <li key={label}>
-                <Link
-                  to={target}
-                  smooth="easeOutCubic"
-                  offset={-56}
-                  duration={450}
-                  className={`block cursor-pointer select-none px-3 py-2 transition-colors duration-200 ${
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(target)}
+                  className={`block bg-transparent cursor-pointer select-none px-3 py-2 font-semibold text-sm transition-colors duration-200 ${
                     activeLink === id ? 'text-main-color' : 'hover:text-main-color'
                   }`}
                 >
                   {label}
-                </Link>
+                </button>
               </li>
             ))}
           </ul>
@@ -112,20 +109,20 @@ const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
           <ul className="container mx-auto max-w-7xl px-4 py-2">
             {navLinks.map(({ label, target, id }) => (
               <li key={label}>
-                <Link
-                  to={target}
-                  smooth="easeOutCubic"
-                  offset={-56}
-                  duration={450}
-                  onClick={() => setMenuOpen(false)}
-                  className={`block cursor-pointer select-none px-3 py-3 text-sm font-semibold transition-colors ${
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    scrollToSection(target);
+                  }}
+                  className={`block w-full bg-transparent cursor-pointer select-none px-3 py-3 text-left text-sm font-semibold transition-colors ${
                     activeLink === id
                       ? 'text-main-color'
                       : 'text-gray-700 hover:text-main-color dark:text-gray-300'
                   }`}
                 >
                   {label}
-                </Link>
+                </button>
               </li>
             ))}
           </ul>

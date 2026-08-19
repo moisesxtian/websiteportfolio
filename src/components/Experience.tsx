@@ -4,6 +4,7 @@ import { useExperiences } from '../Hooks/useExperiences';
 import type { Experience as ExperienceType } from '../types/content';
 import ScrollReveal from './ScrollReveal';
 import ShiningTitle, { HoverWords } from './ShiningTitle';
+import Certificates from './Certificates';
 
 const MONTH_INDEX: Record<string, number> = {
   january: 0,
@@ -64,6 +65,10 @@ function formatPeriod(period: string) {
   return period.replace(/\s*[-–—]\s*/g, ' – ');
 }
 
+function isPresentRole(period: string) {
+  return /present/i.test(period);
+}
+
 function companyInitials(company: string) {
   const words = company
     .trim()
@@ -108,28 +113,46 @@ function CompanyLogo({ src, company }: { src: string; company: string }) {
 function ExperienceCard({
   experience,
   isOpen,
+  isCurrent,
   onToggle,
 }: {
   experience: ExperienceType;
   isOpen: boolean;
+  isCurrent: boolean;
   onToggle: () => void;
 }) {
   const detailsId = `experience-details-${experience.id}`;
   const hasDetails = experience.skills.length > 0 || experience.duties.length > 0;
 
   return (
-    <article className="exp-row border-b border-gray-200/80 last:border-b-0 dark:border-gray-800">
+    <article
+      className={`exp-row border-b border-gray-200/80 last:border-b-0 dark:border-gray-800 ${
+        isCurrent ? 'is-current' : ''
+      }`}
+    >
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
         aria-controls={hasDetails ? detailsId : undefined}
-        className="exp-row-trigger group w-full py-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 dark:focus-visible:ring-offset-page-bg sm:py-6"
+        className="exp-row-trigger group w-full py-3.5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color focus-visible:ring-offset-2 dark:focus-visible:ring-offset-page-bg sm:py-4"
       >
         <div className="exp-grid">
-          <p className="pt-1 text-[11px] font-light tracking-wide text-gray-500 dark:text-gray-400 sm:pt-2.5">
-            {formatPeriod(experience.period)}
-          </p>
+          <div className="flex flex-col gap-1.5 pt-1 sm:pt-2">
+            <p
+              className={`text-[11px] font-light tracking-wide ${
+                isCurrent ? 'font-medium text-main-color' : 'text-gray-500 dark:text-gray-400'
+              }`}
+            >
+              {formatPeriod(experience.period)}
+            </p>
+            {isCurrent ? (
+              <span className="exp-now inline-flex w-fit items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-main-color">
+                <span className="exp-now-dot" aria-hidden="true" />
+                Present
+              </span>
+            ) : null}
+          </div>
 
           <div className="flex min-w-0 items-center gap-3 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 sm:gap-4">
             <div className="exp-logo h-10 w-10 flex-shrink-0 rounded-xl">
@@ -141,7 +164,11 @@ function ExperienceCard({
             </div>
 
             <div className="min-w-0 flex-1">
-              <h3 className="text-base font-extrabold leading-tight tracking-tight text-gray-900 sm:text-lg dark:text-gray-100">
+              <h3
+                className={`leading-tight tracking-tight text-gray-900 dark:text-gray-100 ${
+                  isCurrent ? 'text-lg font-extrabold sm:text-xl' : 'text-base font-extrabold sm:text-lg'
+                }`}
+              >
                 <HoverWords text={experience.role} />
               </h3>
               <p className="mt-0.5 text-sm font-medium text-main-color">
@@ -168,7 +195,7 @@ function ExperienceCard({
           aria-hidden={!isOpen}
         >
           <div className="min-h-0 overflow-hidden">
-            <div className="exp-grid pb-5 sm:pb-6">
+            <div className="exp-grid pb-3.5 sm:pb-4">
               <div aria-hidden="true" />
               <div className="flex min-w-0 flex-col gap-3.5">
                 {experience.skills.length > 0 ? (
@@ -213,6 +240,7 @@ export default function Experience() {
   const { experiences } = useExperiences(true);
   const [openId, setOpenId] = useState<string | null>(null);
   const yoeLabel = useMemo(() => formatProfessionalYoe(experiences), [experiences]);
+  const hasPresentRole = experiences.some((experience) => isPresentRole(experience.period));
 
   const handleToggle = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
@@ -221,17 +249,17 @@ export default function Experience() {
   return (
     <section
       id="Experience"
-      className="section-page section-cut relative font-poppins text-secondary-color"
+      className="section-page section-cut is-packed relative scroll-mt-0 font-poppins text-secondary-color !justify-start"
     >
       <div className="section-page-inner gap-5 md:gap-6 !justify-start">
-        <ScrollReveal className="flex w-full flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex w-full shrink-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-main-color">
               Career path
             </p>
             <ShiningTitle
               text="Experience"
-              className="whitespace-nowrap text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-4xl md:text-5xl"
+              className="whitespace-nowrap text-3xl font-extrabold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl"
             />
             <p className="mt-2 max-w-lg text-sm text-gray-600 dark:text-gray-400">
               Roles that shaped how I build, from freelance craft to AI/ML engineering.
@@ -250,7 +278,7 @@ export default function Experience() {
               <p className="text-xl font-bold tabular-nums text-secondary-color">{yoeLabel}</p>
             </div>
           </div>
-        </ScrollReveal>
+        </div>
 
         {experiences.length === 0 ? (
           <p className="py-16 text-center text-sm text-gray-500 dark:text-gray-400">
@@ -263,12 +291,19 @@ export default function Experience() {
                 <ExperienceCard
                   experience={experience}
                   isOpen={openId === experience.id}
+                  isCurrent={
+                    hasPresentRole
+                      ? isPresentRole(experience.period)
+                      : index === 0
+                  }
                   onToggle={() => handleToggle(experience.id)}
                 />
               </ScrollReveal>
             ))}
           </div>
         )}
+
+        <Certificates embedded />
       </div>
     </section>
   );
