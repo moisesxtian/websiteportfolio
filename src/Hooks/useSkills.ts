@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Skill, SkillInput } from '../types/content';
 import { fallbackSkills } from '../data/fallbacks';
+import { resolveIconKey } from '../lib/skillIcons';
 
 export function useSkills() {
   const [skills, setSkills] = useState<Skill[]>(fallbackSkills);
@@ -48,6 +49,26 @@ export function useSkills() {
     await refresh();
   };
 
+  const syncSkillIcons = async () => {
+    if (usingFallback) return;
+
+    let changed = false;
+
+    for (const skill of skills) {
+      const nextKey = resolveIconKey(skill.name, skill.icon_key);
+      if (!nextKey || nextKey === skill.icon_key) continue;
+
+      const { error: updateError } = await supabase
+        .from('skills')
+        .update({ icon_key: nextKey })
+        .eq('id', skill.id);
+
+      if (!updateError) changed = true;
+    }
+
+    if (changed) await refresh();
+  };
+
   const deleteSkill = async (id: string) => {
     const { error: deleteError } = await supabase.from('skills').delete().eq('id', id);
     if (deleteError) throw deleteError;
@@ -62,6 +83,7 @@ export function useSkills() {
     refresh,
     createSkill,
     updateSkill,
+    syncSkillIcons,
     deleteSkill,
   };
 }

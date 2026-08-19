@@ -1,10 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Headphones, Play } from 'lucide-react';
+import { SiSpotify } from 'react-icons/si';
 import { formatPlayedAt, useLastFmTrack } from '../Hooks/useLastFm';
 
-export default function NowPlaying() {
+type NowPlayingProps = {
+  variant?: 'pill' | 'card';
+};
+
+function SpotifyBrand() {
+  return (
+    <div className="spotify-brand">
+      <SiSpotify size={14} />
+      <span className="spotify-brand-name">Spotify</span>
+      <span className="spotify-brand-divider" aria-hidden="true" />
+    </div>
+  );
+}
+
+export default function NowPlaying({ variant = 'pill' }: NowPlayingProps) {
   const { track, loading, error } = useLastFmTrack();
   const [, setTick] = useState(0);
+  const isCard = variant === 'card';
 
   useEffect(() => {
     const id = window.setInterval(() => setTick((n) => n + 1), 60000);
@@ -12,6 +28,20 @@ export default function NowPlaying() {
   }, []);
 
   if (loading) {
+    if (isCard) {
+      return (
+        <div className="about-nowplaying-card is-spotify">
+          <SpotifyBrand />
+          <div className="spotify-cover animate-pulse bg-white/5" />
+          <div className="spotify-meta animate-pulse space-y-2">
+            <div className="h-2 w-20 rounded bg-white/10" />
+            <div className="h-3 w-32 rounded bg-white/10" />
+            <div className="h-2.5 w-24 rounded bg-white/10" />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="w-full rounded-full border border-black/5 bg-white/85 px-2.5 py-2 backdrop-blur-md dark:border-white/10 dark:bg-neutral-900/85">
         <div className="flex items-center gap-2.5 animate-pulse">
@@ -27,10 +57,72 @@ export default function NowPlaying() {
   }
 
   if (error || !track) {
+    if (isCard) {
+      return (
+        <div className="about-nowplaying-card is-spotify">
+          <SpotifyBrand />
+          <div className="spotify-cover spotify-cover-empty">
+            <Headphones size={36} />
+          </div>
+          <div className="spotify-meta">
+            <p className="spotify-kicker">Recently played</p>
+            <p className="spotify-title">Nothing playing right now</p>
+            <p className="spotify-artist">A track shows up here when one is on.</p>
+          </div>
+        </div>
+      );
+    }
+
     return null;
   }
 
   const whenLabel = formatPlayedAt(track.playedAt, track.nowPlaying);
+
+  if (isCard) {
+    return (
+      <a
+        href={track.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="about-nowplaying-card is-spotify group"
+        aria-label={`Play to listen with me: ${track.name} by ${track.artist}, ${whenLabel}`}
+      >
+        <SpotifyBrand />
+
+        <div className="spotify-cover">
+          {track.image ? (
+            <img src={track.image} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <div className="spotify-cover-empty">
+              <Headphones size={36} />
+            </div>
+          )}
+          <span className="spotify-play" aria-hidden="true">
+            <Play size={22} fill="currentColor" className="translate-x-[1px]" />
+          </span>
+        </div>
+
+        <div className="spotify-meta">
+          <p className={`spotify-kicker ${track.nowPlaying ? 'is-live' : ''}`}>
+            {track.nowPlaying ? (
+              <span className="spotify-eq" aria-hidden="true">
+                <span className="eq-bar eq-1" />
+                <span className="eq-bar eq-2" />
+                <span className="eq-bar eq-3" />
+              </span>
+            ) : null}
+            {track.nowPlaying ? 'Listen with me' : 'Recently played'}
+          </p>
+          <p className="spotify-title">{track.name}</p>
+          <p className="spotify-artist">
+            {track.artist}
+            {track.album ? ` · ${track.album}` : ''}
+          </p>
+          {track.nowPlaying ? null : <p className="spotify-when">{whenLabel}</p>}
+        </div>
+      </a>
+    );
+  }
 
   return (
     <a

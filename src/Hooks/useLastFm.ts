@@ -25,8 +25,9 @@ type LastFmRawTrack = {
 
 function pickImage(images: LastFmImage[] | undefined): string {
   if (!images || images.length === 0) return '';
-  const large = images.find((img) => img.size === 'large' || img.size === 'extralarge');
-  return (large?.['#text'] || images[images.length - 1]?.['#text'] || '').trim();
+  const extra = images.find((img) => img.size === 'extralarge');
+  const large = images.find((img) => img.size === 'large');
+  return (extra?.['#text'] || large?.['#text'] || images[images.length - 1]?.['#text'] || '').trim();
 }
 
 function artistName(artist: LastFmRawTrack['artist']): string {

@@ -8,7 +8,9 @@ const CACHE_KEY = 'about_chan_cache';
 
 function readText(value: unknown, fallback: string) {
   if (typeof value !== 'string') return fallback;
-  return value;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.toLowerCase() === 'placeholder') return fallback;
+  return trimmed;
 }
 
 function parseProfile(raw: string | null | undefined): ChatProfileData | null {
@@ -29,6 +31,9 @@ function parseProfile(raw: string | null | undefined): ChatProfileData | null {
       interests: readText(data.interests, fallbackChatProfile.interests),
       hobbies: readText(data.hobbies, fallbackChatProfile.hobbies),
       about: readText(data.about, fallbackChatProfile.about),
+      currentlyBuilding: readText(data.currentlyBuilding, fallbackChatProfile.currentlyBuilding),
+      currentlyLearning: readText(data.currentlyLearning, fallbackChatProfile.currentlyLearning),
+      funFact: readText(data.funFact, fallbackChatProfile.funFact),
     };
   } catch {
     return null;

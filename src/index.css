@@ -1089,6 +1089,1116 @@
     background-color: rgba(249, 115, 22, 0.12);
   }
 
+  /* About is one viewport. Spacing and cards are scaled down to fit. */
+  .about-section.section-page {
+    position: relative;
+    z-index: 11;
+    width: calc(100% + 3.5rem);
+    margin-left: -1.75rem;
+    margin-right: -1.75rem;
+    height: 100svh;
+    min-height: 100svh;
+    max-height: 100svh;
+    box-sizing: border-box;
+    background-color: var(--page-bg);
+    color: var(--secondary-color);
+    overflow: hidden;
+    padding-top: clamp(3.25rem, 6vh, 4.25rem);
+    padding-bottom: clamp(0.85rem, 2vh, 1.35rem);
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+    scroll-margin-top: 0;
+    border-radius: 1.75rem 1.75rem 0 0;
+    box-shadow:
+      0 -18px 50px rgba(15, 15, 15, 0.08),
+      0 -1px 0 rgba(255, 255, 255, 0.35);
+    transition:
+      color 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .about-section.is-personal {
+    --page-bg: #161616;
+    --page-fg: #f3f4f6;
+    --secondary-color: #f3f4f6;
+    --surface: #1f1f1f;
+    --surface-muted: #262626;
+    color-scheme: dark;
+  }
+
+  .dark .about-section.section-page,
+  .about-section.is-personal {
+    box-shadow:
+      0 -18px 50px rgba(0, 0, 0, 0.45),
+      0 -1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .about-surface {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-color: var(--page-bg);
+    border-radius: inherit;
+    transition: background-color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .about-section > .section-page-inner {
+    position: relative;
+    z-index: 1;
+    min-height: 0;
+    height: 100%;
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  .about-toggle {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    padding: 4px;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: var(--surface-muted);
+    flex-shrink: 0;
+    align-self: flex-start;
+    transition:
+      border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .dark .about-toggle,
+  .about-section.is-personal .about-toggle {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .about-toggle:hover {
+    border-color: rgba(249, 115, 22, 0.4);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+  }
+
+  .about-toggle-thumb {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc((100% - 8px) / 2);
+    border-radius: 9999px;
+    background-color: #f97316;
+    box-shadow: 0 8px 18px -12px rgba(249, 115, 22, 0.7);
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  .about-toggle[data-mode='professional'] .about-toggle-thumb,
+  .about-toggle[data-mode='creative'] .about-toggle-thumb {
+    transform: translateX(100%);
+  }
+
+  .about-toggle:hover .about-toggle-thumb {
+    box-shadow: 0 10px 22px -8px rgba(249, 115, 22, 0.95);
+  }
+
+  .about-toggle-btn {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 6.25rem;
+    padding: 0.4rem 0.8rem;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-align: center;
+    white-space: nowrap;
+    color: #6b7280;
+    cursor: pointer;
+    transition:
+      color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .about-toggle-btn:hover {
+    color: #ea580c;
+    transform: translateY(-1px);
+  }
+
+  .about-section.is-personal .about-toggle-btn:hover {
+    color: #fdba74;
+  }
+
+  .about-toggle-btn[aria-checked='true'],
+  .about-toggle-btn[aria-checked='true']:hover,
+  .about-section.is-personal .about-toggle-btn[aria-checked='true']:hover {
+    color: #ffffff;
+    transform: none;
+  }
+
+  .about-panels {
+    display: grid;
+    width: 100%;
+    min-height: 0;
+    flex: 1 1 auto;
+    height: 100%;
+    align-items: stretch;
+  }
+
+  .about-panel {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(0, 16px, 0);
+    pointer-events: none;
+    transition:
+      opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0.45s;
+  }
+
+  .about-panel.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(0, 0, 0);
+    pointer-events: auto;
+  }
+
+  /* Stacked cards are taller than the fixed-height section on phones. */
+  @media (max-width: 767px) {
+    .about-panel {
+      justify-content: flex-start;
+    }
+
+    .about-panel.is-active {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+
+  .about-panel.is-active .about-stagger {
+    animation: about-stagger-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .about-panel.is-active .about-stagger:nth-child(1) {
+    animation-delay: 0.04s;
+  }
+  .about-panel.is-active .about-stagger:nth-child(2) {
+    animation-delay: 0.09s;
+  }
+  .about-panel.is-active .about-stagger:nth-child(3) {
+    animation-delay: 0.14s;
+  }
+  .about-panel.is-active .about-stagger:nth-child(4) {
+    animation-delay: 0.19s;
+  }
+  .about-panel.is-active .about-stagger:nth-child(5) {
+    animation-delay: 0.24s;
+  }
+  .about-panel.is-active .about-stagger:nth-child(6) {
+    animation-delay: 0.29s;
+  }
+  .about-panel.is-active .about-stagger:nth-child(7) {
+    animation-delay: 0.34s;
+  }
+
+  @keyframes about-stagger-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .about-bento {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    width: 100%;
+    align-content: start;
+  }
+
+  @media (min-width: 768px) {
+    .about-bento {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-rows: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 0.85fr);
+      gap: 0.6rem;
+      height: 100%;
+      max-height: 44rem;
+      align-content: stretch;
+    }
+
+    .about-bento-personal {
+      grid-template-areas:
+        'hero hero hero hero hero hero hero hero music music music music'
+        'currently currently currently currently interests interests interests interests music music music music'
+        'hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies facts facts facts facts';
+    }
+
+    .about-bento-personal .about-hero-card {
+      grid-area: hero;
+    }
+
+    .about-bento-personal .about-currently-card {
+      grid-area: currently;
+    }
+
+    .about-bento-personal .about-music-slot {
+      grid-area: music;
+    }
+
+    .about-bento-personal .about-interest-card {
+      grid-area: interests;
+    }
+
+    .about-bento-personal .about-hobbies {
+      grid-area: hobbies;
+    }
+
+    .about-bento-personal .about-facts-card {
+      grid-area: facts;
+    }
+
+    .about-bento-pro {
+      grid-template-areas:
+        'hero hero hero hero hero hero hero hero highlights highlights highlights highlights'
+        'dev dev dev dev dev dev creative creative creative flow flow flow'
+        'dev dev dev dev dev dev creative creative creative focus focus focus';
+    }
+
+    .about-bento-pro .about-hero-card {
+      grid-area: hero;
+    }
+
+    .about-bento-pro .about-highlights-card {
+      grid-area: highlights;
+    }
+
+    .about-bento-pro .about-track-dev {
+      grid-area: dev;
+    }
+
+    .about-bento-pro .about-track-creative {
+      grid-area: creative;
+    }
+
+    .about-bento-pro .about-workflow-card {
+      grid-area: flow;
+    }
+
+    .about-bento-pro .about-focus-card {
+      grid-area: focus;
+    }
+  }
+
+  .about-bento-card,
+  .about-hero-card,
+  .about-nowplaying-card,
+  .about-tool-card {
+    border-radius: 1rem;
+    background-color: var(--surface-muted);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .dark .about-bento-card,
+  .dark .about-hero-card,
+  .dark .about-nowplaying-card,
+  .dark .about-tool-card,
+  .about-section.is-personal .about-bento-card,
+  .about-section.is-personal .about-hero-card,
+  .about-section.is-personal .about-nowplaying-card,
+  .about-section.is-personal .about-tool-card {
+    border-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(38, 38, 38, 0.7);
+  }
+
+  .about-hero-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0.85rem;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @media (min-width: 640px) {
+    .about-hero-card {
+      gap: 0.9rem;
+      padding: 0.85rem 1rem;
+    }
+  }
+
+  .about-hero-avatar {
+    height: 4rem;
+    width: 4rem;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .about-hero-avatar {
+      height: 5rem;
+      width: 5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .about-hero-card {
+      align-items: stretch;
+      gap: 1.1rem;
+      padding: 1rem 1.15rem;
+    }
+
+    /* Square photo that grows with the card so the hero never looks half empty. */
+    .about-hero-avatar {
+      height: auto;
+      width: auto;
+      max-width: 38%;
+      aspect-ratio: 1;
+    }
+  }
+
+  .about-hero-body {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .about-hero-card-personal {
+    background-image: none;
+  }
+
+  .about-hero-card-pro {
+    position: relative;
+  }
+
+  .about-bento-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .about-card-label {
+    flex-shrink: 0;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9ca3af;
+  }
+
+  .dark .about-card-label {
+    color: #6b7280;
+  }
+
+  .about-bento-pro .about-hero-card,
+  .about-bento-pro .about-bento-card,
+  .about-bento-pro .about-tool-card {
+    background-color: rgba(255, 255, 255, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 28px rgba(15, 15, 15, 0.05);
+    backdrop-filter: blur(18px) saturate(1.15);
+    -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  }
+
+  .dark .about-bento-pro .about-hero-card,
+  .dark .about-bento-pro .about-bento-card,
+  .dark .about-bento-pro .about-tool-card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+  }
+
+  .about-bento-pro .about-bento-card .about-tool-card {
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .about-bento-pro .about-bento-card .about-tool-card-branded:hover {
+    border-color: inherit;
+    transform: translateY(-3px);
+  }
+
+  .dark .about-bento-pro .about-bento-card .about-tool-card {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .about-track-card {
+    transition: border-color 0.35s ease;
+  }
+
+  .about-track-card:hover {
+    border-color: rgba(249, 115, 22, 0.4);
+  }
+
+  .about-track-head {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .about-track-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.55rem;
+    margin-top: 0.55rem;
+  }
+
+  .about-track-group {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .about-track-group-grow {
+    flex: 1;
+  }
+
+  .about-track-group > .about-card-label {
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  /* Main track: skills become tiles that stretch to fill the tall card. */
+  .about-skill-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex: 1;
+    min-height: 0;
+    gap: 0.35rem;
+  }
+
+  /* Only the wide Development card has room for a third column. */
+  @media (min-width: 1024px) {
+    .about-track-dev .about-skill-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .about-skill-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    border-radius: 0.7rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.025);
+    padding: 0.45rem 0.55rem;
+    text-align: center;
+    cursor: default;
+    transition: border-color 0.25s ease, background-color 0.25s ease;
+  }
+
+  .dark .about-skill-tile {
+    border-color: rgba(255, 255, 255, 0.07);
+    background-color: rgba(255, 255, 255, 0.035);
+  }
+
+  .about-skill-tile.is-active {
+    border-color: rgba(249, 115, 22, 0.5);
+    background-color: rgba(249, 115, 22, 0.1);
+  }
+
+  .about-skill-tile-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--secondary-color);
+  }
+
+  .about-nowplaying-card.is-spotify {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.8rem;
+    text-decoration: none;
+    background-color: #121212;
+    background-image: linear-gradient(165deg, #1f2a22 0%, #151515 45%, #101010 100%);
+    border-color: rgba(29, 185, 84, 0.22);
+    color: #ffffff;
+    transition:
+      background-color 0.35s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .dark .about-nowplaying-card.is-spotify,
+  .about-section.is-personal .about-nowplaying-card.is-spotify {
+    border-color: rgba(29, 185, 84, 0.22);
+  }
+
+  a.about-nowplaying-card.is-spotify:hover {
+    background-image: linear-gradient(165deg, #26362b 0%, #1c1c1c 45%, #141414 100%);
+    border-color: rgba(29, 185, 84, 0.55);
+    box-shadow: 0 18px 36px -18px rgba(29, 185, 84, 0.4);
+  }
+
+  .spotify-brand {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #1db954;
+  }
+
+  .spotify-brand-name {
+    color: #1db954;
+  }
+
+  .spotify-brand-divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(29, 185, 84, 0.45), transparent);
+  }
+
+  .spotify-cover {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background-color: #282828;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .spotify-cover-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1db954;
+    background: linear-gradient(145deg, #282828, #121212);
+  }
+
+  .spotify-cover > .spotify-cover-empty {
+    position: absolute;
+    inset: 0;
+  }
+
+  .spotify-play {
+    position: absolute;
+    right: 0.7rem;
+    bottom: 0.7rem;
+    display: flex;
+    height: 3rem;
+    width: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: #1db954;
+    color: #121212;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .group:hover .spotify-play,
+  .group:focus-visible .spotify-play {
+    opacity: 1;
+    transform: translateY(0) scale(1.04);
+  }
+
+  .spotify-meta {
+    min-width: 0;
+    padding: 0 0.15rem 0.2rem;
+    text-align: left;
+  }
+
+  .spotify-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.2rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #b3b3b3;
+  }
+
+  .spotify-kicker.is-live {
+    color: #1db954;
+  }
+
+  .spotify-eq {
+    display: inline-flex;
+    height: 0.7rem;
+    align-items: flex-end;
+    gap: 0.15rem;
+  }
+
+  .spotify-eq .eq-bar {
+    background: #1db954;
+  }
+
+  .spotify-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #ffffff;
+  }
+
+  .spotify-artist {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 0.15rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: #b3b3b3;
+  }
+
+  .spotify-when {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 0.3rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #7a7a7a;
+  }
+
+  .group:hover .spotify-title,
+  .group:focus-visible .spotify-title {
+    color: #1db954;
+  }
+
+  @media (max-width: 767px) {
+    .about-nowplaying-card.is-spotify {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.75rem;
+    }
+
+    .about-nowplaying-card.is-spotify .spotify-cover {
+      width: 6.75rem;
+      flex-shrink: 0;
+    }
+
+    .spotify-play {
+      height: 2.25rem;
+      width: 2.25rem;
+      right: 0.4rem;
+      bottom: 0.4rem;
+    }
+
+    .spotify-meta {
+      flex: 1;
+      padding: 0;
+    }
+  }
+
+  .about-music-slot {
+    display: flex;
+    min-height: 0;
+  }
+
+  .about-music-slot .about-nowplaying-card {
+    width: 100%;
+    min-height: 0;
+  }
+
+  @media (min-width: 768px) {
+    /* The slot is a tall column, so the artwork takes whatever height is left. */
+    .about-music-slot .about-nowplaying-card.is-spotify .spotify-cover {
+      flex: 1;
+      min-height: 6rem;
+      height: auto;
+      aspect-ratio: auto;
+    }
+
+    .about-music-slot .spotify-meta {
+      flex-shrink: 0;
+    }
+  }
+
+  /* Shared stacked-row body used by Currently, Facts, Highlights, Focus and Workflow. */
+  .about-detail-list {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.45rem;
+  }
+
+  /* Four steps in one card, so the rows stay tighter than the other lists. */
+  .about-workflow-card .about-detail-list {
+    gap: 0.3rem;
+  }
+
+  .about-detail-row {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 0;
+    border-radius: 0.7rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.025);
+    padding: 0.4rem 0.55rem;
+    transition: border-color 0.3s ease;
+  }
+
+  .dark .about-detail-row,
+  .about-section.is-personal .about-detail-row {
+    border-color: rgba(255, 255, 255, 0.07);
+    background-color: rgba(255, 255, 255, 0.035);
+  }
+
+  .about-detail-row:hover {
+    border-color: rgba(249, 115, 22, 0.35);
+  }
+
+  .about-detail-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .about-detail-value {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    margin-top: 0.1rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--secondary-color);
+  }
+
+  .about-detail-value-single {
+    -webkit-line-clamp: 1;
+  }
+
+  /* Only two rows here, so they can carry more text than the other lists. */
+  .about-currently-card .about-detail-value {
+    -webkit-line-clamp: 3;
+    font-size: 0.78rem;
+  }
+
+  .about-stat-value {
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--secondary-color);
+  }
+
+  .about-step-badge {
+    display: flex;
+    height: 1.4rem;
+    width: 1.4rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.45rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+  }
+
+  .dark .about-step-badge,
+  .about-section.is-personal .about-step-badge {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Highlights read as "value + label" now that the icon badge is gone. */
+  .about-stat-row {
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  .about-stat-row .about-stat-value {
+    min-width: 2.6rem;
+  }
+
+  .about-step-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--secondary-color);
+  }
+
+  .about-step-detail {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.62rem;
+    line-height: 1.3;
+    color: #9ca3af;
+  }
+
+  .dark .about-step-detail {
+    color: #6b7280;
+  }
+
+  /* Tiles instead of loose pills so the card is filled edge to edge. */
+  .about-interest-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex: 1;
+    min-height: 0;
+    gap: 0.35rem;
+    margin-top: 0.45rem;
+  }
+
+  .about-interest-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 0;
+    border-radius: 0.7rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.025);
+    padding: 0.4rem 0.55rem;
+    transition: border-color 0.3s ease;
+  }
+
+  /* An odd number of interests leaves a hole, so the last tile takes the row. */
+  .about-interest-row:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+
+  .dark .about-interest-row,
+  .about-section.is-personal .about-interest-row {
+    border-color: rgba(255, 255, 255, 0.07);
+    background-color: rgba(255, 255, 255, 0.035);
+  }
+
+  .about-interest-row:hover {
+    border-color: rgba(249, 115, 22, 0.35);
+  }
+
+  .about-row-icon {
+    display: flex;
+    height: 1.75rem;
+    width: 1.75rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background-color: rgba(249, 115, 22, 0.12);
+    color: #f97316;
+  }
+
+  .about-hobbies {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .about-hobby-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .about-hobby-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .about-hobby-grid {
+      flex: 1;
+      min-height: 0;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+  }
+
+  .about-mini-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.55rem 0.4rem 0.5rem;
+    text-align: center;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+  }
+
+  .about-mini-tile:hover {
+    transform: translateY(-3px);
+    border-color: rgba(249, 115, 22, 0.45);
+  }
+
+  .about-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: var(--surface);
+    padding: 0.2rem 0.55rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+  }
+
+  .about-chip-lg {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .dark .about-chip,
+  .about-section.is-personal .about-chip {
+    border-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .about-skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: var(--surface);
+    padding: 0.28rem 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+  }
+
+  .about-skill-chip-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  .dark .about-skill-chip,
+  .about-section.is-personal .about-skill-chip {
+    border-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  /* Tools react when a related skill is hovered. */
+  .about-skill-chip {
+    transition: opacity 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .about-skill-chip.is-active {
+    border-color: rgba(249, 115, 22, 0.55);
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .about-skill-chip.is-dimmed {
+    opacity: 0.35;
+  }
+
+  .about-tool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .about-tool-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .about-tool-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+  }
+
+  .about-tool-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.35rem 0.45rem;
+    text-align: center;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+  }
+
+  .about-tool-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(249, 115, 22, 0.45);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-section,
+    .about-toggle-thumb,
+    .about-toggle-btn,
+    .about-panel,
+    .about-track-card,
+    .about-nowplaying-card,
+    .about-tool-card,
+    .about-mini-tile,
+    .about-skill-chip {
+      transition: none;
+    }
+
+    .about-panel {
+      transform: none;
+    }
+
+    .about-panel.is-active .about-stagger {
+      animation: none;
+    }
+
+    .about-track-card:hover,
+    a.about-nowplaying-card:hover,
+    .about-tool-card:hover,
+    .about-mini-tile:hover,
+    .about-toggle-btn:hover {
+      transform: none;
+    }
+
+    .spotify-play,
+    .group:hover .spotify-play,
+    .group:focus-visible .spotify-play {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
   .terminal-pulse {
     animation: terminal-pulse 2.4s ease-in-out infinite;
   }

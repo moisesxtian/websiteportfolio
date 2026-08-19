@@ -56,4 +56,7 @@ export type ChatProfileData = {
   interests: string;
   hobbies: string;
   about: string;
+  currentlyBuilding: string;
+  currentlyLearning: string;
+  funFact: string;
 };

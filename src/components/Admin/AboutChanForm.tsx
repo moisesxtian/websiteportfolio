@@ -35,6 +35,9 @@ export default function AboutChanForm() {
         interests: form.interests.trim(),
         hobbies: form.hobbies.trim(),
         about: form.about.trim(),
+        currentlyBuilding: form.currentlyBuilding.trim(),
+        currentlyLearning: form.currentlyLearning.trim(),
+        funFact: form.funFact.trim(),
       });
       setSuccess('About Chan saved.');
     } catch (err) {
@@ -49,7 +52,8 @@ export default function AboutChanForm() {
       <div>
         <h2 className="text-lg font-semibold">About Chan</h2>
         <p className="mt-0.5 text-xs text-gray-500">
-          These fields show up when someone taps the chatbot header photo.
+          These fields show up on the homepage About section and when someone taps the
+          chatbot header photo.
         </p>
       </div>
 
@@ -103,13 +107,15 @@ export default function AboutChanForm() {
                   onChange={(event) => updateField('location', event.target.value)}
                 />
               </label>
-              <label className="block space-y-1">
+              <label className="block space-y-1 sm:col-span-2">
                 <span className="text-sm font-medium">Interests</span>
                 <input
                   className="admin-input"
                   value={form.interests}
                   onChange={(event) => updateField('interests', event.target.value)}
+                  placeholder="Generative AI, Machine Learning, Crypto, Gaming, Automation"
                 />
+                <span className="text-[11px] text-gray-400">Comma-separated. Shown in the chatbot profile.</span>
               </label>
               <label className="block space-y-1 sm:col-span-2">
                 <span className="text-sm font-medium">Hobbies</span>
@@ -117,7 +123,9 @@ export default function AboutChanForm() {
                   className="admin-input"
                   value={form.hobbies}
                   onChange={(event) => updateField('hobbies', event.target.value)}
+                  placeholder="Video Games, Digital Art, Chess, Photography, Cycling"
                 />
+                <span className="text-[11px] text-gray-400">Comma-separated. Shown in the chatbot profile.</span>
               </label>
               <label className="block space-y-1 sm:col-span-2">
                 <span className="text-sm font-medium">About</span>
@@ -127,6 +135,37 @@ export default function AboutChanForm() {
                   value={form.about}
                   onChange={(event) => updateField('about', event.target.value)}
                 />
+              </label>
+              <label className="block space-y-1 sm:col-span-2">
+                <span className="text-sm font-medium">Currently building</span>
+                <input
+                  className="admin-input"
+                  value={form.currentlyBuilding ?? ''}
+                  onChange={(event) => updateField('currentlyBuilding', event.target.value)}
+                  placeholder="A project, tool, or experiment"
+                />
+                <span className="text-[11px] text-gray-400">Shown on the Personal About card.</span>
+              </label>
+              <label className="block space-y-1 sm:col-span-2">
+                <span className="text-sm font-medium">Currently learning</span>
+                <input
+                  className="admin-input"
+                  value={form.currentlyLearning ?? ''}
+                  onChange={(event) => updateField('currentlyLearning', event.target.value)}
+                  placeholder="A skill, topic, or craft"
+                />
+                <span className="text-[11px] text-gray-400">Shown on the Personal About card.</span>
+              </label>
+              <label className="block space-y-1 sm:col-span-2">
+                <span className="text-sm font-medium">Fun fact</span>
+                <textarea
+                  className="admin-input min-h-20"
+                  rows={2}
+                  value={form.funFact ?? ''}
+                  onChange={(event) => updateField('funFact', event.target.value)}
+                  placeholder="Something small and personal"
+                />
+                <span className="text-[11px] text-gray-400">Shown beside Location on the Personal About grid.</span>
               </label>
             </div>
           </fieldset>

@@ -4,6 +4,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import Intro from '../components/Intro';
 import Projects from '../components/Projects';
 import Experience from '../components/Experience';
+import About from '../components/About';
 import Contact from '../components/Contact';
 
 const ChatBot = lazy(() => import('../components/ChatBot'));
@@ -53,7 +54,10 @@ export default function HomePage() {
             <Projects onViewModeChange={handleProjectsViewMode} />
           </div>
           <div className="section-overlay">
-            <Experience />
+            <div className="section-pin">
+              <Experience />
+            </div>
+            <About />
           </div>
         </div>
 

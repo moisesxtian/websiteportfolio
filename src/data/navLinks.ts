@@ -5,6 +5,7 @@ export const navLinks = [
   { label: 'Home', target: 'Home', id: 'Home' },
   { label: 'Projects', target: 'Projects', id: 'Projects' },
   { label: 'Experience', target: 'Experience', id: 'Experience' },
+  { label: 'About', target: 'About', id: 'About' },
   { label: 'Contact', target: 'Contact', id: 'Contact' },
 ];
 
@@ -20,7 +21,9 @@ export function getSectionScrollOffset(targetId: string): number {
   const section = document.getElementById(targetId);
   if (!section) return 0;
 
-  if (section.getBoundingClientRect().top > 0) return 0;
+  const goingDown = section.getBoundingClientRect().top > 0;
+  if (goingDown) return 0;
+
   return NAVBAR_HEIGHT_OFFSET;
 }
 

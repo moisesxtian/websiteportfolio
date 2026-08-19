@@ -249,7 +249,7 @@ export default function Experience() {
   return (
     <section
       id="Experience"
-      className="section-page section-cut is-packed relative scroll-mt-0 font-poppins text-secondary-color !justify-start"
+      className="section-page is-packed relative scroll-mt-0 font-poppins text-secondary-color !justify-start"
     >
       <div className="section-page-inner gap-5 md:gap-6 !justify-start">
         <div className="flex w-full shrink-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
