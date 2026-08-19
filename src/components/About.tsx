@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Briefcase, User } from 'lucide-react';
 import { useChatProfile } from '../Hooks/useChatProfile';
 import ScrollReveal from './ScrollReveal';
 import ShiningTitle from './ShiningTitle';
@@ -33,7 +34,7 @@ export default function About() {
             <p className="mt-1 max-w-lg text-xs text-gray-600 dark:text-gray-400">
               {isPersonal
                 ? 'Get to know me outside of work.'
-                : 'Skills, tools, and the two sides of how I build.'}
+                : 'Skills, tools, and the two sides of how I build automations.'}
             </p>
           </ScrollReveal>
 
@@ -51,6 +52,7 @@ export default function About() {
               className="about-toggle-btn"
               onClick={() => setMode('personal')}
             >
+              <User size={16} strokeWidth={2.25} aria-hidden="true" />
               Personal
             </button>
             <button
@@ -60,6 +62,7 @@ export default function About() {
               className="about-toggle-btn"
               onClick={() => setMode('professional')}
             >
+              <Briefcase size={16} strokeWidth={2.25} aria-hidden="true" />
               Professional
             </button>
           </div>
