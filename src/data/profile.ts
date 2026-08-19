@@ -1,6 +1,8 @@
 import type { ChatProfileData } from '../types/content';
 
-export const PROFILE_AVATAR = '/chan-avatar.webp';
+export const PERSONAL_AVATAR = '/chan-avatar.webp';
+export const PROFESSIONAL_AVATAR = '/chan-avatar-pro.webp';
+export const PROFILE_AVATAR = PERSONAL_AVATAR;
 
 /** Used until About Chan is saved from /admin */
 export const fallbackChatProfile: ChatProfileData = {
@@ -18,6 +20,8 @@ export const fallbackChatProfile: ChatProfileData = {
   currentlyBuilding: 'Add what you are working on',
   currentlyLearning: 'Add what you are picking up',
   funFact: 'Add a short fun fact about you',
+  personalAvatar: PERSONAL_AVATAR,
+  professionalAvatar: '',
 };
 
 export function isEmptyProfileValue(value: string | undefined | null): boolean {

@@ -1089,17 +1089,7 @@
       background-color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .about-section.is-personal {
-    --page-bg: #161616;
-    --page-fg: #f3f4f6;
-    --secondary-color: #f3f4f6;
-    --surface: #1f1f1f;
-    --surface-muted: #262626;
-    color-scheme: dark;
-  }
-
-  .dark .about-section.section-page,
-  .about-section.is-personal {
+  .dark .about-section.section-page {
     box-shadow:
       0 -18px 50px rgba(0, 0, 0, 0.45),
       0 -1px 0 rgba(255, 255, 255, 0.06);
@@ -1143,8 +1133,7 @@
       box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .dark .about-toggle,
-  .about-section.is-personal .about-toggle {
+  .dark .about-toggle {
     border-color: rgba(255, 255, 255, 0.1);
   }
 
@@ -1207,13 +1196,8 @@
     transform: translateY(-1px);
   }
 
-  .about-section.is-personal .about-toggle-btn:hover {
-    color: #fdba74;
-  }
-
   .about-toggle-btn[aria-checked='true'],
-  .about-toggle-btn[aria-checked='true']:hover,
-  .about-section.is-personal .about-toggle-btn[aria-checked='true']:hover {
+  .about-toggle-btn[aria-checked='true']:hover {
     color: #ffffff;
     transform: none;
   }
@@ -1394,11 +1378,7 @@
   .dark .about-bento-card,
   .dark .about-hero-card,
   .dark .about-nowplaying-card,
-  .dark .about-tool-card,
-  .about-section.is-personal .about-bento-card,
-  .about-section.is-personal .about-hero-card,
-  .about-section.is-personal .about-nowplaying-card,
-  .about-section.is-personal .about-tool-card {
+  .dark .about-tool-card {
     border-color: rgba(255, 255, 255, 0.08);
     background-color: rgba(38, 38, 38, 0.7);
   }
@@ -1622,8 +1602,7 @@
       box-shadow 0.35s ease;
   }
 
-  .dark .about-nowplaying-card.is-spotify,
-  .about-section.is-personal .about-nowplaying-card.is-spotify {
+  .dark .about-nowplaying-card.is-spotify {
     border-color: rgba(29, 185, 84, 0.22);
   }
 
@@ -1850,8 +1829,7 @@
     transition: border-color 0.3s ease;
   }
 
-  .dark .about-detail-row,
-  .about-section.is-personal .about-detail-row {
+  .dark .about-detail-row {
     border-color: rgba(255, 255, 255, 0.07);
     background-color: rgba(255, 255, 255, 0.035);
   }
@@ -1908,8 +1886,7 @@
     color: var(--secondary-color);
   }
 
-  .dark .about-step-badge,
-  .about-section.is-personal .about-step-badge {
+  .dark .about-step-badge {
     background-color: rgba(255, 255, 255, 0.08);
   }
 
@@ -1970,8 +1947,7 @@
     grid-column: span 2;
   }
 
-  .dark .about-interest-row,
-  .about-section.is-personal .about-interest-row {
+  .dark .about-interest-row {
     border-color: rgba(255, 255, 255, 0.07);
     background-color: rgba(255, 255, 255, 0.035);
   }
@@ -2053,8 +2029,7 @@
     font-size: 0.75rem;
   }
 
-  .dark .about-chip,
-  .about-section.is-personal .about-chip {
+  .dark .about-chip {
     border-color: rgba(255, 255, 255, 0.1);
     background-color: rgba(255, 255, 255, 0.04);
   }
@@ -2078,8 +2053,7 @@
     line-height: 0;
   }
 
-  .dark .about-skill-chip,
-  .about-section.is-personal .about-skill-chip {
+  .dark .about-skill-chip {
     border-color: rgba(255, 255, 255, 0.1);
     background-color: rgba(255, 255, 255, 0.04);
   }

@@ -8,11 +8,10 @@ import {
   developmentTools,
   professionalFocus,
   professionalHighlights,
-  professionalRoles,
   skillTools,
   workflowSteps,
 } from '../data/about';
-import { fallbackChatProfile, PROFILE_AVATAR, profileValue } from '../data/profile';
+import { fallbackChatProfile, PERSONAL_AVATAR, PROFESSIONAL_AVATAR, profileValue } from '../data/profile';
 import { getSkillIcon, getToolTheme } from '../lib/skillIcons';
 import type { ChatProfileData } from '../types/content';
 
@@ -136,27 +135,19 @@ export default function AboutProfessional({ profile }: AboutProfessionalProps) {
     <div className="about-bento about-bento-pro">
       <article className="about-hero-card about-hero-card-pro about-stagger">
         <img
-          src={PROFILE_AVATAR}
+          src={profileValue(profile.professionalAvatar, PROFESSIONAL_AVATAR)}
           alt=""
           className="about-hero-avatar rounded-2xl object-cover object-top ring-1 ring-black/10 dark:ring-white/10"
+          onError={(event) => {
+            event.currentTarget.src = PERSONAL_AVATAR;
+          }}
         />
         <div className="about-hero-body">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-main-color">
-            Technical
-          </p>
-          <h3 className="mt-0.5 text-2xl font-bold tracking-tight text-secondary-color sm:text-3xl">
+          <h3 className="text-3xl font-bold tracking-tight text-secondary-color sm:text-4xl">
             {name}
           </h3>
           <p className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">{work}</p>
           <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-500">{languages}</p>
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
-            {professionalRoles.map((role) => (
-              <span key={role} className="about-chip">
-                <span className="h-1.5 w-1.5 rounded-full bg-main-color" />
-                {role}
-              </span>
-            ))}
-          </div>
         </div>
       </article>
 

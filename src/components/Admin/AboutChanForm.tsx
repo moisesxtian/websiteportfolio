@@ -1,6 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useChatProfile } from '../../Hooks/useChatProfile';
 import type { ChatProfileData } from '../../types/content';
+import MediaUpload from './MediaUpload';
+import { PERSONAL_AVATAR } from '../../data/profile';
 
 export default function AboutChanForm() {
   const { profile, saveProfile, usingFallback } = useChatProfile();
@@ -38,6 +40,8 @@ export default function AboutChanForm() {
         currentlyBuilding: form.currentlyBuilding.trim(),
         currentlyLearning: form.currentlyLearning.trim(),
         funFact: form.funFact.trim(),
+        personalAvatar: (form.personalAvatar ?? '').trim() || PERSONAL_AVATAR,
+        professionalAvatar: (form.professionalAvatar ?? '').trim(),
       });
       setSuccess('About Chan saved.');
     } catch (err) {
@@ -64,6 +68,28 @@ export default function AboutChanForm() {
       ) : null}
 
       <form onSubmit={handleSubmit} className="space-y-6">
+          <fieldset className="space-y-3">
+            <legend className="text-sm font-semibold">Photos</legend>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <MediaUpload
+                label="Personal photo"
+                bucket="project-media"
+                folder="about"
+                accept="image/*"
+                value={form.personalAvatar}
+                onChange={(url) => updateField('personalAvatar', url)}
+              />
+              <MediaUpload
+                label="Professional photo"
+                bucket="project-media"
+                folder="about"
+                accept="image/*"
+                value={form.professionalAvatar}
+                onChange={(url) => updateField('professionalAvatar', url)}
+              />
+            </div>
+          </fieldset>
+
           <fieldset className="space-y-3">
             <legend className="text-sm font-semibold">Personal</legend>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

@@ -26,12 +26,6 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 
-export const professionalRoles = [
-  'Full Stack Developer',
-  'Automation Engineer',
-  'AI Developer',
-];
-
 /** Placeholder numbers — swap these for your real ones. */
 export const professionalHighlights: { value: string; label: string; icon: LucideIcon }[] = [
   { value: '1+', label: 'Years of Experience', icon: Code2 },

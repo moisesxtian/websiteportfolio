@@ -37,6 +37,14 @@ async function main() {
     // already converted
   }
 
+  const proAvatar = path.join(root, 'chan-avatar-pro.png');
+  try {
+    await fs.access(proAvatar);
+    await convertPng(proAvatar, 256);
+  } catch {
+    // already converted
+  }
+
   const unused = path.join(root, 'assets', 'HeroCard.webp');
   try {
     await fs.access(unused);

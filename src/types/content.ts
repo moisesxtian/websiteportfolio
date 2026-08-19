@@ -59,4 +59,6 @@ export type ChatProfileData = {
   currentlyBuilding: string;
   currentlyLearning: string;
   funFact: string;
+  personalAvatar: string;
+  professionalAvatar: string;
 };

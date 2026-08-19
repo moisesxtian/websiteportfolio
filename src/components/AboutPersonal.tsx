@@ -1,7 +1,7 @@
 import {
   fallbackChatProfile,
   isEmptyProfileValue,
-  PROFILE_AVATAR,
+  PERSONAL_AVATAR,
   profileValue,
 } from '../data/profile';
 import {
@@ -11,7 +11,7 @@ import {
   getInterestIcon,
 } from '../data/about';
 import type { ChatProfileData } from '../types/content';
-import { BookOpen, Cake, Hammer, Languages, MapPin, Sparkles } from 'lucide-react';
+import { BookOpen, Cake, Hammer, Languages, Sparkles } from 'lucide-react';
 import NowPlaying from './NowPlaying';
 
 type AboutPersonalProps = {
@@ -20,10 +20,7 @@ type AboutPersonalProps = {
 
 export default function AboutPersonal({ profile }: AboutPersonalProps) {
   const name = profileValue(profile.name, fallbackChatProfile.name);
-  const nickname = profileValue(profile.nickname, fallbackChatProfile.nickname);
   const about = profileValue(profile.about, fallbackChatProfile.about);
-  const work = profileValue(profile.work, fallbackChatProfile.work);
-  const location = profileValue(profile.location, fallbackChatProfile.location);
   const currentlyBuilding = profileValue(
     profile.currentlyBuilding,
     fallbackChatProfile.currentlyBuilding
@@ -54,29 +51,17 @@ export default function AboutPersonal({ profile }: AboutPersonalProps) {
     <div className="about-bento about-bento-personal">
       <article className="about-hero-card about-hero-card-personal about-stagger">
         <img
-          src={PROFILE_AVATAR}
+          src={profileValue(profile.personalAvatar, PERSONAL_AVATAR)}
           alt=""
           className="about-hero-avatar rounded-2xl object-cover object-top ring-1 ring-black/5 dark:ring-white/10"
         />
         <div className="about-hero-body">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-main-color">
-            {nickname}
-          </p>
-          <h3 className="mt-0.5 text-2xl font-bold tracking-tight text-secondary-color sm:text-3xl">
+          <h3 className="text-3xl font-bold tracking-tight text-secondary-color sm:text-4xl">
             {name}
           </h3>
           <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-gray-600 dark:text-gray-400">
             {about}
           </p>
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
-            {isEmptyProfileValue(work) ? null : <span className="about-chip">{work}</span>}
-            {isEmptyProfileValue(location) ? null : (
-              <span className="about-chip">
-                <MapPin size={12} />
-                {location}
-              </span>
-            )}
-          </div>
         </div>
       </article>
 

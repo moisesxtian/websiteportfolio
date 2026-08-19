@@ -2,6 +2,7 @@
 export function toLocalWebp(url: string | null | undefined): string {
   if (!url) return '';
   if (url === '/chan-avatar.png') return '/chan-avatar.webp';
+  if (url === '/chan-avatar-pro.png') return '/chan-avatar-pro.webp';
 
   const isLocalAsset =
     url.startsWith('/assets/Projects/') ||

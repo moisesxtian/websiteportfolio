@@ -15,9 +15,7 @@ export default function About() {
   return (
     <section
       id="About"
-      className={`about-section section-page relative font-poppins text-secondary-color !justify-start ${
-        isPersonal ? 'dark is-personal' : ''
-      }`}
+      className="about-section section-page relative font-poppins text-secondary-color !justify-start"
       aria-label="About"
     >
       <div className="about-surface" aria-hidden="true" />
@@ -34,7 +32,7 @@ export default function About() {
             />
             <p className="mt-1 max-w-lg text-xs text-gray-600 dark:text-gray-400">
               {isPersonal
-                ? 'A quieter look at the person behind the work.'
+                ? 'Get to know me outside of work.'
                 : 'Skills, tools, and the two sides of how I build.'}
             </p>
           </ScrollReveal>

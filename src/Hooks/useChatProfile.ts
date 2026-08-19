@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { fallbackChatProfile } from '../data/profile';
+import { toLocalWebp } from '../lib/assets';
 import type { ChatProfileData } from '../types/content';
 
 const SETTINGS_KEY = 'about_chan';
@@ -34,6 +35,10 @@ function parseProfile(raw: string | null | undefined): ChatProfileData | null {
       currentlyBuilding: readText(data.currentlyBuilding, fallbackChatProfile.currentlyBuilding),
       currentlyLearning: readText(data.currentlyLearning, fallbackChatProfile.currentlyLearning),
       funFact: readText(data.funFact, fallbackChatProfile.funFact),
+      personalAvatar: toLocalWebp(readText(data.personalAvatar, fallbackChatProfile.personalAvatar)),
+      professionalAvatar: toLocalWebp(
+        readText(data.professionalAvatar, fallbackChatProfile.professionalAvatar)
+      ),
     };
   } catch {
     return null;
