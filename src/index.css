@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -1370,16 +1370,17 @@
     .about-bento-personal {
       grid-template-areas:
         'hero hero hero hero hero hero hero hero music music music music'
-        'currently currently currently currently interests interests interests interests music music music music'
-        'hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies facts facts facts facts';
+        'hobbies hobbies hobbies hobbies interests interests interests interests music music music music'
+        'facts facts facts facts facts facts facts facts facts facts facts facts';
+      grid-template-rows: minmax(0, 1fr) minmax(0, 1.15fr) auto;
     }
 
     .about-bento-personal .about-hero-card {
       grid-area: hero;
     }
 
-    .about-bento-personal .about-currently-card {
-      grid-area: currently;
+    .about-bento-personal .about-hobby-card {
+      grid-area: hobbies;
     }
 
     .about-bento-personal .about-music-slot {
@@ -1388,10 +1389,6 @@
 
     .about-bento-personal .about-interest-card {
       grid-area: interests;
-    }
-
-    .about-bento-personal .about-hobbies {
-      grid-area: hobbies;
     }
 
     .about-bento-personal .about-facts-card {
@@ -1876,7 +1873,7 @@
     }
   }
 
-  /* Shared stacked-row body used by Currently, Facts, Highlights, Focus and Workflow. */
+  /* Shared stacked-row body used by Facts, Highlights, Focus and Workflow. */
   .about-detail-list {
     display: flex;
     flex: 1;
@@ -1934,10 +1931,63 @@
     -webkit-line-clamp: 1;
   }
 
-  /* Only two rows here, so they can carry more text than the other lists. */
-  .about-currently-card .about-detail-value {
-    -webkit-line-clamp: 3;
-    font-size: 0.78rem;
+  .about-facts-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.35rem;
+    flex: 0 0 auto;
+    min-height: 0;
+    margin-top: 0.35rem;
+  }
+
+  .about-facts-body:not(:has(.about-facts-fun-row)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-facts-body:not(:has(.about-facts-primary)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-facts-primary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .about-facts-primary .about-detail-row:only-child {
+    grid-column: 1 / -1;
+  }
+
+  .about-facts-fun-row {
+    align-items: center;
+  }
+
+  .about-facts-fun-row .about-detail-value {
+    -webkit-line-clamp: 2;
+  }
+
+  .about-facts-card {
+    align-self: start;
+    padding: 0.55rem 0.75rem;
+  }
+
+  .about-facts-card .about-detail-row {
+    flex: 0 0 auto;
+    align-items: center;
+    padding: 0.32rem 0.5rem;
+  }
+
+  .about-bento-personal .about-interest-row {
+    justify-content: center;
+    text-align: center;
+  }
+
+  @media (max-width: 639px) {
+    .about-facts-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .about-stat-value {
@@ -2042,49 +2092,6 @@
     border-radius: 0.5rem;
     background-color: rgba(249, 115, 22, 0.12);
     color: #f97316;
-  }
-
-  .about-hobbies {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .about-hobby-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-
-  @media (min-width: 640px) {
-    .about-hobby-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 768px) {
-    .about-hobby-grid {
-      flex: 1;
-      min-height: 0;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 0.5rem;
-    }
-  }
-
-  .about-mini-tile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    padding: 0.55rem 0.4rem 0.5rem;
-    text-align: center;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
-  }
-
-  .about-mini-tile:hover {
-    transform: translateY(-3px);
-    border-color: rgba(249, 115, 22, 0.45);
   }
 
   .about-chip {
@@ -2192,7 +2199,6 @@
     .about-track-card,
     .about-nowplaying-card,
     .about-tool-card,
-    .about-mini-tile,
     .about-skill-chip {
       transition: none;
     }
@@ -2208,7 +2214,6 @@
     .about-track-card:hover,
     a.about-nowplaying-card:hover,
     .about-tool-card:hover,
-    .about-mini-tile:hover,
     .about-toggle:hover,
     .about-toggle-btn:hover {
       transform: none;
