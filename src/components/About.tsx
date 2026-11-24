@@ -1,12 +1,16 @@
 import { useState } from 'react';
-import { Briefcase, User } from 'lucide-react';
 import { useChatProfile } from '../Hooks/useChatProfile';
 import ScrollReveal from './ScrollReveal';
-import ShiningTitle from './ShiningTitle';
+import SectionTitle from './SectionTitle';
 import AboutPersonal from './AboutPersonal';
 import AboutProfessional from './AboutProfessional';
 
 type AboutMode = 'personal' | 'professional';
+
+const MODES: { id: AboutMode; label: string }[] = [
+  { id: 'personal', label: 'personal' },
+  { id: 'professional', label: 'professional' },
+];
 
 export default function About() {
   const [mode, setMode] = useState<AboutMode>('personal');
@@ -16,69 +20,48 @@ export default function About() {
   return (
     <section
       id="About"
-      className="about-section section-page relative font-poppins text-secondary-color !justify-start"
+      className="about-section section-page font-poppins text-secondary-color !justify-start"
       aria-label="About"
     >
-      <div className="about-surface" aria-hidden="true" />
-
-      <div className="section-page-inner gap-3 md:gap-4 !justify-start">
-        <div className="flex w-full shrink-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="section-page-inner gap-8 md:gap-10 !justify-start">
+        <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <ScrollReveal>
-            <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-main-color">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-main-color">
               {isPersonal ? 'Get to know me' : 'How I work'}
             </p>
-            <ShiningTitle
+            <SectionTitle
               text="About"
-              className="whitespace-nowrap text-2xl font-extrabold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl"
+              className="text-3xl font-bold leading-[1.05] tracking-tight sm:text-4xl md:text-5xl"
             />
-            <p className="mt-1 max-w-lg text-xs text-gray-600 dark:text-gray-400">
-              {isPersonal
-                ? 'Get to know me outside of work.'
-                : 'Skills, tools, and the two sides of how I build automations.'}
-            </p>
           </ScrollReveal>
 
-          <div
-            className="about-toggle"
-            data-mode={mode}
-            role="radiogroup"
-            aria-label="About view"
-          >
-            <span className="about-toggle-thumb" aria-hidden="true" />
-            <button
-              type="button"
-              role="radio"
-              aria-checked={isPersonal}
-              className="about-toggle-btn"
-              onClick={() => setMode('personal')}
-            >
-              <User size={16} strokeWidth={2.25} aria-hidden="true" />
-              Personal
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={!isPersonal}
-              className="about-toggle-btn"
-              onClick={() => setMode('professional')}
-            >
-              <Briefcase size={16} strokeWidth={2.25} aria-hidden="true" />
-              Professional
-            </button>
+          <div className="about-switch" role="radiogroup" aria-label="About view">
+            {MODES.map(({ id, label }, index) => (
+              <span key={id} className="inline-flex items-baseline gap-2">
+                {index > 0 ? (
+                  <span className="text-gray-300 dark:text-gray-600" aria-hidden="true">
+                    /
+                  </span>
+                ) : null}
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={mode === id}
+                  className="about-switch-btn"
+                  onClick={() => setMode(id)}
+                >
+                  {label}
+                </button>
+              </span>
+            ))}
           </div>
         </div>
 
         <div className="about-panels">
-          <div
-            className={`about-panel ${isPersonal ? 'is-active' : ''}`}
-            aria-hidden={!isPersonal}
-          >
+          <div className={`about-panel ${isPersonal ? 'is-active' : ''}`} aria-hidden={!isPersonal}>
             <AboutPersonal profile={profile} />
           </div>
-          <div
-            className={`about-panel ${!isPersonal ? 'is-active' : ''}`}
-            aria-hidden={isPersonal}
-          >
+          <div className={`about-panel ${!isPersonal ? 'is-active' : ''}`} aria-hidden={isPersonal}>
             <AboutProfessional profile={profile} />
           </div>
         </div>

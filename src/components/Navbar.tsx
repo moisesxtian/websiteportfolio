@@ -69,7 +69,7 @@ const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 will-change-transform transition-transform duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${
         !hidden && navbarVisible ? 'translate-y-0' : '-translate-y-full'
       } ${hidden ? 'pointer-events-none' : ''}`}
       aria-hidden={hidden}
@@ -105,7 +105,7 @@ const Navbar = ({ hidden = false }: { hidden?: boolean }) => {
       </div>
 
       {menuOpen ? (
-        <div className="md:hidden border-b border-black/5 bg-white/90 backdrop-blur-md dark:border-white/10 dark:bg-neutral-950/90">
+        <div className="md:hidden border-b border-black/5 bg-page-bg dark:border-white/10">
           <ul className="container mx-auto max-w-7xl px-4 py-2">
             {navLinks.map(({ label, target, id }) => (
               <li key={label}>

@@ -1,127 +1,74 @@
 import { useState } from 'react';
-import { type LucideIcon } from 'lucide-react';
-import { IconContext } from 'react-icons';
 import {
   creativeSkills,
-  creativeTools,
   developmentSkills,
-  developmentTools,
   professionalFocus,
   professionalHighlights,
   skillTools,
   workflowSteps,
 } from '../data/about';
-import { fallbackChatProfile, PERSONAL_AVATAR, PROFESSIONAL_AVATAR, profileValue } from '../data/profile';
-import { getSkillIcon, getToolTheme } from '../lib/skillIcons';
+import {
+  fallbackChatProfile,
+  PERSONAL_AVATAR,
+  PROFESSIONAL_AVATAR,
+  profileValue,
+} from '../data/profile';
 import type { ChatProfileData } from '../types/content';
+import { AboutFigure } from './AboutPersonal';
 
 type AboutProfessionalProps = {
   profile: ChatProfileData;
 };
 
-type ToolItem = {
-  name: string;
-  icon_key: string;
-};
-
-function SkillTiles({
-  skills,
-  activeSkill,
-  onHover,
-}: {
-  skills: { name: string; icon: LucideIcon }[];
-  activeSkill: string | null;
-  onHover: (skill: string | null) => void;
-}) {
-  return (
-    <div className="about-skill-grid">
-      {skills.map((skill) => (
-        <div
-          key={skill.name}
-          className={`about-skill-tile ${activeSkill === skill.name ? 'is-active' : ''}`}
-          onMouseEnter={() => onHover(skill.name)}
-          onMouseLeave={() => onHover(null)}
-        >
-          <p className="about-skill-tile-name">{skill.name}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ToolChips({
-  tools,
-  highlightNames,
-}: {
-  tools: ToolItem[];
-  highlightNames: string[] | null;
-}) {
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      <IconContext.Provider value={{ size: '14' }}>
-        {tools.map((tool) => {
-          const Icon = getSkillIcon(tool.icon_key, tool.name);
-          const theme = getToolTheme(tool.icon_key, tool.name);
-          // No skill hovered = every tool is normal; otherwise split into on/off.
-          // Compare case-insensitively so "N8N" still matches the "n8n" tool.
-          let state = '';
-          if (highlightNames) {
-            const matched = highlightNames.some(
-              (n) => n.toLowerCase() === tool.name.toLowerCase()
-            );
-            state = matched ? 'is-active' : 'is-dimmed';
-          }
-          return (
-            <span key={tool.name} className={`about-skill-chip shrink-0 ${state}`}>
-              <span className="about-skill-chip-icon" style={{ color: theme.icon }}>
-                <Icon color={theme.icon} />
-              </span>
-              {tool.name}
-            </span>
-          );
-        })}
-      </IconContext.Provider>
-    </div>
-  );
-}
-
-function TrackCard({
+/**
+ * One discipline as a short list of skills. The tools behind a skill only
+ * appear while that skill is hovered, focused or tapped, so the page stays quiet.
+ */
+function Track({
+  index,
   title,
   skills,
-  tools,
-  isPrimary = false,
-  className = '',
 }: {
+  index: string;
   title: string;
-  skills: { name: string; icon: LucideIcon }[];
-  tools: ToolItem[];
-  isPrimary?: boolean;
-  className?: string;
+  skills: { name: string }[];
 }) {
   const [activeSkill, setActiveSkill] = useState<string | null>(null);
-  const highlightNames = activeSkill ? skillTools[activeSkill] ?? [] : null;
+  const tools = activeSkill ? skillTools[activeSkill] ?? [] : [];
 
   return (
-    <section className={`about-bento-card about-track-card about-stagger ${className}`}>
-      <div className="about-track-head">
-        <h4
-          className={`font-bold text-secondary-color ${isPrimary ? 'text-base' : 'text-sm'}`}
-        >
-          {title}
-        </h4>
-      </div>
+    <section className="min-w-0" onMouseLeave={() => setActiveSkill(null)}>
+      <h4 className="about-track-title">
+        <span className="about-mono text-main-color">{index}</span>
+        {title}
+      </h4>
 
-      <div className="about-track-body">
-        <div className="about-track-group about-track-group-grow">
-          <p className="about-card-label">Skills</p>
-          <SkillTiles skills={skills} activeSkill={activeSkill} onHover={setActiveSkill} />
-        </div>
+      <ul className="about-skill-list">
+        {skills.map((skill) => (
+          <li key={skill.name}>
+            <button
+              type="button"
+              className={activeSkill === skill.name ? 'is-active' : ''}
+              aria-pressed={activeSkill === skill.name}
+              onMouseEnter={() => setActiveSkill(skill.name)}
+              onFocus={() => setActiveSkill(skill.name)}
+              onClick={() => setActiveSkill(skill.name)}
+            >
+              {skill.name}
+            </button>
+          </li>
+        ))}
+      </ul>
 
-        <div className="about-track-group">
-          <p className="about-card-label">Tools I use</p>
-          <ToolChips tools={tools} highlightNames={highlightNames} />
-        </div>
-      </div>
+      <p className={`about-tools ${tools.length ? 'is-shown' : ''}`} aria-live="polite">
+        {tools.length ? (
+          <>
+            <span className="about-mono text-main-color">uses</span> {tools.join(' · ')}
+          </>
+        ) : (
+          <span className="about-mono">pick a skill to see its tools</span>
+        )}
+      </p>
     </section>
   );
 }
@@ -129,83 +76,61 @@ function TrackCard({
 export default function AboutProfessional({ profile }: AboutProfessionalProps) {
   const name = profileValue(profile.name, fallbackChatProfile.name);
   const work = profileValue(profile.work, fallbackChatProfile.work);
-  const languages = profileValue(profile.languages, fallbackChatProfile.languages);
 
   return (
-    <div className="about-bento about-bento-pro">
-      <article className="about-hero-card about-hero-card-pro about-stagger">
-        <img
-          src={profileValue(profile.professionalAvatar, PROFESSIONAL_AVATAR)}
-          alt=""
-          className="about-hero-avatar rounded-2xl object-cover object-top ring-1 ring-black/10 dark:ring-white/10"
-          onError={(event) => {
-            event.currentTarget.src = PERSONAL_AVATAR;
-          }}
-        />
-        <div className="about-hero-body">
-          <h3 className="text-3xl font-bold tracking-tight text-secondary-color sm:text-4xl">
-            {name}
-          </h3>
-          <p className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">{work}</p>
-          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-500">{languages}</p>
-        </div>
-      </article>
-
-      <section className="about-bento-card about-highlights-card about-stagger">
-        <p className="about-card-label">Highlights</p>
-        <div className="about-detail-list">
-          {professionalHighlights.map((highlight) => (
-            <div key={highlight.label} className="about-detail-row about-stat-row">
-              <span className="about-stat-value">{highlight.value}</span>
-              <span className="about-card-label">{highlight.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <TrackCard
-        title="Development"
-        skills={developmentSkills}
-        tools={developmentTools}
-        isPrimary
-        className="about-track-dev"
+    <div className="about-layout">
+      <AboutFigure
+        src={profileValue(profile.professionalAvatar, PROFESSIONAL_AVATAR)}
+        fallback={PERSONAL_AVATAR}
+        figure="fig. 02"
+        caption={`${name}, on the clock`}
+        tilt="right"
       />
 
-      <TrackCard
-        title="Creative"
-        skills={creativeSkills}
-        tools={creativeTools}
-        className="about-track-creative"
-      />
+      <div className="flex min-w-0 flex-col gap-8">
+        <div>
+          <p className="about-lead">{work}</p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            {professionalFocus.map((item, i) => (
+              <span key={item.label}>
+                {i > 0 ? ' · ' : ''}
+                {item.label} <span className="text-secondary-color">{item.value}</span>
+              </span>
+            ))}
+          </p>
 
-      <section className="about-bento-card about-workflow-card about-stagger">
-        <p className="about-card-label">How i build automations</p>
-        <div className="about-detail-list">
-          {workflowSteps.map((step, index) => (
-            <div key={step.title} className="about-detail-row">
-              <span className="about-step-badge">{index + 1}</span>
-              <div className="about-detail-text">
-                <p className="about-step-title">{step.title}</p>
-                <p className="about-step-detail">{step.detail}</p>
+          <dl className="about-stats">
+            {professionalHighlights.map((item) => (
+              <div key={item.label}>
+                <dt className="sr-only">{item.label}</dt>
+                <dd>
+                  <span className="about-stat-value">{item.value}</span>
+                  <span className="about-stat-label">{item.label}</span>
+                </dd>
               </div>
-            </div>
-          ))}
+            ))}
+          </dl>
         </div>
-      </section>
 
-      <section className="about-bento-card about-focus-card about-stagger">
-        <p className="about-card-label">Focus</p>
-        <div className="about-detail-list">
-          {professionalFocus.map((item) => (
-            <div key={item.label} className="about-detail-row">
-              <div className="about-detail-text">
-                <p className="about-card-label">{item.label}</p>
-                <p className="about-detail-value about-detail-value-single">{item.value}</p>
-              </div>
-            </div>
-          ))}
+        <div className="grid gap-8 sm:grid-cols-2">
+          <Track index="A" title="Development" skills={developmentSkills} />
+          <Track index="B" title="Creative" skills={creativeSkills} />
         </div>
-      </section>
+
+        <div>
+          <p className="about-kicker">How I build automations</p>
+          <ol className="about-steps">
+            {workflowSteps.map((step, index) => (
+              <li key={step.title}>
+                <span className="about-mono text-main-color">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                {step.title}
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,135 +1,113 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
+import { isLiteMode } from '../lib/perf';
 
-const TRAIL_COUNT = 12;
+const TRAIL_COUNT = 8;
 
 type CursorAuraProps = {
   containerRef: RefObject<HTMLElement | null>;
 };
 
 const CursorAura = ({ containerRef }: CursorAuraProps) => {
+  const layerRef = useRef<HTMLDivElement>(null);
   const dotsRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-  const mouse = useRef({ x: -9999, y: -9999, inside: false });
-  const trail = useRef(
-    Array.from({ length: TRAIL_COUNT }, () => ({ x: -9999, y: -9999 }))
-  );
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-    if (prefersReduced || !isFinePointer) return;
+    if (!isFinePointer || isLiteMode()) return;
+    setEnabled(true);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
 
     const container = containerRef.current;
     if (!container) return;
 
-    setEnabled(true);
-
-    const onMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      if (!mouse.current.inside) {
-        trail.current.forEach((point) => {
-          point.x = x;
-          point.y = y;
-        });
-      }
-
-      mouse.current.x = x;
-      mouse.current.y = y;
-      mouse.current.inside = true;
-    };
-
-    const onLeave = () => {
-      mouse.current.inside = false;
-    };
-
+    const mouse = { x: 0, y: 0, inside: false };
+    const trail = Array.from({ length: TRAIL_COUNT }, () => ({ x: 0, y: 0 }));
     let frame = 0;
 
     const animate = () => {
-      const points = trail.current;
-      const layer = dotsRef.current?.parentElement;
+      frame = 0;
+      if (!mouse.inside) return;
 
-      if (!mouse.current.inside) {
-        if (layer) layer.style.opacity = '0';
-        frame = requestAnimationFrame(animate);
-        return;
-      }
-
-      if (layer) layer.style.opacity = '1';
-
-      points[0].x += (mouse.current.x - points[0].x) * 0.35;
-      points[0].y += (mouse.current.y - points[0].y) * 0.35;
+      trail[0].x += (mouse.x - trail[0].x) * 0.35;
+      trail[0].y += (mouse.y - trail[0].y) * 0.35;
 
       for (let i = 1; i < TRAIL_COUNT; i++) {
-        const ease = 0.22 - i * 0.008;
-        points[i].x += (points[i - 1].x - points[i].x) * ease;
-        points[i].y += (points[i - 1].y - points[i].y) * ease;
+        const ease = 0.24 - i * 0.012;
+        trail[i].x += (trail[i - 1].x - trail[i].x) * ease;
+        trail[i].y += (trail[i - 1].y - trail[i].y) * ease;
       }
 
-      const glow = glowRef.current;
-      if (glow) {
-        glow.style.transform = `translate3d(${points[0].x}px, ${points[0].y}px, 0) translate(-50%, -50%)`;
-      }
-
-      const dotsEl = dotsRef.current;
-      if (dotsEl) {
-        const dots = dotsEl.children;
+      const dots = dotsRef.current?.children;
+      if (dots) {
         for (let i = 0; i < TRAIL_COUNT; i++) {
-          const el = dots[i] as HTMLElement;
-          // Size and opacity are fixed per dot, so only the position changes here
-          el.style.transform = `translate3d(${points[i].x}px, ${points[i].y}px, 0) translate(-50%, -50%)`;
+          (dots[i] as HTMLElement).style.transform =
+            `translate3d(${trail[i].x}px, ${trail[i].y}px, 0) translate(-50%, -50%)`;
         }
       }
 
-      frame = requestAnimationFrame(animate);
+      // Stop the loop once the trail has caught up; the next move restarts it.
+      const tail = trail[TRAIL_COUNT - 1];
+      if (Math.abs(tail.x - mouse.x) + Math.abs(tail.y - mouse.y) > 0.5) {
+        frame = requestAnimationFrame(animate);
+      }
+    };
+
+    const onMove = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+
+      if (!mouse.inside) {
+        trail.forEach((point) => {
+          point.x = mouse.x;
+          point.y = mouse.y;
+        });
+        mouse.inside = true;
+        if (layerRef.current) layerRef.current.style.opacity = '1';
+      }
+
+      if (!frame) frame = requestAnimationFrame(animate);
+    };
+
+    const onLeave = () => {
+      mouse.inside = false;
+      if (layerRef.current) layerRef.current.style.opacity = '0';
     };
 
     container.addEventListener('mousemove', onMove, { passive: true });
     container.addEventListener('mouseleave', onLeave);
-    frame = requestAnimationFrame(animate);
 
     return () => {
       container.removeEventListener('mousemove', onMove);
       container.removeEventListener('mouseleave', onLeave);
       cancelAnimationFrame(frame);
     };
-  }, [containerRef]);
+  }, [containerRef, enabled]);
 
   if (!enabled) return null;
 
   return (
     <div
+      ref={layerRef}
       className="pointer-events-none absolute inset-0 z-[5] overflow-hidden transition-opacity duration-200"
       style={{ opacity: 0 }}
       aria-hidden="true"
     >
-      <div
-        ref={glowRef}
-        className="absolute left-0 top-0 h-16 w-16 will-change-transform"
-        style={{
-          background:
-            'radial-gradient(circle, rgba(249,115,22,0.14) 0%, rgba(249,115,22,0.04) 40%, transparent 70%)',
-          transform: 'translate3d(-9999px, -9999px, 0)',
-        }}
-      />
       <div ref={dotsRef} className="absolute inset-0">
         {Array.from({ length: TRAIL_COUNT }, (_, i) => {
           const progress = i / (TRAIL_COUNT - 1);
-          const size = 5 - progress * 3.5;
-          const opacity = Math.max(0.04, 0.45 - progress * 0.38);
-
           return (
             <span
               key={i}
-              className="absolute left-0 top-0 rounded-full bg-main-color will-change-transform"
+              className="absolute left-0 top-0 rounded-full bg-main-color"
               style={{
-                width: size,
-                height: size,
-                opacity,
-                boxShadow: '0 0 6px rgba(249,115,22,0.3)',
+                width: 5 - progress * 3,
+                height: 5 - progress * 3,
+                opacity: Math.max(0.06, 0.45 - progress * 0.36),
                 transform: 'translate3d(-9999px, -9999px, 0)',
               }}
             />

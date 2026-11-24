@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 /** A run of letters to pick out while the rest of the name dims back */
 export type Spotlight = {
@@ -41,15 +41,10 @@ const InteractiveName = ({
   spotlight = null,
 }: InteractiveNameProps) => {
   const rootRef = useRef<HTMLHeadingElement>(null);
-  const reducedMotion = useRef(false);
   const [phase, setPhase] = useState<SwapPhase>('tease');
   const [swapping, setSwapping] = useState(false);
   /** Where each swapped letter sat before the name was corrected */
   const startLeft = useRef<Map<string, number> | null>(null);
-
-  useEffect(() => {
-    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
 
   const recordLetterPositions = () => {
     const root = rootRef.current;
@@ -148,42 +143,6 @@ const InteractiveName = ({
     return finish;
   }, [phase]);
 
-  const resetLetters = () => {
-    const root = rootRef.current;
-    if (!root) return;
-    root.querySelectorAll<HTMLElement>('.hero-letter').forEach((el) => {
-      el.style.transform = '';
-      el.style.color = '';
-    });
-  };
-
-  const handleMove = (e: MouseEvent<HTMLHeadingElement>) => {
-    if (reducedMotion.current) return;
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-    if (window.scrollY > 24) return;
-
-    const letters = e.currentTarget.querySelectorAll<HTMLElement>('.hero-letter');
-    letters.forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const radius = 70;
-      const force = Math.max(0, 1 - dist / radius);
-
-      if (force > 0) {
-        const lift = -4 * force;
-        el.style.transform = `translate3d(0, ${lift}px, 0)`;
-        el.style.color = force > 0.2 ? '#f97316' : '';
-      } else {
-        el.style.transform = '';
-        el.style.color = '';
-      }
-    });
-  };
-
   const shownText = phase === 'final' || !teaseText ? text : teaseText;
 
   // The swapped pair keeps the same two slots in both spellings
@@ -201,10 +160,8 @@ const InteractiveName = ({
       ref={rootRef}
       className={`hero-name ai-${phase} ${swapping ? 'is-swapping' : ''} ${
         spotlight ? 'is-reading' : ''
-      } mx-auto w-full text-center font-extrabold leading-[1.05] tracking-tight ${className}`}
+      } mx-auto w-full text-center font-bold leading-[1.05] tracking-tight ${className}`}
       aria-label={text}
-      onMouseMove={handleMove}
-      onMouseLeave={resetLetters}
     >
       {shownText.split('').map((char, index) => {
         if (char === ' ') {

@@ -3,7 +3,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useExperiences } from '../Hooks/useExperiences';
 import type { Experience as ExperienceType } from '../types/content';
 import ScrollReveal from './ScrollReveal';
-import ShiningTitle, { HoverWords } from './ShiningTitle';
+import SectionTitle from './SectionTitle';
 import Certificates from './Certificates';
 
 const MONTH_INDEX: Record<string, number> = {
@@ -140,7 +140,7 @@ function ExperienceCard({
         <div className="exp-grid">
           <div className="flex flex-col gap-1.5 pt-1 sm:pt-2">
             <p
-              className={`text-[11px] font-light tracking-wide ${
+              className={`text-[11px] font-normal tracking-wide ${
                 isCurrent ? 'font-medium text-main-color' : 'text-gray-500 dark:text-gray-400'
               }`}
             >
@@ -153,7 +153,7 @@ function ExperienceCard({
             ) : null}
           </div>
 
-          <div className="flex min-w-0 items-center gap-3 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 sm:gap-4">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
             <div className="exp-logo h-10 w-10 flex-shrink-0 rounded-xl">
               <CompanyLogo
                 key={experience.image_url || experience.company}
@@ -165,13 +165,13 @@ function ExperienceCard({
             <div className="min-w-0 flex-1">
               <h3
                 className={`leading-tight tracking-tight text-gray-900 dark:text-gray-100 ${
-                  isCurrent ? 'text-lg font-extrabold sm:text-xl' : 'text-base font-extrabold sm:text-lg'
+                  isCurrent ? 'text-lg font-bold sm:text-xl' : 'text-base font-bold sm:text-lg'
                 }`}
               >
-                <HoverWords text={experience.role} />
+                {experience.role}
               </h3>
               <p className="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
-                @ <HoverWords text={experience.company} />
+                @ {experience.company}
               </p>
             </div>
 
@@ -202,7 +202,7 @@ function ExperienceCard({
                     {experience.skills.map((skill, skillIndex) => (
                       <li
                         key={skill}
-                        className="exp-skill inline-flex items-center gap-2 px-1 py-0.5 text-[11px] font-light text-gray-600 sm:text-xs dark:text-gray-400"
+                        className="exp-skill inline-flex items-center gap-2 px-1 py-0.5 text-[11px] font-normal text-gray-600 sm:text-xs dark:text-gray-400"
                         style={{ '--i': skillIndex } as CSSProperties}
                       >
                         <span className="block h-1.5 w-1.5 rounded-full bg-main-color" />
@@ -217,7 +217,7 @@ function ExperienceCard({
                     {experience.duties.map((duty, dutyIndex) => (
                       <li
                         key={duty}
-                        className="exp-duty flex gap-2 text-sm font-light leading-relaxed text-gray-600 dark:text-gray-400"
+                        className="exp-duty flex gap-2 text-sm font-normal leading-relaxed text-gray-600 dark:text-gray-400"
                         style={{ '--i': dutyIndex } as CSSProperties}
                       >
                         <ChevronRight size={14} className="mt-1 flex-shrink-0 text-main-color" />
@@ -256,9 +256,9 @@ export default function Experience() {
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-main-color">
               Career path
             </p>
-            <ShiningTitle
+            <SectionTitle
               text="Experience"
-              className="whitespace-nowrap text-3xl font-extrabold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl"
+              className="whitespace-nowrap text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl"
             />
             <p className="mt-2 max-w-lg text-sm text-gray-600 dark:text-gray-400">
               Roles that shaped how I build, from freelance craft to AI/ML engineering.

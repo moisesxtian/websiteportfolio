@@ -31,7 +31,7 @@ const Certificates = ({ embedded = false }: CertificatesProps) => {
           <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wider text-main-color">
             Credentials
           </p>
-          <h2 className="text-lg font-extrabold tracking-tight text-gray-900 sm:text-xl dark:text-gray-100">
+          <h2 className="text-lg font-bold tracking-tight text-gray-900 sm:text-xl dark:text-gray-100">
             Certificates
           </h2>
         </div>

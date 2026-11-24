@@ -1,26 +1,40 @@
 import { useEffect, useState } from 'react';
 import { Headphones, Play } from 'lucide-react';
-import { SiSpotify } from 'react-icons/si';
 import { formatPlayedAt, useLastFmTrack } from '../Hooks/useLastFm';
 
 type NowPlayingProps = {
-  variant?: 'pill' | 'card';
+  /** pill: floating hero badge. inline: one quiet row for the About section. */
+  variant?: 'pill' | 'inline';
 };
 
-function SpotifyBrand() {
+function EqBars() {
   return (
-    <div className="spotify-brand">
-      <SiSpotify size={14} />
-      <span className="spotify-brand-name">Spotify</span>
-      <span className="spotify-brand-divider" aria-hidden="true" />
-    </div>
+    <span className="eq" aria-hidden="true">
+      <span className="eq-bar eq-1" />
+      <span className="eq-bar eq-2" />
+      <span className="eq-bar eq-3" />
+    </span>
+  );
+}
+
+function Cover({ src, size }: { src: string; size: string }) {
+  return (
+    <span
+      className={`${size} flex flex-shrink-0 items-center justify-center overflow-hidden bg-gray-100 text-main-color dark:bg-neutral-800`}
+    >
+      {src ? (
+        <img src={src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+      ) : (
+        <Headphones size={14} />
+      )}
+    </span>
   );
 }
 
 export default function NowPlaying({ variant = 'pill' }: NowPlayingProps) {
   const { track, loading, error } = useLastFmTrack();
   const [, setTick] = useState(0);
-  const isCard = variant === 'card';
+  const isInline = variant === 'inline';
 
   useEffect(() => {
     const id = window.setInterval(() => setTick((n) => n + 1), 60000);
@@ -28,98 +42,51 @@ export default function NowPlaying({ variant = 'pill' }: NowPlayingProps) {
   }, []);
 
   if (loading) {
-    if (isCard) {
-      return (
-        <div className="about-nowplaying-card is-spotify">
-          <SpotifyBrand />
-          <div className="spotify-cover animate-pulse bg-white/5" />
-          <div className="spotify-meta animate-pulse space-y-2">
-            <div className="h-2 w-20 rounded bg-white/10" />
-            <div className="h-3 w-32 rounded bg-white/10" />
-            <div className="h-2.5 w-24 rounded bg-white/10" />
-          </div>
-        </div>
-      );
+    if (isInline) {
+      return <span className="block h-4 w-48 rounded bg-gray-100 dark:bg-neutral-800" />;
     }
 
     return (
-      <div className="w-full rounded-full border border-black/5 bg-white/85 px-2.5 py-2 backdrop-blur-md dark:border-white/10 dark:bg-neutral-900/85">
-        <div className="flex items-center gap-2.5 animate-pulse">
-          <div className="h-9 w-9 rounded-full bg-gray-200 dark:bg-neutral-700" />
+      <div className="w-full rounded-full border border-black/5 bg-page-bg px-2.5 py-2 dark:border-white/10">
+        <div className="flex items-center gap-2.5">
+          <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-neutral-800" />
           <div className="flex-1 space-y-1.5">
-            <div className="h-2 w-24 rounded bg-gray-200 dark:bg-neutral-700" />
-            <div className="h-2.5 w-36 rounded bg-gray-200 dark:bg-neutral-700" />
+            <div className="h-2 w-24 rounded bg-gray-100 dark:bg-neutral-800" />
+            <div className="h-2.5 w-36 rounded bg-gray-100 dark:bg-neutral-800" />
           </div>
-          <div className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-200 dark:bg-neutral-700" />
         </div>
       </div>
     );
   }
 
   if (error || !track) {
-    if (isCard) {
-      return (
-        <div className="about-nowplaying-card is-spotify">
-          <SpotifyBrand />
-          <div className="spotify-cover spotify-cover-empty">
-            <Headphones size={36} />
-          </div>
-          <div className="spotify-meta">
-            <p className="spotify-kicker">Recently played</p>
-            <p className="spotify-title">Nothing playing right now</p>
-            <p className="spotify-artist">A track shows up here when one is on.</p>
-          </div>
-        </div>
-      );
-    }
-
-    return null;
+    return isInline ? (
+      <span className="text-gray-500 dark:text-gray-400">Nothing on right now.</span>
+    ) : null;
   }
 
   const whenLabel = formatPlayedAt(track.playedAt, track.nowPlaying);
+  const ariaLabel = `Listen with me: ${track.name} by ${track.artist}, ${whenLabel}`;
 
-  if (isCard) {
+  if (isInline) {
     return (
       <a
         href={track.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="about-nowplaying-card is-spotify group"
-        aria-label={`Play to listen with me: ${track.name} by ${track.artist}, ${whenLabel}`}
+        className="group inline-flex min-w-0 max-w-full items-center gap-3"
+        aria-label={ariaLabel}
       >
-        <SpotifyBrand />
-
-        <div className="spotify-cover">
-          {track.image ? (
-            <img src={track.image} alt="" className="h-full w-full object-cover" />
-          ) : (
-            <div className="spotify-cover-empty">
-              <Headphones size={36} />
-            </div>
-          )}
-          <span className="spotify-play" aria-hidden="true">
-            <Play size={22} fill="currentColor" className="translate-x-[1px]" />
+        <Cover src={track.image} size="h-9 w-9 rounded" />
+        <span className="min-w-0">
+          <span className="block truncate font-medium text-secondary-color transition-colors duration-200 group-hover:text-main-color">
+            {track.name}
           </span>
-        </div>
-
-        <div className="spotify-meta">
-          <p className={`spotify-kicker ${track.nowPlaying ? 'is-live' : ''}`}>
-            {track.nowPlaying ? (
-              <span className="spotify-eq" aria-hidden="true">
-                <span className="eq-bar eq-1" />
-                <span className="eq-bar eq-2" />
-                <span className="eq-bar eq-3" />
-              </span>
-            ) : null}
-            {track.nowPlaying ? 'Listen with me' : 'Recently played'}
-          </p>
-          <p className="spotify-title">{track.name}</p>
-          <p className="spotify-artist">
-            {track.artist}
-            {track.album ? ` · ${track.album}` : ''}
-          </p>
-          {track.nowPlaying ? null : <p className="spotify-when">{whenLabel}</p>}
-        </div>
+          <span className="flex items-center gap-1.5 truncate text-xs text-gray-500 dark:text-gray-400">
+            {track.nowPlaying ? <EqBars /> : null}
+            {track.artist} · {whenLabel}
+          </span>
+        </span>
       </a>
     );
   }
@@ -129,31 +96,23 @@ export default function NowPlaying({ variant = 'pill' }: NowPlayingProps) {
       href={track.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex w-full items-center gap-2.5 rounded-full border border-black/5 bg-white/85 px-2.5 py-2 backdrop-blur-md transition-colors duration-200 hover:bg-white dark:border-white/10 dark:bg-neutral-900/85 dark:hover:bg-neutral-900"
-      aria-label={`Play to listen with me: ${track.name} by ${track.artist}, ${whenLabel}`}
+      className="group flex w-full items-center gap-2.5 rounded-full border border-black/5 bg-page-bg px-2.5 py-2 transition-colors duration-200 hover:border-main-color/40 dark:border-white/10"
+      aria-label={ariaLabel}
     >
-      <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden rounded-full bg-gray-100 ring-1 ring-black/5 dark:bg-neutral-800 dark:ring-white/10">
-        {track.image ? (
-          <img src={track.image} alt="" className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-main-color">
-            <Headphones size={14} />
-          </div>
-        )}
+      <span className="relative flex-shrink-0">
+        <Cover src={track.image} size="h-9 w-9 rounded-full" />
         {track.nowPlaying ? (
-          <span className="absolute inset-x-1.5 bottom-1 flex h-1.5 items-end justify-center gap-0.5">
-            <span className="eq-bar eq-1" />
-            <span className="eq-bar eq-2" />
-            <span className="eq-bar eq-3" />
+          <span className="absolute inset-x-0 bottom-1 flex justify-center">
+            <EqBars />
           </span>
         ) : null}
-      </div>
+      </span>
 
       <div className="min-w-0 flex-1 text-left">
-        <p className="text-[10px] text-gray-400 leading-none mb-0.5 dark:text-gray-500">
+        <p className="mb-0.5 text-[10px] leading-none text-gray-400 dark:text-gray-500">
           Play to listen with me
         </p>
-        <p className="truncate text-xs font-semibold text-secondary-color group-hover:text-main-color transition-colors">
+        <p className="truncate text-xs font-semibold text-secondary-color transition-colors duration-200 group-hover:text-main-color">
           {track.name}
         </p>
         <p className="truncate text-[11px] text-gray-500 dark:text-gray-400">

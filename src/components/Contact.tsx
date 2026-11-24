@@ -143,7 +143,7 @@ const Contact = () => {
                   type="text"
                   id="name"
                   name="name"
-                  className="block w-full rounded-lg border border-gray-300 bg-white/80 p-3 text-sm shadow-sm backdrop-blur-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900/80 dark:text-gray-100"
+                  className="block w-full rounded-lg border border-gray-300 bg-white p-3 text-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900 dark:text-gray-100"
                   placeholder="Your Full Name"
                   required
                 />
@@ -156,7 +156,7 @@ const Contact = () => {
                   type="email"
                   id="email"
                   name="email"
-                  className="block w-full rounded-lg border border-gray-300 bg-white/80 p-3 text-sm shadow-sm backdrop-blur-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900/80 dark:text-gray-100"
+                  className="block w-full rounded-lg border border-gray-300 bg-white p-3 text-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900 dark:text-gray-100"
                   placeholder="Your Email Address"
                   required
                 />
@@ -170,7 +170,7 @@ const Contact = () => {
               <textarea
                 id="message"
                 name="message"
-                className="block w-full rounded-lg border border-gray-300 bg-white/80 p-3 text-sm shadow-sm backdrop-blur-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900/80 dark:text-gray-100"
+                className="block w-full rounded-lg border border-gray-300 bg-white p-3 text-sm focus:border-main-color focus:outline-none focus:ring-2 focus:ring-main-color dark:border-gray-700 dark:bg-neutral-900 dark:text-gray-100"
                 rows={4}
                 placeholder="Your Message"
                 required

@@ -142,7 +142,7 @@ export default function ChatBot() {
             <button
               type="button"
               onClick={() => setProfileOpen(true)}
-              className="relative flex-shrink-0 rounded-full transition-transform duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color"
+              className="relative flex-shrink-0 rounded-full transition-opacity duration-200 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color"
               aria-label="Open profile"
             >
               <img
@@ -214,7 +214,7 @@ export default function ChatBot() {
         onClick={toggleChat}
         className={
           open
-            ? 'pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full bg-neutral-700 text-white shadow-lg shadow-neutral-800/20 ring-1 ring-black/5 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color dark:bg-neutral-600 dark:ring-white/10'
+            ? 'pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full bg-neutral-700 text-white shadow-lg shadow-neutral-800/20 ring-1 ring-black/5 transition-colors duration-200 hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color dark:bg-neutral-600 dark:ring-white/10'
             : 'chat-fab pointer-events-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color'
         }
         aria-label={open ? 'Close chat' : 'Chat me'}

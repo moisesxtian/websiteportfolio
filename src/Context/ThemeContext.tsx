@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import { flushSync } from 'react-dom';
+import { isLiteMode } from '../lib/perf';
 
 export type Theme = 'light' | 'dark';
 
@@ -64,7 +65,9 @@ function setCircleOrigin(event?: MouseEvent<HTMLElement>) {
 
 function canUseViewTransition(): boolean {
   if (typeof document.startViewTransition !== 'function') return false;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+  // Lite mode covers reduced motion and software rendering, where a full-screen
+  // clip-path wipe would be rasterised on the CPU every frame.
+  if (isLiteMode()) return false;
   // View Transitions can be flaky on some mobile browsers - skip animation, still toggle.
   if (window.matchMedia('(pointer: coarse)').matches) return false;
   return true;

@@ -78,23 +78,19 @@ function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
 
-function applyLayer(
-  el: HTMLElement | null,
-  progress: number,
-  { y, fade, scale = 0, blur = 0 }: { y: number; fade: number; scale?: number; blur?: number }
-) {
+/** Scroll-out for one hero layer. Transform and opacity only, so it stays cheap
+ *  even when the browser is painting without a GPU. */
+function applyLayer(el: HTMLElement | null, progress: number, { y, fade }: { y: number; fade: number }) {
   if (!el) return;
 
   if (progress <= 0.001) {
     el.style.transform = '';
     el.style.opacity = '';
-    el.style.filter = '';
     return;
   }
 
   el.style.opacity = String(Math.max(0, 1 - progress * fade));
-  el.style.transform = `translate3d(0, ${progress * y}px, 0) scale(${1 - progress * scale})`;
-  el.style.filter = blur > 0 ? `blur(${progress * blur}px)` : '';
+  el.style.transform = `translate3d(0, ${progress * y}px, 0)`;
 }
 
 type HomeProps = {
@@ -204,11 +200,11 @@ const Home = ({ onBootReady }: HomeProps) => {
       const raw = Math.min(1, Math.max(0, window.scrollY / travel));
       const progress = prefersReduced.current ? 0 : easeOutCubic(raw);
 
-      applyLayer(socialsRef.current, progress, { y: -18, fade: 1.15, scale: 0.02, blur: 3 });
-      applyLayer(nameRef.current, progress, { y: -10, fade: 1.05, scale: 0.04, blur: 3 });
-      applyLayer(metaRef.current, progress, { y: 16, fade: 1.2, scale: 0.02, blur: 3 });
-      applyLayer(scrollHintRef.current, progress, { y: 12, fade: 1.5, blur: 3 });
-      applyLayer(nowPlayingRef.current, progress, { y: 14, fade: 1.4, blur: 3 });
+      applyLayer(socialsRef.current, progress, { y: -18, fade: 1.15 });
+      applyLayer(nameRef.current, progress, { y: -10, fade: 1.05 });
+      applyLayer(metaRef.current, progress, { y: 16, fade: 1.2 });
+      applyLayer(scrollHintRef.current, progress, { y: 12, fade: 1.5 });
+      applyLayer(nowPlayingRef.current, progress, { y: 14, fade: 1.4 });
 
       section.style.setProperty('--hero-exit', String(progress));
       section.style.pointerEvents = progress > 0.8 ? 'none' : 'auto';
@@ -333,7 +329,7 @@ const Home = ({ onBootReady }: HomeProps) => {
                 {ROLES.map((role, index) => (
                   <div
                     key={role}
-                    className="hero-pop-item role-pill inline-flex items-center px-1 py-0.5 text-[11px] sm:text-xs font-light text-gray-600 dark:text-gray-400"
+                    className="hero-pop-item role-pill inline-flex items-center px-1 py-0.5 text-[11px] sm:text-xs font-normal text-gray-600 dark:text-gray-400"
                     style={{ animationDelay: `${skillsStart + index * ITEM_STAGGER}s` }}
                   >
                     {/* The pill's own transform belongs to its entrance animation, so

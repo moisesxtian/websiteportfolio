@@ -13,7 +13,7 @@ import { useProjects } from '../Hooks/useProjects';
 import { projectImages } from '../lib/projectImages';
 import type { Project } from '../types/content';
 import ScrollReveal from './ScrollReveal';
-import ShiningTitle, { HoverWords } from './ShiningTitle';
+import SectionTitle from './SectionTitle';
 
 type ViewMode = 'showcase' | 'grid';
 
@@ -95,9 +95,9 @@ const Projects = ({ onViewModeChange }: ProjectsProps) => {
               <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-main-color">
                 Portfolio
               </p>
-              <ShiningTitle
+              <SectionTitle
                 text="Personal Projects"
-                className="text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-4xl md:text-5xl"
+                className="text-3xl font-bold leading-[1.05] tracking-tight sm:text-4xl md:text-5xl"
               />
               <p className="mt-2 max-w-lg text-sm text-gray-600 dark:text-gray-400">
                 {viewMode === 'grid'
@@ -230,7 +230,7 @@ function ImageGallery({
               e.stopPropagation();
               go(-1);
             }}
-            className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-1.5 text-white opacity-0 backdrop-blur transition group-hover/gallery:opacity-100"
+            className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-1.5 text-white opacity-0 transition group-hover/gallery:opacity-100"
             aria-label="Previous image"
           >
             <ChevronLeft size={16} />
@@ -241,7 +241,7 @@ function ImageGallery({
               e.stopPropagation();
               go(1);
             }}
-            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-1.5 text-white opacity-0 backdrop-blur transition group-hover/gallery:opacity-100"
+            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-1.5 text-white opacity-0 transition group-hover/gallery:opacity-100"
             aria-label="Next image"
           >
             <ChevronRight size={16} />
@@ -299,8 +299,8 @@ function ShowcaseSlide({
         <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-orange-300 sm:text-[11px]">
           Featured project
         </p>
-        <h3 className="text-xl font-extrabold leading-tight sm:text-2xl md:text-3xl lg:text-4xl">
-          <HoverWords text={project.title} />
+        <h3 className="text-xl font-bold leading-tight sm:text-2xl md:text-3xl lg:text-4xl">
+          {project.title}
         </h3>
         <p
           className={`text-xs leading-relaxed text-gray-300 sm:text-sm md:text-base ${
@@ -473,7 +473,7 @@ function ShowcaseView({
           <button
             type="button"
             onClick={onPrev}
-            className="pointer-events-auto absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white backdrop-blur transition hover:bg-main-color sm:left-3 sm:p-2.5"
+            className="pointer-events-auto absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white transition hover:bg-main-color sm:left-3 sm:p-2.5"
             aria-label="Previous project"
           >
             <ChevronLeft size={18} />
@@ -481,7 +481,7 @@ function ShowcaseView({
           <button
             type="button"
             onClick={onNext}
-            className="pointer-events-auto absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white backdrop-blur transition hover:bg-main-color sm:right-3 sm:p-2.5"
+            className="pointer-events-auto absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white transition hover:bg-main-color sm:right-3 sm:p-2.5"
             aria-label="Next project"
           >
             <ChevronRight size={18} />
@@ -583,7 +583,7 @@ function ProjectCard({
         className="group flex w-full items-start gap-3 p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-main-color"
       >
         <h3 className="min-w-0 flex-1 text-sm font-semibold leading-snug text-gray-900 dark:text-gray-100">
-          <HoverWords text={project.title} />
+          {project.title}
         </h3>
         <ChevronDown
           size={16}
@@ -608,7 +608,7 @@ function ProjectCard({
                 {project.skills.map((skill, skillIndex) => (
                   <span
                     key={skill}
-                    className="exp-skill inline-flex items-center gap-2 px-1 py-0.5 text-[11px] font-light text-gray-600 dark:text-gray-400"
+                    className="exp-skill inline-flex items-center gap-2 px-1 py-0.5 text-[11px] font-normal text-gray-600 dark:text-gray-400"
                     style={{ '--i': skillIndex } as CSSProperties}
                   >
                     <span className="block h-1.5 w-1.5 rounded-full bg-main-color" />
