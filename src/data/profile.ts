@@ -4,6 +4,9 @@ export const PERSONAL_AVATAR = '/chan-avatar.webp';
 export const PROFESSIONAL_AVATAR = '/chan-avatar-pro.webp';
 export const PROFILE_AVATAR = PERSONAL_AVATAR;
 
+export const GITHUB_USERNAME = 'moisesxtian';
+export const GITHUB_URL = `https://github.com/${GITHUB_USERNAME}`;
+
 /** Used until About Chan is saved from /admin */
 export const fallbackChatProfile: ChatProfileData = {
   name: 'Christian Moises',
